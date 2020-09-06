@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "RR9B2nz1QqqF/t8/1M2KNN1NafOhjawVe4PbD2ZXSv3dHJk249xMOs8jh4NAXccxAVMHzTLtRmbDYnRSTuQuWw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Root\\source\\repos\\AgroSup\\AgroSup.Core\\AgroSup.Core.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Root\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\Root\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}
