@@ -4,14 +4,14 @@
     "C:\\Users\\Root\\source\\repos\\AgroSup\\AgroSup.Infrastructure\\AgroSup.Infrastructure.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Root\\source\\repos\\AgroSup\\AgroSup.Infrastructure\\AgroSup.Infrastructure.csproj": {
+    "C:\\Users\\Root\\source\\repos\\AgroSup\\AgroSup.Core\\AgroSup.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Root\\source\\repos\\AgroSup\\AgroSup.Infrastructure\\AgroSup.Infrastructure.csproj",
-        "projectName": "AgroSup.Infrastructure",
-        "projectPath": "C:\\Users\\Root\\source\\repos\\AgroSup\\AgroSup.Infrastructure\\AgroSup.Infrastructure.csproj",
+        "projectUniqueName": "C:\\Users\\Root\\source\\repos\\AgroSup\\AgroSup.Core\\AgroSup.Core.csproj",
+        "projectName": "AgroSup.Core",
+        "projectPath": "C:\\Users\\Root\\source\\repos\\AgroSup\\AgroSup.Core\\AgroSup.Core.csproj",
         "packagesPath": "C:\\Users\\Root\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Root\\source\\repos\\AgroSup\\AgroSup.Infrastructure\\obj\\",
+        "outputPath": "C:\\Users\\Root\\source\\repos\\AgroSup\\AgroSup.Core\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Root\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -38,6 +38,10 @@
       "frameworks": {
         "netstandard2.0": {
           "dependencies": {
+            "Microsoft.Extensions.Identity.Stores": {
+              "target": "Package",
+              "version": "[3.1.7, )"
+            },
             "NETStandard.Library": {
               "suppressParent": "All",
               "target": "Package",
@@ -55,6 +59,72 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.301\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Root\\source\\repos\\AgroSup\\AgroSup.Infrastructure\\AgroSup.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Root\\source\\repos\\AgroSup\\AgroSup.Infrastructure\\AgroSup.Infrastructure.csproj",
+        "projectName": "AgroSup.Infrastructure",
+        "projectPath": "C:\\Users\\Root\\source\\repos\\AgroSup\\AgroSup.Infrastructure\\AgroSup.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\Root\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Root\\source\\repos\\AgroSup\\AgroSup.Infrastructure\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Root\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.1": {
+            "projectReferences": {
+              "C:\\Users\\Root\\source\\repos\\AgroSup\\AgroSup.Core\\AgroSup.Core.csproj": {
+                "projectPath": "C:\\Users\\Root\\source\\repos\\AgroSup\\AgroSup.Core\\AgroSup.Core.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.1": {
+          "dependencies": {
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[3.1.7, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[3.1.7, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "NETStandard.Library": {
+              "privateAssets": "all"
+            }
+          },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.301\\RuntimeIdentifierGraph.json"
         }
       }
