@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AgroSup.Core.Domain
 {
-    class Parcel
+    public class Parcel
     {
         public Guid Id { get; set; }
         public string Number { get; set; }

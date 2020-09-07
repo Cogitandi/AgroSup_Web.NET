@@ -7,7 +7,7 @@ using System.Text;
 
 namespace AgroSup.Core.Domain
 {
-    class User : IdentityUser<Guid>
+    public class User : IdentityUser<Guid>
     {
         private IList<YearPlan> _yearPlans = new List<YearPlan>();
 

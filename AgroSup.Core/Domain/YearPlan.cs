@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AgroSup.Core.Domain
 {
-    class YearPlan
+    public class YearPlan
     {
         private IList<Field> _fields = new List<Field>();
         private IList<Operator> _operators = new List<Operator>();

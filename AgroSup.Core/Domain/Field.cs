@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AgroSup.Core.Domain
 {
-    class Field
+    public class Field
     {
 
         private IList<Parcel> _parcels = new List<Parcel>();
