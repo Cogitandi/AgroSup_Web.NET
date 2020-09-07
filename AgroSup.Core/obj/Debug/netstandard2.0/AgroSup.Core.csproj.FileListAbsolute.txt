@@ -1,7 +1,6 @@
 C:\Users\Root\source\repos\AgroSup\AgroSup.Core\bin\Debug\netstandard2.0\AgroSup.Core.deps.json
 C:\Users\Root\source\repos\AgroSup\AgroSup.Core\bin\Debug\netstandard2.0\AgroSup.Core.dll
 C:\Users\Root\source\repos\AgroSup\AgroSup.Core\bin\Debug\netstandard2.0\AgroSup.Core.pdb
-C:\Users\Root\source\repos\AgroSup\AgroSup.Core\obj\Debug\netstandard2.0\AgroSup.Core.csprojAssemblyReference.cache
 C:\Users\Root\source\repos\AgroSup\AgroSup.Core\obj\Debug\netstandard2.0\AgroSup.Core.AssemblyInfoInputs.cache
 C:\Users\Root\source\repos\AgroSup\AgroSup.Core\obj\Debug\netstandard2.0\AgroSup.Core.AssemblyInfo.cs
 C:\Users\Root\source\repos\AgroSup\AgroSup.Core\obj\Debug\netstandard2.0\AgroSup.Core.csproj.CoreCompileInputs.cache

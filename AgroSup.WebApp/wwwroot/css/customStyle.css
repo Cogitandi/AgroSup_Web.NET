@@ -1,0 +1,54 @@
+
+body  { 
+    padding-bottom: 70px;
+}
+#intro {
+    background-image: url("../img/start.jpg");
+    height:50vh;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+}
+.bg-transparent {
+    background-color: rgba(0,0,0,.30) !important;
+    font-family: 'Lora', serif;
+}
+
+#nav .nav-link {
+    color: #fff;
+}
+#content {
+    min-height: 600px;
+}
+/*.table-hover > tbody > tr:hover > th,
+.table-hover > tbody > tr:hover > td
+{
+    background-color: yellow;
+
+}*/
+#crops tbody .detail {
+    display: none;
+}
+
+#fields tbody {
+    padding: 0px auto;
+}
+#fields tbody {
+    white-space: pre-line;
+}
+
+	
+
+footer {
+    background-color: black;
+    color: #fff;
+}
+
+#parcels tr:hover td[hover] {
+    background-color: #F5F5DC !important;
+}
+
+td[name=fieldName],td[name=plantName],td[name=fieldNumber] {
+     pointer-events: none;
+}

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AgroSup.Infrastructure.Repositories
 {
-    class ParcelRepository : IParcelRepository
+    public class ParcelRepository : IParcelRepository
     {
         private readonly DatabaseContext _context;
 

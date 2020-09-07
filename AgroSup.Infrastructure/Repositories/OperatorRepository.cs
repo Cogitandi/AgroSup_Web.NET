@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AgroSup.Infrastructure.Data
 {
-    class OperatorRepository : IOperatorRepository
+    public class OperatorRepository : IOperatorRepository
     {
         private readonly DatabaseContext _context;
 

@@ -1,25 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AgroSup.Core.Domain;
+using AgroSup.Core.Repositories;
+using AgroSup.WebApp.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using AgroSup.WebApp.Models;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace AgroSup.WebApp.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly UserManager<User> _userManager;
+        private readonly IYearPlanRepository _yearPlanRepository;
+        private readonly IUserRepository _userRepository;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(
+            IUserRepository userRepository,
+            ILogger<HomeController> logger,
+            IYearPlanRepository yearPlanRepository,
+            UserManager<User> userManager)
         {
             _logger = logger;
+            _userManager = userManager;
+            _yearPlanRepository = yearPlanRepository;
+            _userRepository = userRepository;
         }
 
         public IActionResult Index()
         {
+            //var loggedUserId = _userManager.GetUserId(User);
+            //var user = _userRepository.GetById(Guid.Parse(loggedUserId)).Result;
+            //user.ManagedYearPlan = null;
             return View();
         }
 

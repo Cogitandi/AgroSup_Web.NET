@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AgroSup.Infrastructure.Repositories
 {
-    class FieldRepository : IFieldRepository
+    public class FieldRepository : IFieldRepository
     {
         private readonly DatabaseContext _context;
 

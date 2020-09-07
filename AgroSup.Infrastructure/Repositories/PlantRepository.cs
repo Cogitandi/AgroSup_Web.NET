@@ -4,13 +4,11 @@ using AgroSup.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using System.Linq;
 
 namespace AgroSup.Infrastructure.Repositories
 {
-    class PlantRepository : IPlantRepository
+    public class PlantRepository : IPlantRepository
     {
         private readonly DatabaseContext _context;
 

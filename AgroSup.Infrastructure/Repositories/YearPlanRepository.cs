@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AgroSup.Infrastructure.Repositories
 {
-    class YearPlanRepository : IYearPlanRepository
+    public class YearPlanRepository : IYearPlanRepository
     {
         private readonly DatabaseContext _context;
 
