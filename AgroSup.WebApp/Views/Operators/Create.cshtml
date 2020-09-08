@@ -1,0 +1,41 @@
+﻿@model AgroSup.WebApp.ViewModels.Operators.OperatorViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<partial name="_DataMenuPartial"/>
+<!--- Content -->
+<div class="col-md-10">
+    <div class="container-md mx-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <small id="firstNameHelp" class="form-text text-muted">Podaj imię osoby, która zarządza gospodarstwem.</small>
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <small id="surnameHelp" class="form-text text-muted">Podaj nazwiso osoby, która zarządza gospodarstwem.</small>
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ArimrNumber" class="control-label"></label>
+                <input asp-for="ArimrNumber" class="form-control" />
+                <span asp-validation-for="ArimrNumber" class="text-danger"></span>
+                <small id="arimrNumberHelp" class="form-text text-muted">Podaj numer otrzymany od ARIMR. (opcjonalnie) </small>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Dodaj" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

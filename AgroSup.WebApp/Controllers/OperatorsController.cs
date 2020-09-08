@@ -41,5 +41,31 @@ namespace AgroSup.WebApp.Controllers
             });
             return View(model);
         }
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(OperatorViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            var loggedUser = await _userManager.GetUserAsync(User);
+
+            Operator @operator = new Operator()
+            {
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                ArimrNumber = model.ArimrNumber,
+                YearPlan = loggedUser.ManagedYearPlan
+            };
+            await _operatorRepository.Create(@operator);
+            return RedirectToAction("Index");
+
+        }
     }
 }
