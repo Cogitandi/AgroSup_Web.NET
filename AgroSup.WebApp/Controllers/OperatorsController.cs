@@ -105,8 +105,14 @@ namespace AgroSup.WebApp.Controllers
                 @operator.ArimrNumber = model.ArimrNumber;
                 await _operatorRepository.Update(@operator);
                 return RedirectToAction("Index");
-
-            
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var @operator = await _operatorRepository.GetById(id);
+            await _operatorRepository.Remove(@operator);
+            return RedirectToAction("Index");
         }
     }
 }
