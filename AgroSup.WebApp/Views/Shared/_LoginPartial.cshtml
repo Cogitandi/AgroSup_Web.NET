@@ -18,7 +18,7 @@
             {
                 <li class="nav-item">
 
-                    <a class="nav-link" asp-controller="yearplans" asp-action="index">Sezon @userManagedYearPlan.StartYear / @userManagedYearPlan.EndYear</a>
+                    <a class="nav-link" asp-controller="yearplans" asp-action="index">@userManagedYearPlan.GetYearPlanName</a>
                 </li>
             }
             else

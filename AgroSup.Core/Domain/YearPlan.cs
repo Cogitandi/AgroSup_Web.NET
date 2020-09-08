@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace AgroSup.Core.Domain
@@ -15,5 +16,13 @@ namespace AgroSup.Core.Domain
         public User User { get; set; }
         public IEnumerable<Field> Fields => _fields;
         public IEnumerable<Operator> Operators => _operators;
+
+        public string GetYearPlanName
+        {
+            get
+            {
+                return "Sezon " + StartYear + "/" + EndYear;
+            }
+        }
     }
 }
