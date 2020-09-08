@@ -65,7 +65,48 @@ namespace AgroSup.WebApp.Controllers
             };
             await _operatorRepository.Create(@operator);
             return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var @operator = await _operatorRepository.GetById(id);
 
+            if (@operator == null)
+            {
+                return NotFound();
+            }
+            
+            var model = new OperatorViewModel()
+            {
+                Id = @operator.Id,
+                FirstName = @operator.FirstName,
+                LastName = @operator.LastName,
+                ArimrNumber = @operator.ArimrNumber
+            };
+
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(OperatorViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var @operator = await _operatorRepository.GetById(model.Id);
+                @operator.FirstName = model.FirstName;
+                @operator.LastName = model.LastName;
+                @operator.ArimrNumber = model.ArimrNumber;
+                await _operatorRepository.Update(@operator);
+                return RedirectToAction("Index");
+
+            
         }
     }
 }
