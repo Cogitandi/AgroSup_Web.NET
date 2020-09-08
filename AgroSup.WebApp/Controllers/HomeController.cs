@@ -1,6 +1,6 @@
 ﻿using AgroSup.Core.Domain;
 using AgroSup.Core.Repositories;
-using AgroSup.WebApp.Models;
+using AgroSup.WebApp.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -12,27 +12,14 @@ namespace AgroSup.WebApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly UserManager<User> _userManager;
-        private readonly IYearPlanRepository _yearPlanRepository;
-        private readonly IUserRepository _userRepository;
 
-        public HomeController(
-            IUserRepository userRepository,
-            ILogger<HomeController> logger,
-            IYearPlanRepository yearPlanRepository,
-            UserManager<User> userManager)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            _userManager = userManager;
-            _yearPlanRepository = yearPlanRepository;
-            _userRepository = userRepository;
         }
 
         public IActionResult Index()
         {
-            //var loggedUserId = _userManager.GetUserId(User);
-            //var user = _userRepository.GetById(Guid.Parse(loggedUserId)).Result;
-            //user.ManagedYearPlan = null;
             return View();
         }
 

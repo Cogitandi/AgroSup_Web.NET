@@ -1,6 +1,6 @@
 using System;
 
-namespace AgroSup.WebApp.Models
+namespace AgroSup.WebApp.ViewModels
 {
     public class ErrorViewModel
     {

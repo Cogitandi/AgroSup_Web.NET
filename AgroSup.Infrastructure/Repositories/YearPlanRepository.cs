@@ -4,6 +4,7 @@ using AgroSup.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AgroSup.Infrastructure.Repositories
@@ -39,6 +40,17 @@ namespace AgroSup.Infrastructure.Repositories
                 .Include(x => x.Fields)
                 .Include(x => x.Operators)
                 .FirstAsync(x => x.Id.Equals(id));
+        }
+
+        public async Task<IEnumerable<YearPlan>> GetByUser(User user)
+        {
+            return await _context.YearPlans
+                .Include(x => x.User)
+                .Include(x => x.Fields)
+                .Include(x => x.Operators)
+                .Where(x => x.User == user)
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         public async Task Remove(YearPlan YearPlan)

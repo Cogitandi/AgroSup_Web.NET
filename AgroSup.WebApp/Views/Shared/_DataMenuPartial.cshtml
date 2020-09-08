@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewData["Title"] = "_DataMenuPartial";
+}
+
+<!--- Left menu -->
+<div class="col-md-2 mb-4">
+    <ul class="nav nav-pills flex-column">
+        <li><a class="nav-link font-weight-bold" data-toggle="collapse" data-target=".d1" href="#">Plany roczne</a></li>
+        <li>
+            <ul style="padding-left: 20px; list-style: none">
+                <li><a class="d1 nav-link collapse" asp-controller="yearplans" asp-action="index">Lista</a></li>
+                <li><a class="d1 nav-link collapse" asp-controller="yearplans" asp-action="create">Stwórz nowy plan</a></li>
+            </ul>
+        </li>
+        <li><a class="nav-link font-weight-bold" data-toggle="collapse" data-target=".d3" href="#">Osoby</a></li>
+        <li>
+            <ul style="padding-left: 20px; list-style: none">
+                <li><a class="d3 nav-link collapse" asp-controller="Operator" asp-action="Index">Lista</a></li>
+                <li><a class="d3 nav-link collapse" asp-controller="Operator" asp-action="Create">Dodaj</a></li>
+            </ul>
+        </li>
+        <li><a class="nav-link font-weight-bold" data-toggle="collapse" data-target=".d2" href="#">Pola</a></li>
+        <li>
+            <ul style="padding-left: 20px; list-style: none">
+                <li><a class="d2 nav-link collapse" asp-controller="Field" asp-action="Index">Lista</a></li>
+                <li><a class="d2 nav-link collapse" asp-controller="Field" asp-action="Create">Stwórz nowe pole</a></li>
+            </ul>
+        </li>
+        <li><a class="nav-link font-weight-bold" href="/selectPlants">Wybierz rośliny</a></li>
+    </ul>
+</div>
+
