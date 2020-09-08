@@ -41,6 +41,15 @@ namespace AgroSup.Infrastructure.Data
                 .FirstAsync(x => x.Id.Equals(id));
         }
 
+        public async Task<IEnumerable<Operator>> GetByUser(User user)
+        {
+            return await _context.Operators
+                .Include(x => x.YearPlan)
+                .Include(x => x.Parcels)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
         public async Task Remove(Operator @operator)
         {
             _context.Operators.Remove(@operator);
