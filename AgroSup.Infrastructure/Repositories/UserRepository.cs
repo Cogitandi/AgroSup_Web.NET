@@ -21,5 +21,11 @@ namespace AgroSup.Infrastructure.Repositories
         {
             return await _context.ApplicationUsers.Include(x => x.ManagedYearPlan).FirstAsync(x => x.Id == id);
         }
+
+        public async Task Update(User user)
+        {
+            _context.ApplicationUsers.Update(user);
+            await _context.SaveChangesAsync();
+        }
     }
 }

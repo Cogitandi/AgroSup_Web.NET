@@ -17,10 +17,15 @@ namespace AgroSup.WebApp.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly IYearPlanRepository _yearPlanRepository;
+        private readonly IUserRepository _userRepository;
         
 
-        public YearPlansController(UserManager<User> userManager, IYearPlanRepository yearPlanRepository)
+        public YearPlansController(
+            IUserRepository userRepository,
+            UserManager<User> userManager,
+            IYearPlanRepository yearPlanRepository)
         {
+            _userRepository = userRepository;
             _userManager = userManager;
             _yearPlanRepository = yearPlanRepository;
         }
@@ -44,12 +49,11 @@ namespace AgroSup.WebApp.Controllers
         {
             var loggedUser = await _userManager.GetUserAsync(User);
             var userYearPlans = await _yearPlanRepository.GetByUser(loggedUser);
-            //ViewBag.YearPlans = new SelectList(userYearPlans, "Id", "GetYearPlanName");
-            var model = new YearPlanViewModel() { };
-            model.AddYearPlansToSelect(userYearPlans);
-            return View(model);
+            ViewBag.YearPlans = new SelectList(userYearPlans, "Id", "GetYearPlanName");
+            return View();
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(YearPlanViewModel model)
         {
             if(!ModelState.IsValid)
@@ -67,6 +71,38 @@ namespace AgroSup.WebApp.Controllers
            await _yearPlanRepository.Create(yearPlan);
             return RedirectToAction("Index");
        
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SetManagedYearPlan(Guid id)
+        {
+            var loggedUserId =  _userManager.GetUserId(User);
+            var loggedUser = await _userRepository.GetById(Guid.Parse(loggedUserId));
+            var yearPlan = await _yearPlanRepository.GetById(id);
+            loggedUser.ManagedYearPlan = yearPlan;
+            await _userRepository.Update(loggedUser);
+            return RedirectToAction("Index");
+        }
+
+        // Validation
+        [AcceptVerbs("GET", "POST")]
+        public async Task<IActionResult> UniqueYearPlan(YearPlanViewModel model)
+        {
+            var loggedUserId = _userManager.GetUserId(User);
+            var loggedUser = await _userRepository.GetById(Guid.Parse(loggedUserId));
+            // Get list of user's yearplans
+            var userYearPlans = await _yearPlanRepository.GetByUser(loggedUser);
+            var list = userYearPlans.ToList();
+
+            foreach (var item in list)
+            {
+                if (item.StartYear == model.StartYear)
+                {
+                    // If user have yearplan with startYear passed by user error
+                    return Json($"Posiadasz już plan na ten rok");
+                }
+            }
+            return Json(true);
         }
     }
 }

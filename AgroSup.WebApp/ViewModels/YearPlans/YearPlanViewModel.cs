@@ -1,4 +1,5 @@
 ﻿using AgroSup.Core.Domain;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
@@ -12,22 +13,12 @@ namespace AgroSup.WebApp.ViewModels.YearPlans
     public class YearPlanViewModel
     {
         public Guid Id { get; set; }
-        [Required]
+        [Required(ErrorMessage ="To pole jest wymagane")]
         [DisplayName("Rok rozpoczęcia")]
+        [Remote(action: "UniqueYearPlan", controller: "YearPlans")]
+        [Range(2000, 2100, ErrorMessage = "Niepoprawny rok")]
         public int StartYear { get; set; }
         [DisplayName("Rok zakończenia")]
         public int EndYear { get; set; }
-        public List<SelectListItem> UserYearPlans { get; set; }
-
-        public void AddYearPlansToSelect(IEnumerable<YearPlan> yearplans)
-        {
-            UserYearPlans = yearplans.Select(x => new SelectListItem()
-            {
-                Value = x.Id.ToString(),
-                Text = x.GetYearPlanName
-            }).ToList();
-        }
-
-
     }
 }

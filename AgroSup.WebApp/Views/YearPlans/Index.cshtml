@@ -29,7 +29,11 @@
                             <td class="align-middle">@Html.DisplayFor(modelItem => item.StartYear)</td>
                             <td class="align-middle">@Html.DisplayFor(modelItem => item.EndYear)</td>
                             <td class="align-middle">
-                                <button asp-action="SetManagedYearPlan" asp-route-id="@item.Id" class = "btn btn-block btn btn-secondary">Zarządzaj</button>
+                                <form asp-action="SetManagedYearPlan" asp-controller="yearplans">
+                                    <input type="hidden" name="id" value="@item.Id"/>
+                                    <input type="submit" value="Zarządzaj" class="btn btn-block btn btn-secondary" />
+                                </form>
+                                @*<button asp-action="SetManagedYearPlan" asp-route-id="@item.Id" asp-controller="yearplans" class = "btn btn-block btn btn-secondary">Zarządzaj</button>*@
                             <td>
                         </tr>
                     }

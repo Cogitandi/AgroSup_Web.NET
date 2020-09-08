@@ -9,5 +9,6 @@ namespace AgroSup.Core.Repositories
     public interface IUserRepository
     {
         Task<User> GetById(Guid id);
+        Task Update(User user);
     }
 }

@@ -19,8 +19,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label">Wybierz sezon z którego chcesz zaimportować dane</label>
-                @*<select class="form-control" asp-items="ViewBag.YearPlans" name="yearPlanImport">-->*@
-                <select class="form-control" asp-items="Model.UserYearPlans" name="yearPlanImport">-->
+                <select class="form-control" asp-items="ViewBag.YearPlans" name="yearPlanImport">
                     <option selected>Wybierz</option>
                 </select>
                 <small id="import" class="form-text text-muted">Wybierz sezon z którego chcesz zaimportować wszystkie dane</small>
@@ -34,3 +33,6 @@
     </div>
 </div>
 <!--- End content -->
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

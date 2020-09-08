@@ -1,7 +1,3 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
 jQuery.extend(jQuery.validator.messages, {
             required: "To pole jest wymagane.",
             remote: "Please fix this field.",
@@ -10,7 +6,7 @@ jQuery.extend(jQuery.validator.messages, {
             date: "Please enter a valid date.",
             dateISO: "Please enter a valid date (ISO).",
             number: "Podaj poprawną liczbę",
-            digits: "Dozwolone są tylko cyfry.",
+            digits: "Please enter only digits.",
             creditcard: "Please enter a valid credit card number.",
             equalTo: "Please enter the same value again.",
             accept: "Please enter a value with a valid extension.",
