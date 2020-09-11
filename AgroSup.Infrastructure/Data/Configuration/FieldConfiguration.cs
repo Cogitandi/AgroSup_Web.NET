@@ -17,6 +17,7 @@ namespace AgroSup.Infrastructure.Data.Configuration
             builder.Property(x => x.PlantVariety);
             builder.HasOne(x => x.Plant);
             builder.HasOne(x => x.YearPlan).WithMany(y => y.Fields);
+            builder.HasMany(x => x.Parcels).WithOne(y => y.Field);
 
 
         }

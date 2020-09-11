@@ -11,5 +11,6 @@ namespace AgroSup.Core.Domain
         public int CultivatedArea { get; set; }
         public bool FuelApplication { get; set; }
         public Operator Operator { get; set; }
+        public Field Field { get; set; }
     }
 }

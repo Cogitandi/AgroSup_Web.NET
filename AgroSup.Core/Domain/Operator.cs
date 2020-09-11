@@ -14,5 +14,13 @@ namespace AgroSup.Core.Domain
         public string ArimrNumber { get; set; }
         public YearPlan YearPlan { get; set; }
         public IEnumerable<Parcel> Parcels => _parcels;
+
+        public string GetName
+        {
+            get
+                {
+                return FirstName + " " + LastName;
+            }
+        }
     }
 }

@@ -1,0 +1,41 @@
+﻿@model IEnumerable<AgroSup.WebApp.ViewModels.Fields.FieldViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+    int counter = 0;
+}
+
+<partial name="_DataMenuPartial"/>
+<!--- Content -->
+<div class="col-md-10">
+    <div class="container-md mx-4">
+        <h2 class="text-center">Twoje pola w sezonie</h2>
+        <div class="table-responsive">
+            <table id="axs" class="text-center table w-75 mx-auto table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">@Html.DisplayNameFor(modelItem=>modelItem.Number)</th>
+                        <th scope="col">@Html.DisplayNameFor(modelItem => modelItem.Name)</th>
+                        <th scope="col">@Html.DisplayNameFor(modelItem => modelItem.Area)</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                    <tr>
+                        <th class="align-middle" scope="row">@(++counter)</th>
+                        <td class="align-middle">@item.Number</td>
+                        <td class="align-middle">@item.Name</td>
+                        <td class="align-middle">@item.Area</td>
+                        <td class="align-middle">@Html.ActionLink("Modyfikuj", "Edit", new { id = item.Id }, new { @class = "btn btn-block btn btn-secondary" }) </td>
+                    </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!--- End content -->

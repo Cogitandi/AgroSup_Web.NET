@@ -21,7 +21,7 @@ namespace AgroSup.Infrastructure.Repositories
 
         public async Task Create(Field field)
         {
-            _context.Fields.Add(field);
+            _context.Add(field);
             await _context.SaveChangesAsync();
         }
 
@@ -38,7 +38,18 @@ namespace AgroSup.Infrastructure.Repositories
             return await _context.Fields
                 .Include(x => x.Plant)
                 .Include(x => x.YearPlan)
+                .Include(x => x.Parcels)
                 .FirstAsync(x => x.Id.Equals(id));
+        }
+
+        public async Task<IEnumerable<Field>> GetByUser(User user)
+        {
+            return await _context.Fields
+                .Include(x => x.Plant)
+                .Include(x => x.YearPlan)
+                .Include(x => x.Parcels)
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         public async Task Remove(Field field)

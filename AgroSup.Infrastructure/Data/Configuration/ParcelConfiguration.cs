@@ -16,6 +16,7 @@ namespace AgroSup.Infrastructure.Data.Configuration
             builder.Property(x => x.CultivatedArea);
             builder.Property(x => x.FuelApplication);
             builder.HasOne(x => x.Operator).WithMany(x=>x.Parcels);
+            builder.HasOne(x => x.Field).WithMany(x=>x.Parcels);
         }
     }
 }

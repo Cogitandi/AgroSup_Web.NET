@@ -6,7 +6,6 @@ namespace AgroSup.Core.Domain
 {
     public class Field
     {
-
         private IList<Parcel> _parcels = new List<Parcel>();
 
         public Guid Id { get; set; }
@@ -16,6 +15,16 @@ namespace AgroSup.Core.Domain
         public Plant Plant { get; set; }
         public YearPlan YearPlan { get; set; }
 
-        public IEnumerable<Parcel> Parcels => _parcels;
+        public List<Parcel> Parcels { get; set; } = new List<Parcel>();
+
+        public float GetArea()
+        {
+            float area = 0;
+            foreach(var item in Parcels)
+            {
+                area += item.CultivatedArea;
+            }
+            return area/100;
+        }
     }
 }

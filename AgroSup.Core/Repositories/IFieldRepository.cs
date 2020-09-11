@@ -10,6 +10,7 @@ namespace AgroSup.Core.Repositories
     {
         Task<IEnumerable<Field>> GetAll();
         Task<Field> GetById(Guid id);
+        Task<IEnumerable<Field>> GetByUser(User user);
         Task Create(Field @field);
         Task Update(Field @field);
         Task Remove(Field @field);

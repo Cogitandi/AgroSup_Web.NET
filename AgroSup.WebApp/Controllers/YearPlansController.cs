@@ -67,6 +67,7 @@ namespace AgroSup.WebApp.Controllers
                 StartYear = model.StartYear,
                 EndYear = model.StartYear + 1,
                 User = loggedUser
+                
             };
            await _yearPlanRepository.Create(yearPlan);
             return RedirectToAction("Index");

@@ -15,17 +15,14 @@ namespace AgroSup.WebApp.Controllers
     public class OperatorsController : Controller
     {
         private readonly UserManager<User> _userManager;
-        private readonly IUserRepository _userRepository;
         private readonly IOperatorRepository _operatorRepository;
 
         public OperatorsController(
             UserManager<User> userManager,
-            IUserRepository userRepository,
             IOperatorRepository operatorRepository
             )
         {
             _userManager = userManager;
-            _userRepository = userRepository;
             _operatorRepository = operatorRepository;
         }
         public async Task<IActionResult> Index()
