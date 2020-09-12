@@ -19,7 +19,10 @@ namespace AgroSup.Infrastructure.Repositories
 
         public async Task<User> GetById(Guid id)
         {
-            return await _context.ApplicationUsers.Include(x => x.ManagedYearPlan).FirstAsync(x => x.Id == id);
+            return await _context.ApplicationUsers
+                .Include(x => x.ManagedYearPlan)
+                .ThenInclude(x=>x.Operators)
+                .FirstAsync(x => x.Id == id);
         }
 
         public async Task Update(User user)

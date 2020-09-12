@@ -18,39 +18,20 @@ namespace AgroSup.Infrastructure.Data
             _context = context;
         }
 
-        public async Task Create(Operator @operator)
+        private IQueryable<Operator> DbInclude(DbSet<Operator> dbSet)
+        {
+            return dbSet
+                .Include(x => x.Parcels)
+                .ThenInclude(y => y.Operator);
+        }
+
+        public async Task Add(Operator @operator)
         {
             _context.Operators.Add(@operator);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Operator>> GetAll()
-        {
-            return await _context.Operators
-                .Include(x => x.YearPlan)
-                .Include(x => x.Parcels)
-                .ToListAsync();
-
-        }
-
-        public async Task<Operator> GetById(Guid id)
-        {
-            return await _context.Operators
-                .Include(x => x.YearPlan)
-                .Include(x => x.Parcels)
-                .FirstAsync(x => x.Id.Equals(id));
-        }
-
-        public async Task<IEnumerable<Operator>> GetByUser(User user)
-        {
-            return await _context.Operators
-                .Include(x => x.YearPlan)
-                .Include(x => x.Parcels)
-                .AsNoTracking()
-                .ToListAsync();
-        }
-
-        public async Task Remove(Operator @operator)
+        public async Task Delete(Operator @operator)
         {
             _context.Operators.Remove(@operator);
             await _context.SaveChangesAsync();
@@ -60,6 +41,18 @@ namespace AgroSup.Infrastructure.Data
         {
             _context.Operators.Update(@operator);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<Operator> GetById(Guid id)
+        {
+            return await DbInclude(_context.Operators).FirstAsync(x => x.Id == id);
+        }
+
+        public async Task<IEnumerable<Operator>> GetByYearPlan(YearPlan yearplan)
+        {
+            return await DbInclude(_context.Operators)
+                .Where(x => x.YearPlan == yearplan)
+                .ToListAsync();
         }
     }
 }

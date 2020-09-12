@@ -15,8 +15,8 @@ namespace AgroSup.Infrastructure.Data
         {
         }
         public DbSet<Field> Fields { get; set; }
-        public DbSet<Operator> Operators { get; set; }
         public DbSet<Parcel> Parcels { get; set; }
+        public DbSet<Operator> Operators { get; set; }
         public DbSet<Plant> Plants { get; set; }
         public DbSet<User> ApplicationUsers { get; set; }
         public DbSet<YearPlan> YearPlans { get; set; }

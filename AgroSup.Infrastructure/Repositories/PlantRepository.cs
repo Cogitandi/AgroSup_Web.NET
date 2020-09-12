@@ -17,12 +17,6 @@ namespace AgroSup.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task Create(Plant plant)
-        {
-            _context.Plants.Add(plant);
-            await _context.SaveChangesAsync();
-        }
-
         public async Task<IEnumerable<Plant>> GetAll()
         {
             return await _context.Plants
@@ -35,7 +29,13 @@ namespace AgroSup.Infrastructure.Repositories
                 .FindAsync(id);
         }
 
-        public async Task Remove(Plant plant)
+        public async Task Add(Plant plant)
+        {
+            _context.Plants.Add(plant);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task Delete(Plant plant)
         {
             _context.Plants.Remove(plant);
             await _context.SaveChangesAsync();

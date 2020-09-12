@@ -10,8 +10,8 @@ namespace AgroSup.Core.Repositories
     {
         Task<IEnumerable<Plant>> GetAll();
         Task<Plant> GetById(Guid id);
-        Task Create(Plant @plant);
-        Task Update(Plant @plant);
-        Task Remove(Plant @plant);
+        Task Add(Plant plant);
+        Task Update(Plant plant);
+        Task Delete(Plant plant);
     }
 }

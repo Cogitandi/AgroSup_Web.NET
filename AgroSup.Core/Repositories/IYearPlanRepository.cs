@@ -8,11 +8,10 @@ namespace AgroSup.Core.Repositories
 {
     public interface IYearPlanRepository
     {
-        Task<IEnumerable<YearPlan>> GetAll();
         Task<YearPlan> GetById(Guid id);
         Task<IEnumerable<YearPlan>> GetByUser(User user);
-        Task Create(YearPlan @yearPlan);
-        Task Update(YearPlan @yearPlan);
-        Task Remove(YearPlan @yearPlan);
+        Task Add(YearPlan yearPlan);
+        Task Update(YearPlan yearPlan);
+        Task Delete(YearPlan yearPlan);
     }
 }

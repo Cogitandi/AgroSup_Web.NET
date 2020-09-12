@@ -21,5 +21,10 @@ namespace AgroSup.WebApp.ViewModels.Fields
         public float Area { get; set; }
 
         public List<ParcelViewModel> Parcels { get; set; } = new List<ParcelViewModel>();
+
+        public void SetParcels(IEnumerable<ParcelViewModel> domains)
+        {
+            Parcels = domains.ToList();
+        }
     }
 }

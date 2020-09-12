@@ -42,7 +42,6 @@ namespace AgroSup.WebApp
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IFieldRepository, FieldRepository>();
             services.AddScoped<IOperatorRepository, OperatorRepository>();
-            services.AddScoped<IParcelRepository, ParcelRepository>();
             services.AddScoped<IPlantRepository, PlantRepository>();
             services.AddScoped<IYearPlanRepository, YearPlanRepository>();
         }

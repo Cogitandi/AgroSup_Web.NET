@@ -8,11 +8,10 @@ namespace AgroSup.Core.Repositories
 {
     public interface IOperatorRepository
     {
-        Task<IEnumerable<Operator>> GetAll();
         Task<Operator> GetById(Guid id);
-        Task<IEnumerable<Operator>> GetByUser(User user);
-        Task Create(Operator @operator);
+        Task<IEnumerable<Operator>> GetByYearPlan(YearPlan yearplan);
+        Task Add(Operator @operator);
         Task Update(Operator @operator);
-        Task Remove(Operator @operator);
+        Task Delete(Operator @operator);
     }
 }

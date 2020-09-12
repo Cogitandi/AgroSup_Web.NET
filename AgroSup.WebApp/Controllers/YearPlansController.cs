@@ -16,13 +16,12 @@ namespace AgroSup.WebApp.Controllers
     public class YearPlansController : Controller
     {
         private readonly UserManager<User> _userManager;
-        private readonly IYearPlanRepository _yearPlanRepository;
         private readonly IUserRepository _userRepository;
-        
+        private readonly IYearPlanRepository _yearPlanRepository;
 
         public YearPlansController(
-            IUserRepository userRepository,
             UserManager<User> userManager,
+            IUserRepository userRepository,
             IYearPlanRepository yearPlanRepository)
         {
             _userRepository = userRepository;
@@ -34,7 +33,7 @@ namespace AgroSup.WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var loggedUser = await _userManager.GetUserAsync(User);
+            var loggedUser = await GetLoggedUser();
             var userYearPlans = await _yearPlanRepository.GetByUser(loggedUser);
             var model = userYearPlans.Select(x=> new YearPlanViewModel
             {
@@ -60,7 +59,7 @@ namespace AgroSup.WebApp.Controllers
             {
                 return View();
             }
-            var loggedUser = await _userManager.GetUserAsync(User);
+            var loggedUser = await GetLoggedUser();
 
             YearPlan yearPlan = new YearPlan()
             {
@@ -69,7 +68,7 @@ namespace AgroSup.WebApp.Controllers
                 User = loggedUser
                 
             };
-           await _yearPlanRepository.Create(yearPlan);
+           await _yearPlanRepository.Add(yearPlan);
             return RedirectToAction("Index");
        
         }
@@ -77,8 +76,7 @@ namespace AgroSup.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SetManagedYearPlan(Guid id)
         {
-            var loggedUserId =  _userManager.GetUserId(User);
-            var loggedUser = await _userRepository.GetById(Guid.Parse(loggedUserId));
+            var loggedUser = await GetLoggedUser();
             var yearPlan = await _yearPlanRepository.GetById(id);
             loggedUser.ManagedYearPlan = yearPlan;
             await _userRepository.Update(loggedUser);
@@ -104,6 +102,15 @@ namespace AgroSup.WebApp.Controllers
                 }
             }
             return Json(true);
+        }
+
+
+        // Methods
+        private async Task<User> GetLoggedUser()
+        {
+            var loggedUserId = Guid.Parse(_userManager.GetUserId(User));
+            var loggedUser = await _userRepository.GetById(loggedUserId);
+            return loggedUser;
         }
     }
 }

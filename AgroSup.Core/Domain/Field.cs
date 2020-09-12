@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace AgroSup.Core.Domain
@@ -25,6 +26,10 @@ namespace AgroSup.Core.Domain
                 area += item.CultivatedArea;
             }
             return area/100;
+        }
+        public void SetParcels(IEnumerable<Parcel> parcels)
+        {
+            Parcels = parcels.ToList();
         }
     }
 }

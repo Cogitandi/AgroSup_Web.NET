@@ -18,42 +18,33 @@ namespace AgroSup.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task Create(YearPlan yearPlan)
+        private IQueryable<YearPlan> DbInclude(DbSet<YearPlan> dbSet)
+        {
+            return dbSet
+                .Include(x => x.User)
+                .Include(x => x.Fields)
+                .Include(x => x.Operators);
+        }
+
+        public async Task<YearPlan> GetById(Guid id)
+        {
+            return await DbInclude(_context.YearPlans).FirstAsync(x => x.Id==id);
+        }
+
+        public async Task<IEnumerable<YearPlan>> GetByUser(User user)
+        {
+            return await DbInclude(_context.YearPlans)
+                .Where(x => x.User == user)
+                .ToListAsync();
+        }
+
+        public async Task Add(YearPlan yearPlan)
         {
             _context.YearPlans.Add(yearPlan);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<YearPlan>> GetAll()
-        {
-            return await _context.YearPlans
-                .Include(x=>x.User)
-                .Include(x=>x.Fields)
-                .Include(x=>x.Operators)
-                .ToListAsync();
-        }
-
-        public async Task<YearPlan> GetById(Guid id)
-        {
-            return await _context.YearPlans
-                .Include(x => x.User)
-                .Include(x => x.Fields)
-                .Include(x => x.Operators)
-                .FirstAsync(x => x.Id.Equals(id));
-        }
-
-        public async Task<IEnumerable<YearPlan>> GetByUser(User user)
-        {
-            return await _context.YearPlans
-                .Include(x => x.User)
-                .Include(x => x.Fields)
-                .Include(x => x.Operators)
-                .Where(x => x.User == user)
-                .AsNoTracking()
-                .ToListAsync();
-        }
-
-        public async Task Remove(YearPlan YearPlan)
+        public async Task Delete(YearPlan YearPlan)
         {
             _context.Remove(YearPlan);
             await _context.SaveChangesAsync();

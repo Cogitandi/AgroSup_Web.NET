@@ -15,20 +15,24 @@ namespace AgroSup.WebApp.Controllers
     public class OperatorsController : Controller
     {
         private readonly UserManager<User> _userManager;
+        private readonly IUserRepository _userRepository;
         private readonly IOperatorRepository _operatorRepository;
 
         public OperatorsController(
             UserManager<User> userManager,
+            IUserRepository userRepository,
             IOperatorRepository operatorRepository
             )
         {
             _userManager = userManager;
+            _userRepository = userRepository;
             _operatorRepository = operatorRepository;
         }
+
         public async Task<IActionResult> Index()
         {
-            var loggedUser = await _userManager.GetUserAsync(User);
-            var operators = await _operatorRepository.GetByUser(loggedUser);
+            var managedYearPlan = await getManagedYearPlan();
+            var operators = await _operatorRepository.GetByYearPlan(managedYearPlan);
             var model = operators.Select(x => new OperatorViewModel()
             {
                 Id = x.Id,
@@ -51,16 +55,16 @@ namespace AgroSup.WebApp.Controllers
             {
                 return View();
             }
-            var loggedUser = await _userManager.GetUserAsync(User);
+            var managedYearPlan = await getManagedYearPlan();
 
             Operator @operator = new Operator()
             {
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 ArimrNumber = model.ArimrNumber,
-                YearPlan = loggedUser.ManagedYearPlan
+                YearPlan = managedYearPlan,
             };
-            await _operatorRepository.Create(@operator);
+            await _operatorRepository.Add(@operator);
             return RedirectToAction("Index");
         }
         public async Task<IActionResult> Edit(Guid id)
@@ -84,7 +88,6 @@ namespace AgroSup.WebApp.Controllers
                 ArimrNumber = @operator.ArimrNumber
             };
 
-
             return View(model);
         }
 
@@ -96,20 +99,30 @@ namespace AgroSup.WebApp.Controllers
             {
                 return View(model);
             }
+
             var @operator = await _operatorRepository.GetById(model.Id);
-                @operator.FirstName = model.FirstName;
-                @operator.LastName = model.LastName;
-                @operator.ArimrNumber = model.ArimrNumber;
-                await _operatorRepository.Update(@operator);
-                return RedirectToAction("Index");
+            @operator.FirstName = model.FirstName;
+            @operator.LastName = model.LastName;
+            @operator.ArimrNumber = model.ArimrNumber;
+            await _operatorRepository.Update(@operator);
+            return RedirectToAction("Index");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(Guid id)
         {
             var @operator = await _operatorRepository.GetById(id);
-            await _operatorRepository.Remove(@operator);
+            await _operatorRepository.Delete(@operator);
             return RedirectToAction("Index");
+        }
+
+        // Methods
+        private async Task<YearPlan> getManagedYearPlan()
+        {
+            var loggedUserId = Guid.Parse(_userManager.GetUserId(User));
+            var loggedUser = await _userRepository.GetById(loggedUserId);
+            var managedYearPlan = loggedUser.ManagedYearPlan;
+            return managedYearPlan;
         }
     }
 }
