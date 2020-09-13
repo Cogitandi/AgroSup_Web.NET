@@ -20,5 +20,6 @@ namespace AgroSup.WebApp.ViewModels.YearPlans
         public int StartYear { get; set; }
         [DisplayName("Rok zakończenia")]
         public int EndYear { get; set; }
+        public IEnumerable<SelectListItem> YearPlansToImport { get; set; }
     }
 }

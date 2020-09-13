@@ -48,6 +48,7 @@ namespace AgroSup.WebApp.Controllers
         {
             var loggedUser = await _userManager.GetUserAsync(User);
             var userYearPlans = await _yearPlanRepository.GetByUser(loggedUser);
+
             ViewBag.YearPlans = new SelectList(userYearPlans, "Id", "GetYearPlanName");
             return View();
         }

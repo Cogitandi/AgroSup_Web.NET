@@ -9,9 +9,11 @@ namespace AgroSup.Core.Repositories
     public interface IFieldRepository
     {
         Task<Field> GetById(Guid id);
+        Task<Field> GetPrevious(Guid id);
+        Task<Field> GetNext(Guid id);
         Task<IEnumerable<Field>> GetByYearPlan(YearPlan yearplan);
-        Task Add(Field @field);
-        Task Update(Field @field);
-        Task Delete(Field @field);
+        Task Add(Field field);
+        Task Update(Field field);
+        Task Delete(Field field);
     }
 }

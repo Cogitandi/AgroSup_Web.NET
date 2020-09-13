@@ -32,6 +32,11 @@ namespace AgroSup.WebApp.Controllers
         public async Task<IActionResult> Index()
         {
             var managedYearPlan = await getManagedYearPlan();
+            if (managedYearPlan == null)
+            {
+                return RedirectToAction("Index", "YearPlan");
+            }
+
             var operators = await _operatorRepository.GetByYearPlan(managedYearPlan);
             var model = operators.Select(x => new OperatorViewModel()
             {
@@ -56,6 +61,11 @@ namespace AgroSup.WebApp.Controllers
                 return View();
             }
             var managedYearPlan = await getManagedYearPlan();
+            if (managedYearPlan == null)
+            {
+                return RedirectToAction("Index", "YearPlan");
+            }
+
 
             Operator @operator = new Operator()
             {

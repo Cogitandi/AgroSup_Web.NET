@@ -35,6 +35,12 @@ namespace AgroSup.WebApp.Controllers
         public async Task<IActionResult> Index()
         {
             var managedYearPlan = await getManagedYearPlan();
+
+            if (managedYearPlan == null)
+            {
+                return RedirectToAction("Index", "YearPlan");
+            }
+
             var fields = await _fieldRepository.GetByYearPlan(managedYearPlan);
 
             var model = fields.Select(x => new FieldViewModel()
@@ -50,9 +56,22 @@ namespace AgroSup.WebApp.Controllers
         public async Task<IActionResult> Create()
         {
             var managedYearPlan = await getManagedYearPlan();
-            var operators = managedYearPlan.Operators;
+            if (managedYearPlan == null)
+            {
+                return RedirectToAction("Index", "YearPlan");
+            }
+            var operators = managedYearPlan.Operators.Select(x => new SelectListItem()
+            {
+                Text = x.GetName,
+                Value = x.Id.ToString(),
+            });
+
+            var model = new FieldViewModel()
+            {
+                Number = await GetNumberForNewField(managedYearPlan),
+            };
             ViewBag.Operators = new SelectList(operators, "Id", "GetName");
-            return View();
+            return View(model);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -64,6 +83,11 @@ namespace AgroSup.WebApp.Controllers
             }
 
             var managedYearPlan = await getManagedYearPlan();
+            if (managedYearPlan == null)
+            {
+                return RedirectToAction("Index", "YearPlan");
+            }
+
 
             Field field = new Field()
             {
@@ -97,6 +121,11 @@ namespace AgroSup.WebApp.Controllers
             model.SetParcels(getParcelsModelFromDomain(field));
 
             var managedYearPlan = await getManagedYearPlan();
+            if (managedYearPlan == null)
+            {
+                return RedirectToAction("Index", "YearPlan");
+            }
+
             var operators = managedYearPlan.Operators;
             ViewBag.Operators = new SelectList(operators, "Id", "GetName");
 
@@ -133,6 +162,11 @@ namespace AgroSup.WebApp.Controllers
         public async Task<IActionResult> AddParcel(FieldViewModel model)
         {
             var managedYearPlan = await getManagedYearPlan();
+            if (managedYearPlan == null)
+            {
+                return RedirectToAction("Index", "YearPlan");
+            }
+
             var operators = managedYearPlan.Operators;
             ViewBag.Operators = new SelectList(operators, "Id", "GetName");
             model.Parcels.Add(new ParcelViewModel());
@@ -143,6 +177,11 @@ namespace AgroSup.WebApp.Controllers
         public async Task<IActionResult> RemoveParcel(FieldViewModel model, int index)
         {
             var managedYearPlan = await getManagedYearPlan();
+            if (managedYearPlan == null)
+            {
+                return RedirectToAction("Index", "YearPlan");
+            }
+
             var operators = managedYearPlan.Operators;
             ViewBag.Operators = new SelectList(operators, "Id", "GetName");
 
@@ -150,8 +189,39 @@ namespace AgroSup.WebApp.Controllers
             model.Parcels.RemoveAt(index);
             return PartialView("Parcels", model);
         }
+        [HttpPost]
+        public async Task<IActionResult> ChangeNumber(Guid fieldId, int position)
+        {
+            // position = 1 - change fieldId number to up
+            // position = 2 - change fieldId number to down
+
+            if(position==1)
+            {
+                var mainField = await _fieldRepository.GetById(fieldId);
+                var fieldWithHigherNumber = await _fieldRepository.GetPrevious(fieldId);
+                await SwapFieldNumbers(mainField, fieldWithHigherNumber);
+            } else
+            {
+                var mainField = await _fieldRepository.GetById(fieldId);
+                var fieldWithLowerNumber = await _fieldRepository.GetNext(fieldId);
+                await SwapFieldNumbers(mainField, fieldWithLowerNumber);
+            }
+
+
+            var field = await _fieldRepository.GetById(fieldId);
+            //var neighbourField = position==1?await
+            return RedirectToAction("Index");
+        }
 
         // Methods
+        private async Task SwapFieldNumbers(Field a, Field b)
+        {
+            var temp = a.Number;
+            a.Number = b.Number;
+            b.Number = temp;
+            await _fieldRepository.Update(a);
+            await _fieldRepository.Update(b);
+        }
         private async Task<YearPlan> getManagedYearPlan()
         {
             var loggedUserId = Guid.Parse(_userManager.GetUserId(User));
@@ -179,6 +249,15 @@ namespace AgroSup.WebApp.Controllers
                 FuelApplication = x.FuelApplication,
                 Operator = x.Operator,
             });
+        }
+        private async Task<int> GetNumberForNewField(YearPlan yearPlan)
+        {
+            var yearPlanFields = await _fieldRepository.GetByYearPlan(yearPlan);
+            if(yearPlanFields.Count()>0)
+            {
+                return yearPlanFields.Max(x => x.Number)+1;
+            }
+            return 1;
         }
 
     }

@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<AgroSup.WebApp.ViewModels.Fields.FieldViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Lista pól";
     int counter = 0;
 }
 
-<partial name="_DataMenuPartial"/>
+<partial name="_DataMenuPartial" />
 <!--- Content -->
 <div class="col-md-10">
     <div class="container-md mx-4">
@@ -14,8 +14,9 @@
             <table id="axs" class="text-center table w-75 mx-auto table-striped table-hover">
                 <thead>
                     <tr>
+                        <th scope="col"></th>
                         <th scope="col">#</th>
-                        <th scope="col">@Html.DisplayNameFor(modelItem=>modelItem.Number)</th>
+                        <th scope="col">@Html.DisplayNameFor(modelItem => modelItem.Number)</th>
                         <th scope="col">@Html.DisplayNameFor(modelItem => modelItem.Name)</th>
                         <th scope="col">@Html.DisplayNameFor(modelItem => modelItem.Area)</th>
                         <th scope="col"></th>
@@ -24,13 +25,33 @@
                 <tbody>
                     @foreach (var item in Model)
                     {
-                    <tr>
-                        <th class="align-middle" scope="row">@(++counter)</th>
-                        <td class="align-middle">@item.Number</td>
-                        <td class="align-middle">@item.Name</td>
-                        <td class="align-middle">@item.Area</td>
-                        <td class="align-middle">@Html.ActionLink("Modyfikuj", "Edit", new { id = item.Id }, new { @class = "btn btn-block btn btn-secondary" }) </td>
-                    </tr>
+                        <tr>
+                            @if (Model.First().Id == item.Id)
+                            {
+                                <th class="align-middle">
+                                    <i class="fas fa-sort-down fa-2x down" data-id="@item.Id"></i>
+                                </th>
+                            }
+                            else if (Model.Last().Id == item.Id)
+                            {
+                                <th class="align-middle">
+                                    <i class="fas fa-sort-up fa-2x up" data-id="@item.Id"></i>
+                                </th>
+                            }
+                            else
+                            {
+                                <th class="align-middle">
+                                    <p><i class="fas fa-sort-up fa-2x up" data-id="@item.Id"></i></p>
+                                    <p><i class="fas fa-sort-down fa-2x down" data-id="@item.Id"></i></p>
+                                </th>
+                            }
+
+                            <th class="align-middle">@(++counter)</th>
+                            <td class="align-middle">@item.Number</td>
+                            <td class="align-middle">@item.Name</td>
+                            <td class="align-middle">@item.Area</td>
+                            <td class="align-middle">@Html.ActionLink("Modyfikuj", "Edit", new { id = item.Id }, new { @class = "btn btn-block btn btn-secondary" }) </td>
+                        </tr>
                     }
 
                 </tbody>
@@ -39,3 +60,36 @@
     </div>
 </div>
 <!--- End content -->
+
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <script>
+        $(".up").on("click", function () {
+            var id = $(this).data("id");
+        $.ajax({
+            async: true,
+            data: "fieldId="+id+"&position=1",
+            type: "POST",
+            url: '@Url.Action("ChangeNumber", "Fields")',
+            success: function (partialView) {
+                location.reload();
+            }
+        });
+        });
+
+         $(".down").on("click", function () {
+            var id = $(this).data("id");
+        $.ajax({
+            async: true,
+            data: "fieldId="+id+"&position=2",
+            type: "POST",
+            url: '@Url.Action("ChangeNumber", "Fields")',
+            success: function (partialView) {
+                location.reload();
+            }
+        });
+    });
+
+    </script>
+}

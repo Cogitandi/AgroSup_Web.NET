@@ -24,7 +24,8 @@ namespace AgroSup.Infrastructure.Repositories
             return dbSet
                 .Include(x => x.Plant)
                 .Include(x => x.Parcels)
-                .ThenInclude(y=>y.Operator);
+                .ThenInclude(y => y.Operator)
+                .Include(x => x.YearPlan);
         }
 
         public async Task Add(Field field)
@@ -49,11 +50,42 @@ namespace AgroSup.Infrastructure.Repositories
         {
             return await DbInclude(_context.Fields).FirstAsync(x => x.Id == id);
         }
+        public async Task<Field> GetPrevious(Guid id)
+        {
+            Field previousField = null;
+            var fieldFromId = await GetById(id);
+            var fields = await GetByYearPlan(fieldFromId.YearPlan);
+            var fieldsList = fields.ToList();
+            for(int i=0;i< fieldsList.Count();i++)
+            {
+                if(fieldsList[i].Id == id)
+                {
+                    previousField = fieldsList[i - 1];
+                }
+            }
+            return previousField;
+        }
+        public async Task<Field> GetNext(Guid id)
+        {
+            Field nextField = null;
+            var fieldFromId = await GetById(id);
+            var fields = await GetByYearPlan(fieldFromId.YearPlan);
+            var fieldsList = fields.ToList();
+            for (int i = 0; i < fieldsList.Count(); i++)
+            {
+                if (fieldsList[i].Id == id)
+                {
+                    nextField = fieldsList[i + 1];
+                }
+            }
+            return nextField;
+        }
 
         public async Task<IEnumerable<Field>> GetByYearPlan(YearPlan yearplan)
         {
             return await DbInclude(_context.Fields)
                 .Where(x => x.YearPlan == yearplan)
+                .OrderBy(x=>x.Number)
                 .ToListAsync();
         }
     }
