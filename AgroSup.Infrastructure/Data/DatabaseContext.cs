@@ -18,6 +18,7 @@ namespace AgroSup.Infrastructure.Data
         public DbSet<Parcel> Parcels { get; set; }
         public DbSet<Operator> Operators { get; set; }
         public DbSet<Plant> Plants { get; set; }
+        public DbSet<UserPlant> UserPlants { get; set; }
         public DbSet<User> ApplicationUsers { get; set; }
         public DbSet<YearPlan> YearPlans { get; set; }
 
@@ -28,6 +29,7 @@ namespace AgroSup.Infrastructure.Data
             builder.ApplyConfiguration(new OperatorConfiguration());
             builder.ApplyConfiguration(new ParcelConfiguration());
             builder.ApplyConfiguration(new PlantConfiguration());
+            builder.ApplyConfiguration(new UserPlantConfiguration());
             builder.ApplyConfiguration(new UserConfiguration());
             builder.ApplyConfiguration(new YearPlanConfiguration());
         }

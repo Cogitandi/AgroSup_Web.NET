@@ -12,6 +12,7 @@ namespace AgroSup.Core.Domain
         private IList<YearPlan> _yearPlans = new List<YearPlan>();
 
         public YearPlan ManagedYearPlan { get; set; }
+        public IEnumerable<UserPlant> ChoosedPlants { get; set; } = new List<UserPlant>();
         public IEnumerable<YearPlan> YearPlans => _yearPlans;
     }
 }

@@ -12,6 +12,7 @@ namespace AgroSup.Infrastructure.Data.Configuration
         public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.HasOne(x => x.ManagedYearPlan);
+            builder.HasMany(x => x.ChoosedPlants).WithOne(y => y.User);
             builder.HasMany(x => x.YearPlans).WithOne(y => y.User);
         }
     }
