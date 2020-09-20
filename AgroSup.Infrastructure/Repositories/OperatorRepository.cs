@@ -22,7 +22,7 @@ namespace AgroSup.Infrastructure.Data
         {
             return dbSet
                 .Include(x => x.Parcels)
-                .ThenInclude(y => y.Operator);
+                .ThenInclude(x => x.Field);
         }
 
         public async Task Add(Operator @operator)
@@ -45,7 +45,7 @@ namespace AgroSup.Infrastructure.Data
 
         public async Task<Operator> GetById(Guid id)
         {
-            return await DbInclude(_context.Operators).FirstAsync(x => x.Id == id);
+            return await DbInclude(_context.Operators).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<IEnumerable<Operator>> GetByYearPlan(YearPlan yearplan)

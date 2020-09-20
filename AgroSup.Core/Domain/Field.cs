@@ -7,8 +7,6 @@ namespace AgroSup.Core.Domain
 {
     public class Field
     {
-        private IList<Parcel> _parcels = new List<Parcel>();
-
         public Guid Id { get; set; }
         public int Number { get; set; }
         public string Name { get; set; }
@@ -18,18 +16,31 @@ namespace AgroSup.Core.Domain
 
         public List<Parcel> Parcels { get; set; } = new List<Parcel>();
 
-        public float GetArea()
+        public float GetArea
         {
-            float area = 0;
-            foreach(var item in Parcels)
+            get
             {
-                area += item.CultivatedArea;
+                float area = 0;
+                foreach (var item in Parcels)
+                {
+                    area += item.CultivatedArea;
+                }
+                return area / 100;
             }
-            return area/100;
         }
         public void SetParcels(IEnumerable<Parcel> parcels)
         {
             Parcels = parcels.ToList();
+        }
+        public static string GetPlantName(IEnumerable<Field> fields, Field field)
+        {
+            var fieldName = field.Name;
+            var plant = fields.FirstOrDefault(x => x.Name.Equals(fieldName))?.Plant;
+            if(plant!= null)
+            {
+                return plant.Name;
+            }
+            return "Brak danych";
         }
     }
 }

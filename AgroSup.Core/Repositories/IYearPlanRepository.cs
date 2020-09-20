@@ -10,6 +10,7 @@ namespace AgroSup.Core.Repositories
     {
         Task<YearPlan> GetById(Guid id);
         Task<IEnumerable<YearPlan>> GetByUser(User user);
+        Task<YearPlan> GetByYearBack(YearPlan yearPlan, int yearBack);
         Task Add(YearPlan yearPlan);
         Task Update(YearPlan yearPlan);
         Task Delete(YearPlan yearPlan);

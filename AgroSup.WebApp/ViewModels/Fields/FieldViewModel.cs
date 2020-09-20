@@ -21,7 +21,7 @@ namespace AgroSup.WebApp.ViewModels.Fields
         [DisplayName("Powierzchnia [ha]")]
         public float Area { get; set; }
 
-        public List<ParcelViewModel> Parcels { get; set; } = new List<ParcelViewModel>();
+        public IList<ParcelViewModel> Parcels { get; set; } = new List<ParcelViewModel>();
 
         public void SetParcels(IEnumerable<ParcelViewModel> domains)
         {

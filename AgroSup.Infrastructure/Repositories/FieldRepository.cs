@@ -48,7 +48,7 @@ namespace AgroSup.Infrastructure.Repositories
 
         public async Task<Field> GetById(Guid id)
         {
-            return await DbInclude(_context.Fields).FirstAsync(x => x.Id == id);
+            return await DbInclude(_context.Fields).FirstOrDefaultAsync(x => x.Id == id);
         }
         public async Task<Field> GetPrevious(Guid id)
         {

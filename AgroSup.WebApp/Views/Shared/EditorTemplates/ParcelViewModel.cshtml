@@ -1,5 +1,7 @@
 ﻿@model AgroSup.WebApp.ViewModels.Fields.ParcelViewModel
-
+@{ 
+    var options = (IEnumerable<SelectListItem>)@ViewData["operators"];
+}
     <div class="form-row">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group col-md-2">
@@ -13,9 +15,9 @@
             <span asp-validation-for="CultivatedArea" class="text-danger"></span>
         </div>
         <div class="form-group col-md-2">
-            <label asp-for="Operator"></label>
-            <select class="form-control" asp-items="ViewBag.Operators" name="operator" title="Wybierz">
-                <option selected>Brak</option>
+            <label asp-for="OperatorId"></label>
+            <select class="form-control" asp-items="ViewBag.OperatorSelectList" asp-for="OperatorId" title="Wybierz">
+                <option selected value="00000000-0000-0000-0000-000000000000">Brak</option>
             </select>
         </div>
         <div class="form-group col-auto align-self-end">

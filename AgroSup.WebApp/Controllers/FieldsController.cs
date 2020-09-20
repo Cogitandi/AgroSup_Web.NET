@@ -20,16 +20,19 @@ namespace AgroSup.WebApp.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IUserRepository _userRepository;
         private readonly IFieldRepository _fieldRepository;
+        private readonly IOperatorRepository _operatorRepository;
 
         public FieldsController(
             UserManager<User> userManager,
             IUserRepository userRepository,
-            IFieldRepository fieldRepository
+            IFieldRepository fieldRepository,
+            IOperatorRepository operatorRepository
             )
         {
             _userManager = userManager;
             _userRepository = userRepository;
             _fieldRepository = fieldRepository;
+            _operatorRepository = operatorRepository;
         }
 
         public async Task<IActionResult> Index()
@@ -48,7 +51,7 @@ namespace AgroSup.WebApp.Controllers
                 Id = x.Id,
                 Name = x.Name,
                 Number = x.Number,
-                Area = x.GetArea()
+                Area = x.GetArea,
             });
             return View(model);
         }
@@ -60,17 +63,16 @@ namespace AgroSup.WebApp.Controllers
             {
                 return RedirectToAction("Index", "YearPlan");
             }
-            var operators = managedYearPlan.Operators.Select(x => new SelectListItem()
-            {
-                Text = x.GetName,
-                Value = x.Id.ToString(),
-            });
-
             var model = new FieldViewModel()
             {
                 Number = await GetNumberForNewField(managedYearPlan),
             };
-            ViewBag.Operators = new SelectList(operators, "Id", "GetName");
+            var operatorSelectList = managedYearPlan.Operators.Select(x => new SelectListItem()
+            {
+                Text = x.GetName,
+                Value = x.Id.ToString(),
+            });
+            ViewBag.OperatorSelectList = operatorSelectList;
             return View(model);
         }
         [HttpPost]
@@ -88,14 +90,19 @@ namespace AgroSup.WebApp.Controllers
                 return RedirectToAction("Index", "YearPlan");
             }
 
-
             Field field = new Field()
             {
                 Name = model.Name,
                 Number = model.Number,
                 YearPlan = managedYearPlan,
+                Parcels = model.Parcels.Select(x => new Parcel()
+                {
+                    Number = x.Number,
+                    CultivatedArea = x.CultivatedArea,
+                    FuelApplication = x.FuelApplication,
+                    Operator = _operatorRepository.GetById(x.OperatorId).Result
+                }).ToList()
             };
-            field.SetParcels(getParcelsFromModel(model));
             await _fieldRepository.Add(field);
             return RedirectToAction("Index");
         }
@@ -111,15 +118,6 @@ namespace AgroSup.WebApp.Controllers
             {
                 return NotFound();
             }
-
-            var model = new FieldViewModel()
-            {
-                Id = field.Id,
-                Name = field.Name,
-                Number = field.Number,
-            };
-            model.SetParcels(getParcelsModelFromDomain(field));
-
             var managedYearPlan = await getManagedYearPlan();
             if (managedYearPlan == null)
             {
@@ -127,8 +125,27 @@ namespace AgroSup.WebApp.Controllers
             }
 
             var operators = managedYearPlan.Operators;
-            ViewBag.Operators = new SelectList(operators, "Id", "GetName");
 
+            var model = new FieldViewModel()
+            {
+                Id = field.Id,
+                Name = field.Name,
+                Number = field.Number,
+                Parcels = field.Parcels.Select(x => new ParcelViewModel()
+                {
+                    Number = x.Number,
+                    CultivatedArea = x.CultivatedArea,
+                    FuelApplication = x.FuelApplication,
+                    OperatorId = x.Operator != null ? x.Operator.Id : Guid.NewGuid(),
+                }).ToList()
+            };
+
+            var operatorSelectList = managedYearPlan.Operators.Select(x => new SelectListItem()
+            {
+                Text = x.GetName,
+                Value = x.Id.ToString(),
+            });
+            ViewBag.OperatorSelectList = operatorSelectList;
             return View(model);
         }
 
@@ -144,7 +161,14 @@ namespace AgroSup.WebApp.Controllers
             var field = await _fieldRepository.GetById(model.Id);
             field.Name = model.Name;
             field.Number = model.Number;
-            field.SetParcels(getParcelsFromModel(model));
+            field.Parcels = model.Parcels.Select(x => new Parcel()
+            {
+                CultivatedArea = x.CultivatedArea,
+                Number = x.Number,
+                FuelApplication = x.FuelApplication,
+                Operator = _operatorRepository.GetById(x.OperatorId).Result
+            }
+            ).ToList();
             await _fieldRepository.Update(field);
             return RedirectToAction("Index");
         }
@@ -166,9 +190,12 @@ namespace AgroSup.WebApp.Controllers
             {
                 return RedirectToAction("Index", "YearPlan");
             }
-
-            var operators = managedYearPlan.Operators;
-            ViewBag.Operators = new SelectList(operators, "Id", "GetName");
+            var operatorSelectList = managedYearPlan.Operators.Select(x => new SelectListItem()
+            {
+                Text = x.GetName,
+                Value = x.Id.ToString(),
+            });
+            ViewBag.OperatorSelectList = operatorSelectList;
             model.Parcels.Add(new ParcelViewModel());
             return PartialView("Parcels", model);
         }
@@ -181,12 +208,14 @@ namespace AgroSup.WebApp.Controllers
             {
                 return RedirectToAction("Index", "YearPlan");
             }
-
-            var operators = managedYearPlan.Operators;
-            ViewBag.Operators = new SelectList(operators, "Id", "GetName");
-
             ModelState.Clear();
             model.Parcels.RemoveAt(index);
+            var operatorSelectList = managedYearPlan.Operators.Select(x => new SelectListItem()
+            {
+                Text = x.GetName,
+                Value = x.Id.ToString(),
+            });
+            ViewBag.OperatorSelectList = operatorSelectList;
             return PartialView("Parcels", model);
         }
         [HttpPost]
@@ -194,22 +223,9 @@ namespace AgroSup.WebApp.Controllers
         {
             // position = 1 - change fieldId number to up
             // position = 2 - change fieldId number to down
-
-            if(position==1)
-            {
-                var mainField = await _fieldRepository.GetById(fieldId);
-                var fieldWithHigherNumber = await _fieldRepository.GetPrevious(fieldId);
-                await SwapFieldNumbers(mainField, fieldWithHigherNumber);
-            } else
-            {
-                var mainField = await _fieldRepository.GetById(fieldId);
-                var fieldWithLowerNumber = await _fieldRepository.GetNext(fieldId);
-                await SwapFieldNumbers(mainField, fieldWithLowerNumber);
-            }
-
-
-            var field = await _fieldRepository.GetById(fieldId);
-            //var neighbourField = position==1?await
+            var mainField = await _fieldRepository.GetById(fieldId);
+            var fieldToChangeNumberWith = position == 1 ? await _fieldRepository.GetPrevious(fieldId): await _fieldRepository.GetNext(fieldId);
+            await SwapFieldNumbers(mainField, fieldToChangeNumberWith);
             return RedirectToAction("Index");
         }
 
@@ -237,7 +253,7 @@ namespace AgroSup.WebApp.Controllers
                 Number = x.Number,
                 CultivatedArea = x.CultivatedArea,
                 FuelApplication = x.FuelApplication,
-                Operator = x.Operator,
+                //Operator = x.OperatorI,
             });
         }
         private IEnumerable<ParcelViewModel> getParcelsModelFromDomain(Field domain)
@@ -247,7 +263,7 @@ namespace AgroSup.WebApp.Controllers
                 Number = x.Number,
                 CultivatedArea = x.CultivatedArea,
                 FuelApplication = x.FuelApplication,
-                Operator = x.Operator,
+                //Operator = x.Operator,
             });
         }
         private async Task<int> GetNumberForNewField(YearPlan yearPlan)

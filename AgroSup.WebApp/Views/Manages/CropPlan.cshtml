@@ -1,0 +1,53 @@
+﻿@model AgroSup.WebApp.ViewModels.Manages.CropPlanViewModel
+
+@{
+    ViewData["Title"] = "Plan upraw";
+}
+<partial name="_ManageMenuPartial" />
+
+<!--- Content -->
+<div class="col-md-10">
+    <div class="container-md mx-auto">
+        <form asp-action="CropPlan">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <button type="submit" class="float-right btn btn-primary">Zapisz</button>
+            <h2 class="text-center">Uprawy 11/12  </h2>
+            <div class="table-responsive">
+                <table id="axs" class="text-center w-75 mx-auto table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Pole</th>
+                            <th scope="col">Powierzchnia [ha]</th>
+                            <th scope="col">@(Model.StartYear-2)/@(Model.EndYear-2)</th>
+                            <th scope="col">@(Model.StartYear-1)/@(Model.EndYear-1)</th>
+                            <th scope="col">@Model.StartYear/@Model.EndYear</th>
+                            <th scope="col">Odmiana</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @for(int i=0;i<Model.Fields.Count;i++)
+                        {
+                            <tr>
+                                <td class="align-middle">@Model.Fields[i].Name</td>
+                                <td class="align-middle">@Model.Fields[i].Area</td>
+                                <td class="align-middle">@Model.Fields[i].PlantName2</td>
+                                <td class="align-middle">@Model.Fields[i].PlantName1</td>
+                                <td class="align-middle">
+                                    <select class="form-control" asp-items="Model.Plants" asp-for="@Model.Fields[i].PlantId">
+                                        <option selected value="00000000-0000-0000-0000-000000000000">Wybierz</option>
+                                    </select>
+                                </td>
+                                <td class="align-middle">
+                                    <input type="hidden" asp-for="@Model.Fields[i].Id" />
+                                    <input asp-for="@Model.Fields[i].PlantVariety" class="form-control" />
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+</div>
+<!--- End content -->

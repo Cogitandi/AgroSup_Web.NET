@@ -1,4 +1,5 @@
 ﻿using AgroSup.Core.Domain;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,6 +21,6 @@ namespace AgroSup.WebApp.ViewModels.Fields
         [DisplayName("Paliwo")]
         public bool FuelApplication { get; set; }
         [DisplayName("Dopłaty")]
-        public Operator Operator { get; set; }
+        public Guid OperatorId { get; set; }
     }
 }

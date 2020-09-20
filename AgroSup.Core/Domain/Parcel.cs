@@ -12,5 +12,26 @@ namespace AgroSup.Core.Domain
         public bool FuelApplication { get; set; }
         public Operator Operator { get; set; }
         public Field Field { get; set; }
+
+        public float GetCultivatedArea()
+        {
+            return (float)CultivatedArea / 100;
+        }
+        public string GetFuelApplication()
+        {
+            return FuelApplication ? "Tak" : "Nie";
+        }
+        public string GetOperatorName()
+        {
+            return Operator == null ? "Brak dopłat" : Operator.GetName;
+        }
+        public string GetFieldName()
+        {
+            return Field.Name;
+        }
+        public string GetPlantName()
+        {
+            return Field.Plant == null ? "Nie ustalono" : Field.Plant.Name;
+        }
     }
 }

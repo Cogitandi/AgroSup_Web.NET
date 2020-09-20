@@ -37,6 +37,15 @@ namespace AgroSup.Infrastructure.Repositories
                 .Where(x => x.User == user)
                 .ToListAsync();
         }
+        public async Task<YearPlan> GetByYearBack(YearPlan yearPlan, int backYear)
+        {
+            var startYear = yearPlan.StartYear - backYear;
+            var user = yearPlan.User;
+            return await _context.YearPlans
+                .Where(x=>x.User==user)
+                .Where(x => x.StartYear == startYear)
+                .FirstOrDefaultAsync();
+        }
 
         public async Task Add(YearPlan yearPlan)
         {
