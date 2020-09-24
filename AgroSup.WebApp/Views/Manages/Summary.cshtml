@@ -8,52 +8,49 @@
     <div class="container-md mx-4">
         <h2 class="text-center">Podsumowanie  </h2>
         <div class="d-flex flex-wrap">
-            @foreach (var item in Model.Operators)
+            @foreach (var item in Model.DisplayGroups)
             {
-                <table class="table w-auto table-hover mx-2">
-                    <thead>
-                        <tr>
-                            <th colspan="2" class="text-center">@item.Name</th>
-                        </tr>
-                        <tr>
-                            <th scope="col">Roślina</th>
-                            <th scope="col">Powierzchnia</th>
+                <div class="card mx-2">
+                    <div class="card-body">
+                        <table class="table w-auto table-hover">
+                            <thead>
+                                <tr>
+                                    <th colspan="2" class="text-center">@item.Name</th>
+                                </tr>
+                                <tr>
+                                    <th scope="col">Roślina</th>
+                                    <th scope="col">Powierzchnia</th>
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var plant in item.Plants)
-                        {
-                            <tr>
-                                <td>@plant.Name</td>
-                                <td>@plant.Area (@plant.AreaPercent%)</td>
-                            </tr>
-                        }
-                        @if (item.ShowEfa)
-                        {
-                            <tr>
-                                <td>EFA</td>
-                                <td>@item.EfaPercent %</td>
-                            </tr>
-                        }
-                        @if (item.NotEstabilishedArea != 0)
-                        {
-                            <tr>
-                                <td>Nie zaplanowano</td>
-                                <td>@item.NotEstabilishedArea ha</td>
-                            </tr>
-                        }
-                        <tr>
-                            <td>Razem</td>
-                            <td>@item.TotalArea ha</td>
-                        </tr>
-                        <tr>
-                            <td>Paliwo</td>
-                            <td>@item.FuelArea</td>
-                        </tr>
-                    </tbody>
-                </table>
-            }         
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var plant in item.Plants)
+                                {
+                                    <tr>
+                                        <td>@plant.Name</td>
+                                        <td>@plant.Area ha (@plant.AreaPercent%)</td>
+                                    </tr>
+                                }
+                                @if (item.ShowEfa)
+                                {
+                                    <tr>
+                                        <td>EFA</td>
+                                        <td>@item.EfaPercent %</td>
+                                    </tr>
+                                }
+                                <tr>
+                                    <td>Razem</td>
+                                    <td class="font-weight-bold">@item.TotalArea ha</td>
+                                </tr>
+                                <tr>
+                                    <td>Paliwo</td>
+                                    <td>@item.FuelArea ha</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
         </div>
     </div>
 </div>

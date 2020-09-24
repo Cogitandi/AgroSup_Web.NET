@@ -14,24 +14,146 @@ namespace AgroSup.Core.Domain
         public Plant Plant { get; set; }
         public YearPlan YearPlan { get; set; }
 
-        public List<Parcel> Parcels { get; set; } = new List<Parcel>();
+        public IEnumerable<Parcel> Parcels { get; set; } = new List<Parcel>();
 
-        public float GetArea
+        public Field()
         {
-            get
+                
+        }
+        public Field(Field field)
+        {
+            this.Number = field.Number;
+            this.Name = field.Name;
+        }
+        public int GetFieldArea()
+        {
+            int area = 0;
+            foreach(var parcel in Parcels)
             {
-                float area = 0;
-                foreach (var item in Parcels)
-                {
-                    area += item.CultivatedArea;
-                }
-                return area / 100;
+                area += parcel.CultivatedArea;
             }
+            return area;
         }
-        public void SetParcels(IEnumerable<Parcel> parcels)
+        // Total
+        public static int GetTotalCultivatedArea(IEnumerable<Field> fields)
         {
-            Parcels = parcels.ToList();
+            int area = 0;
+            foreach (var field in fields)
+            {
+                area += field.GetFieldArea();
+            }
+            return area;
         }
+        public static int GetTotalFuelArea(IEnumerable<Field> fields)
+        {
+            int area = 0;
+            foreach (var field in fields)
+            {
+                foreach (var parcel in field.Parcels)
+                {
+                    area += parcel.FuelApplication ? parcel.CultivatedArea :0;
+                }
+            }
+            return area;
+        }
+        public static int GetTotalNotEstabilishedArea(IEnumerable<Field> fields)
+        {
+            int area = 0;
+            foreach (var field in fields)
+            {
+                foreach (var parcel in field.Parcels)
+                {
+                    area += parcel.Field.Plant == null ? parcel.CultivatedArea : 0;
+                }
+            }
+            return area;
+        }
+        public static IEnumerable<string> GetTotalPlantNameList(IEnumerable<Field> fields)
+        {
+            IList<string> PlantNameList = new List<string>();
+            foreach (var field in fields)
+            {
+                foreach (var parcel in field.Parcels)
+                {
+                    if (!PlantNameList.Contains(parcel.GetPlantName()))
+                    {
+                        PlantNameList.Add(parcel.GetPlantName());
+                    }
+                }
+            }
+            return PlantNameList;
+        }
+        public static int GetTotalCultivatedAreaByPlantName(IEnumerable<Field> fields, string plantName)
+        {
+            int area = 0;
+            foreach (var field in fields)
+            {
+                foreach (var parcel in field.Parcels)
+                {
+                    if (parcel.GetPlantName().Equals(plantName))
+                    {
+                        area += parcel.CultivatedArea;
+                    }
+                }
+            }
+            return area;
+        }
+        // WithoutOperator
+        public static int GetCultivatedAreaWithoutOperator(IEnumerable<Field> fields)
+        {
+            int area = 0;
+            foreach(var field in fields)
+            {
+                foreach(var parcel in field.Parcels)
+                {
+                    area += parcel.Operator == null ? parcel.CultivatedArea : 0;
+                }
+            }
+            return area;
+        }
+        public static int GetFuelAreaWithoutOperator(IEnumerable<Field> fields)
+        {
+            int area = 0;
+            foreach (var field in fields)
+            {
+                foreach (var parcel in field.Parcels)
+                {
+                    area += (parcel.Operator == null && parcel.FuelApplication) ? parcel.CultivatedArea : 0;
+                }
+            }
+            return area;
+        }
+        public static IEnumerable<string> GetPlantNameListWithoutOperator(IEnumerable<Field> fields)
+        {
+            IList<string> PlantNameList = new List<string>();
+            foreach (var field in fields)
+            {
+                foreach (var parcel in field.Parcels)
+                {
+                    if(parcel.Operator==null && !PlantNameList.Contains(parcel.GetPlantName()))
+                    {
+                        PlantNameList.Add(parcel.GetPlantName());
+                    }
+                }
+            }
+            return PlantNameList;
+        }
+        public static int GetCultivatedAreaByPlantNameWithoutOperator(IEnumerable<Field> fields, string plantName)
+        {
+            int area = 0;
+            foreach (var field in fields)
+            {
+                foreach (var parcel in field.Parcels)
+                {
+                    if (parcel.Operator == null && parcel.GetPlantName().Equals(plantName))
+                    {
+                        area += parcel.CultivatedArea;
+                    }
+                }
+            }
+            return area;
+        }
+        // Get plant name sawn on field[arg1] from list of fields[arg0]
         public static string GetPlantName(IEnumerable<Field> fields, Field field)
         {
             var fieldName = field.Name;

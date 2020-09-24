@@ -64,10 +64,10 @@ namespace AgroSup.WebApp.Controllers
                 {
                     Id = x.Id,
                     Name = x.Name,
-                    Area = x.GetArea,
+                    Area = x.GetFieldArea() / 100f,
                     PlantId = x.Plant != null ? x.Plant.Id : Guid.NewGuid(),
-                    PlantName2 = Field.GetPlantName(fields2,x),
-                    PlantName1 = Field.GetPlantName(fields1,x),
+                    PlantName2 = Field.GetPlantName(fields2, x),
+                    PlantName1 = Field.GetPlantName(fields1, x),
                     PlantVariety = x.PlantVariety,
                 }).ToList(),
                 Plants = plants.Select(x=>new SelectListItem()
@@ -114,15 +114,34 @@ namespace AgroSup.WebApp.Controllers
                 return RedirectToAction("Index", "YearPlan");
             }
 
+            var fields = await _fieldRepository.GetByYearPlan(managedYearPlan);
             var operators = await _operatorRepository.GetByYearPlan(managedYearPlan);
 
             var withoutOperator = new SummaryDisplayGroup()
             {
                 Name = "Bez dopłat",
                 ShowEfa = false,
-                FuelArea = 2,
-                NotEstabilishedArea = 5,
-                TotalArea = 5,
+                FuelArea = Field.GetFuelAreaWithoutOperator(fields)/100f,
+                TotalArea = Field.GetCultivatedAreaWithoutOperator(fields)/100f,
+                Plants = Field.GetPlantNameListWithoutOperator(fields).Select(x=>new SummaryPlant()
+                {
+                    Name = x,
+                    Area = Field.GetCultivatedAreaByPlantNameWithoutOperator(fields,x)/100f,
+                    AreaPercent = (int)(100 * Field.GetCultivatedAreaByPlantNameWithoutOperator(fields, x) / Field.GetCultivatedAreaWithoutOperator(fields) )
+                })
+            };
+            var TotalFarm = new SummaryDisplayGroup()
+            {
+                Name = "Całość",
+                ShowEfa = false,
+                FuelArea = Field.GetTotalFuelArea(fields)/100f,
+                TotalArea = Field.GetTotalCultivatedArea(fields)/100f,
+                Plants = Field.GetTotalPlantNameList(fields).Select(x => new SummaryPlant()
+                {
+                    Name = x,
+                    Area = Field.GetTotalCultivatedAreaByPlantName(fields,x)/100f,
+                    AreaPercent = (int)(100 * Field.GetTotalCultivatedAreaByPlantName(fields, x) / Field.GetTotalCultivatedArea(fields) )
+                })
             };
 
             var model = new SummaryViewModel()
@@ -130,18 +149,17 @@ namespace AgroSup.WebApp.Controllers
                 DisplayGroups = operators.Select(x => new SummaryDisplayGroup()
                 {
                     Name = x.GetName,
-                    TotalArea = x.GetTotalArea(),
-                    NotEstabilishedArea = x.GetNotStabilishedArea(),
-                    FuelArea = x.GetFuelArea(),
+                    TotalArea = x.GetTotalArea()/100f,
+                    FuelArea = x.GetFuelArea()/100f,
                     ShowEfa = true,
                     EfaPercent = x.GetEfaPercent(),
-                    Plants = x.GetPlantsList().Select(y => new SummaryPlant()
+                    Plants = x.GetPlantNameList().Select(y => new SummaryPlant()
                     {
-                        Name = y.Name,
-                        Area = x.GetAreaByPlant(y),
-                        AreaPercent = (int)(100/x.GetTotalArea() * x.GetAreaByPlant(y))
+                        Name = y,
+                        Area = x.GetAreaByPlant(y)/100f,
+                        AreaPercent = (int)(100 * x.GetAreaByPlant(y) / x.GetTotalArea())
                     })
-                })
+                }).Append(withoutOperator).Append(TotalFarm)
             };
 
             return View(model);
@@ -160,11 +178,13 @@ namespace AgroSup.WebApp.Controllers
             var fields = await _fieldRepository.GetByYearPlan(managedYearPlan);
             IList<Parcel> parcels = new List<Parcel>();
 
-            fields.ToList().ForEach(x =>
+            foreach (var field in fields)
             {
-                x.Parcels.ForEach(y => parcels.Add(y));
-            });
-            
+                foreach (var parcel in field.Parcels)
+                {
+                    parcels.Add(parcel);
+                }
+            }            
             var user = await GetUser();
             var userPlants = user.ChoosedPlants;
 
@@ -183,7 +203,7 @@ namespace AgroSup.WebApp.Controllers
                 Parcels = parcels.Select(x=>new ParcelSummaryParcel()
                 {
                     FieldName = x.Field.Name,
-                    CultivatedArea = x.GetCultivatedArea(),
+                    CultivatedArea = x.CultivatedArea/100f,
                     FuelApplication = x.GetFuelApplication(),
                     Number = x.Number,
                     OperatorName = x.GetOperatorName(),
@@ -193,6 +213,55 @@ namespace AgroSup.WebApp.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> FieldSummary()
+        {
+            var managedYearPlan = await GetManagedYearPlan();
+
+            if (managedYearPlan == null)
+            {
+                return RedirectToAction("Index", "YearPlan");
+            }
+
+            var operators = await _operatorRepository.GetByYearPlan(managedYearPlan);
+            var fields = await _fieldRepository.GetByYearPlan(managedYearPlan);
+            IList<Parcel> parcels = new List<Parcel>();
+
+            foreach(var field in fields)
+            {
+                foreach (var parcel in field.Parcels)
+                {
+                    parcels.Add(parcel);
+                }
+            }
+
+            var user = await GetUser();
+            var userPlants = user.ChoosedPlants;
+
+            var model = new FieldSummaryViewModel()
+            {
+                OperatorSelectList = operators.Select(x => new SelectListItem()
+                {
+                    Text = x.GetName,
+                    Value = x.GetName
+                }),
+                PlantSelectList = userPlants.Select(x => new SelectListItem()
+                {
+                    Text = x.Plant.Name,
+                    Value = x.Plant.Name
+                }),
+                Parcels = parcels.Select(x => new FieldSummaryParcel()
+                {
+                    FieldNumber = x.Field.Number,
+                    FieldName = x.Field.Name,
+                    CultivatedArea = x.CultivatedArea/100f,
+                    FuelApplication = x.GetFuelApplication(),
+                    Number = x.Number,
+                    OperatorName = x.GetOperatorName(),
+                    PlantName = x.GetPlantName(),
+                })
+            };
+            return View(model);
+        }
 
         // Methods
         private async Task<YearPlan> GetManagedYearPlan()

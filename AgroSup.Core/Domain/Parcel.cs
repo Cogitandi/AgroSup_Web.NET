@@ -13,9 +13,15 @@ namespace AgroSup.Core.Domain
         public Operator Operator { get; set; }
         public Field Field { get; set; }
 
-        public float GetCultivatedArea()
+        public Parcel(Parcel parcel)
         {
-            return (float)CultivatedArea / 100;
+            this.Number = parcel.Number;
+            this.CultivatedArea = parcel.CultivatedArea;
+            this.FuelApplication = parcel.FuelApplication;
+        }
+        public Parcel()
+        {
+
         }
         public string GetFuelApplication()
         {

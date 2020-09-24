@@ -51,7 +51,7 @@ namespace AgroSup.WebApp.Controllers
                 Id = x.Id,
                 Name = x.Name,
                 Number = x.Number,
-                Area = x.GetArea,
+                Area = x.GetFieldArea()/100f,
             });
             return View(model);
         }

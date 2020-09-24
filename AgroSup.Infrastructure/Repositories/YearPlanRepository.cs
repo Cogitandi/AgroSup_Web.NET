@@ -23,14 +23,18 @@ namespace AgroSup.Infrastructure.Repositories
             return dbSet
                 .Include(x => x.User)
                 .Include(x => x.Fields)
+                .ThenInclude(f => f.Parcels)
                 .Include(x => x.Operators);
         }
 
         public async Task<YearPlan> GetById(Guid id)
         {
-            return await DbInclude(_context.YearPlans).FirstAsync(x => x.Id==id);
+            return await DbInclude(_context.YearPlans).FirstOrDefaultAsync(x => x.Id == id);
         }
-
+        public async Task<YearPlan> GetByIdToImport(Guid id)
+        {
+            return await DbInclude(_context.YearPlans).AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+        }
         public async Task<IEnumerable<YearPlan>> GetByUser(User user)
         {
             return await DbInclude(_context.YearPlans)

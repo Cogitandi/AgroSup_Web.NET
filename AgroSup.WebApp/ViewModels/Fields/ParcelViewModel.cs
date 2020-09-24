@@ -17,6 +17,7 @@ namespace AgroSup.WebApp.ViewModels.Fields
         public string Number { get; set; }
         [Required(ErrorMessage = "Musisz wypełnić te pole")]
         [DisplayName("Powierzchnia [ar]")]
+        [Range(0,10000,ErrorMessage ="Powierzchnia nie może być ujemna")]
         public int CultivatedArea { get; set; }
         [DisplayName("Paliwo")]
         public bool FuelApplication { get; set; }

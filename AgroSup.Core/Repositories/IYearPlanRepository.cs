@@ -9,6 +9,7 @@ namespace AgroSup.Core.Repositories
     public interface IYearPlanRepository
     {
         Task<YearPlan> GetById(Guid id);
+        Task<YearPlan> GetByIdToImport(Guid id);
         Task<IEnumerable<YearPlan>> GetByUser(User user);
         Task<YearPlan> GetByYearBack(YearPlan yearPlan, int yearBack);
         Task Add(YearPlan yearPlan);

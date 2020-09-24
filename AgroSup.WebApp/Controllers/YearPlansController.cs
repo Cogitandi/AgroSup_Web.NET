@@ -54,21 +54,25 @@ namespace AgroSup.WebApp.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(YearPlanViewModel model)
+        public async Task<IActionResult> Create(YearPlanViewModel model,Guid yearPlanImportId)
         {
             if(!ModelState.IsValid)
             {
                 return View();
             }
             var loggedUser = await GetLoggedUser();
-
             YearPlan yearPlan = new YearPlan()
             {
                 StartYear = model.StartYear,
                 EndYear = model.StartYear + 1,
-                User = loggedUser
-                
+                User = loggedUser,
             };
+
+            var yearPlanImport = await _yearPlanRepository.GetByIdToImport(yearPlanImportId);
+            if(yearPlanImport != null)
+            {
+                yearPlan.GetDataToImport(yearPlanImport);
+            }
            await _yearPlanRepository.Add(yearPlan);
             return RedirectToAction("Index");
        

@@ -21,60 +21,63 @@ namespace AgroSup.Core.Domain
                 return FirstName + " " + LastName;
             }
         }
-        public float GetTotalArea()
+        public Operator()
         {
-            float totalArea = 0;
+
+        }
+        public Operator(Operator @operator)
+        {
+            this.FirstName = @operator.FirstName;
+            this.LastName = @operator.LastName;
+            this.LastName = @operator.LastName;
+            this.ArimrNumber = @operator.ArimrNumber;
+        }
+        public int GetTotalArea()
+        {
+            int totalArea = 0;
             foreach(var item in Parcels)
             {
                 totalArea += item.CultivatedArea;
             }
-            return totalArea/100;
+            return totalArea;
         }
-        public float GetFuelArea()
+        public int GetFuelArea()
         {
-            float fuelArea = 0;
+            int fuelArea = 0;
             foreach (var item in Parcels)
             {
                 fuelArea += item.FuelApplication ? item.CultivatedArea : 0;
             }
-            return fuelArea/100;
+            return fuelArea;
         }
-        public float GetNotStabilishedArea()
+        public IEnumerable<string> GetPlantNameList()
         {
-            float area = 0;
-            foreach (var item in Parcels)
-            {
-                area += item.Field.Plant==null ? item.CultivatedArea : 0;
-            }
-            return area/100;
-        }
-        public IEnumerable<Plant> GetPlantsList()
-        {
-            IList<Plant> plants = new List<Plant>();
+            IList<string> PlantNameList = new List<string>();
 
-            foreach (var item in Parcels)
+            foreach (var parcel in Parcels)
             {
-                var plant = item.Field.Plant;
-                if(plant !=null && !plants.Contains(plant))
+                if(!PlantNameList.Contains(parcel.GetPlantName()))
                 {
-                    plants.Add(plant);
+                    PlantNameList.Add(parcel.GetPlantName());
                 }
             }
-            return plants;
+            return PlantNameList;
         }
-        public float GetAreaByPlant(Plant plant)
+        public int GetAreaByPlant(string plantName)
         {
-            float area = 0;
-            foreach (var item in Parcels)
+            int area = 0;
+            foreach (var parcel in Parcels)
             {
-                var fieldPlant = item.Field.Plant;
-                area += (fieldPlant != null && fieldPlant==plant) ? item.CultivatedArea : 0;
+                if(parcel.GetPlantName().Equals(plantName))
+                {
+                    area += parcel.CultivatedArea;
+                }
             }
-            return area/100;
+            return area;
         }
         public float GetEfaPercent()
         {
-            float efaArea = 0;
+            int efaArea = 0;
             foreach (var item in Parcels)
             {
                 if (item.Field.Plant == null)
@@ -83,8 +86,7 @@ namespace AgroSup.Core.Domain
                     continue;
                 efaArea += item.CultivatedArea * item.Field.Plant.EfaNitrogenRate;
             }
-            float totalArea = GetTotalArea()*100;
-            float percent = totalArea / 100 * efaArea;
+            float percent = 100 * efaArea / GetTotalArea() ;
             return percent;
         }
     }

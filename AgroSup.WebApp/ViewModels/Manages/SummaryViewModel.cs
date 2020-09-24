@@ -16,7 +16,6 @@ namespace AgroSup.WebApp.ViewModels.Manages
         public string Name { get; set; }
         public IEnumerable<SummaryPlant> Plants { get; set; }
         public float EfaPercent { get; set; }
-        public float NotEstabilishedArea { get; set; }
         public float TotalArea { get; set; }
         public float FuelArea { get; set; }
     }
