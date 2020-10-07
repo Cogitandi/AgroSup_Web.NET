@@ -26,6 +26,7 @@ namespace AgroSup.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Number")
@@ -37,7 +38,7 @@ namespace AgroSup.Infrastructure.Migrations
                     b.Property<string>("PlantVariety")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("YearPlanId")
+                    b.Property<Guid>("YearPlanId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -59,12 +60,13 @@ namespace AgroSup.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("YearPlanId")
+                    b.Property<Guid>("YearPlanId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -83,13 +85,14 @@ namespace AgroSup.Infrastructure.Migrations
                     b.Property<int>("CultivatedArea")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("FieldId")
+                    b.Property<Guid>("FieldId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("FuelApplication")
                         .HasColumnType("bit");
 
                     b.Property<string>("Number")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("OperatorId")
@@ -114,6 +117,7 @@ namespace AgroSup.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -198,10 +202,10 @@ namespace AgroSup.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("PlantId")
+                    b.Property<Guid>("PlantId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -225,7 +229,7 @@ namespace AgroSup.Infrastructure.Migrations
                     b.Property<int>("StartYear")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -376,14 +380,18 @@ namespace AgroSup.Infrastructure.Migrations
 
                     b.HasOne("AgroSup.Core.Domain.YearPlan", "YearPlan")
                         .WithMany("Fields")
-                        .HasForeignKey("YearPlanId");
+                        .HasForeignKey("YearPlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("AgroSup.Core.Domain.Operator", b =>
                 {
                     b.HasOne("AgroSup.Core.Domain.YearPlan", "YearPlan")
                         .WithMany("Operators")
-                        .HasForeignKey("YearPlanId");
+                        .HasForeignKey("YearPlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("AgroSup.Core.Domain.Parcel", b =>
@@ -391,7 +399,8 @@ namespace AgroSup.Infrastructure.Migrations
                     b.HasOne("AgroSup.Core.Domain.Field", "Field")
                         .WithMany("Parcels")
                         .HasForeignKey("FieldId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("AgroSup.Core.Domain.Operator", "Operator")
                         .WithMany("Parcels")
@@ -409,18 +418,24 @@ namespace AgroSup.Infrastructure.Migrations
                 {
                     b.HasOne("AgroSup.Core.Domain.Plant", "Plant")
                         .WithMany()
-                        .HasForeignKey("PlantId");
+                        .HasForeignKey("PlantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("AgroSup.Core.Domain.User", "User")
                         .WithMany("ChoosedPlants")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("AgroSup.Core.Domain.YearPlan", b =>
                 {
                     b.HasOne("AgroSup.Core.Domain.User", "User")
                         .WithMany("YearPlans")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

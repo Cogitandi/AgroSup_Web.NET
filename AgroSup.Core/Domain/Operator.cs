@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using System.ComponentModel.DataAnnotations;
 
 namespace AgroSup.Core.Domain
 {
     public class Operator
     {
         public Guid Id { get; set; }
+        [Required]
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string ArimrNumber { get; set; }
+        [Required]
         public YearPlan YearPlan { get; set; }
         public IList<Parcel> Parcels { get; set; } = new List<Parcel>();
 
@@ -77,6 +80,12 @@ namespace AgroSup.Core.Domain
         }
         public float GetEfaPercent()
         {
+            int totalArea = GetTotalArea();
+            if (totalArea == 0)
+            {
+                return 0;
+            }
+
             int efaArea = 0;
             foreach (var item in Parcels)
             {
@@ -86,7 +95,8 @@ namespace AgroSup.Core.Domain
                     continue;
                 efaArea += item.CultivatedArea * item.Field.Plant.EfaNitrogenRate;
             }
-            float percent = 100 * efaArea / GetTotalArea() ;
+
+            float percent = 100 * efaArea / totalArea;
             return percent;
         }
     }

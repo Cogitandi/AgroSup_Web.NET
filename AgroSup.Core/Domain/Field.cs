@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 
@@ -8,10 +9,13 @@ namespace AgroSup.Core.Domain
     public class Field
     {
         public Guid Id { get; set; }
+        [Required]
         public int Number { get; set; }
+        [Required]
         public string Name { get; set; }
         public string PlantVariety { get; set; }
         public Plant Plant { get; set; }
+        [Required]
         public YearPlan YearPlan { get; set; }
 
         public IEnumerable<Parcel> Parcels { get; set; } = new List<Parcel>();

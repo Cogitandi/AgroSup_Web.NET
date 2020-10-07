@@ -15,6 +15,7 @@ namespace AgroSup.WebApp.ViewModels.Fields
         [Required(ErrorMessage ="Musisz wypełnić te pole")]
         [DisplayName("Numer")]
         public int Number { get; set; }
+        [RegularExpression(@"^([a-żA-Ż0-9_\-()\s]+)$", ErrorMessage = "Niepoprawna nazwa")]
         [Required(ErrorMessage = "Musisz wypełnić te pole")]
         [DisplayName("Nazwa")]
         public string Name { get; set; }

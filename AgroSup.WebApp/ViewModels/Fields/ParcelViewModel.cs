@@ -13,11 +13,13 @@ namespace AgroSup.WebApp.ViewModels.Fields
     {
         public Guid Id { get; set; }
         [Required(ErrorMessage = "Musisz wypełnić te pole")]
+        [RegularExpression(@"^[0-9|/]+$", ErrorMessage = "Niepoprawny numer")]
         [DisplayName("Numer")]
         public string Number { get; set; }
         [Required(ErrorMessage = "Musisz wypełnić te pole")]
         [DisplayName("Powierzchnia [ar]")]
         [Range(0,10000,ErrorMessage ="Powierzchnia nie może być ujemna")]
+        [RegularExpression(@"^[0-9]+$", ErrorMessage = "Niepoprawna powierzchnia")]
         public int CultivatedArea { get; set; }
         [DisplayName("Paliwo")]
         public bool FuelApplication { get; set; }

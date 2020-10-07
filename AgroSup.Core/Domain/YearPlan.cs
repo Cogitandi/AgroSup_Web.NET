@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -8,12 +9,12 @@ namespace AgroSup.Core.Domain
 {
     public class YearPlan
     {
-        private IList<Field> _fields = new List<Field>();
-        private IList<Operator> _operators = new List<Operator>();
-
         public Guid Id { get; set; }
+        [Required]
         public int StartYear { get; set; }
+        [Required]
         public int EndYear { get; set; }
+        [Required]
         public User User { get; set; }
         public IEnumerable<Field> Fields { get; set; }
         public IEnumerable<Operator> Operators { get; set; }

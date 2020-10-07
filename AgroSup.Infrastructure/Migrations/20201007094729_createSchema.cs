@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AgroSup.Infrastructure.Migrations
 {
-    public partial class initial : Migration
+    public partial class createSchema : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -19,6 +19,19 @@ namespace AgroSup.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Plants",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    EfaNitrogenRate = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Plants", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -104,17 +117,22 @@ namespace AgroSup.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Plants",
+                name: "UserPlants",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    EfaNitrogenRate = table.Column<int>(nullable: false),
-                    UserId = table.Column<Guid>(nullable: true)
+                    UserId = table.Column<Guid>(nullable: false),
+                    PlantId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Plants", x => x.Id);
+                    table.PrimaryKey("PK_UserPlants", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserPlants_Plants_PlantId",
+                        column: x => x.PlantId,
+                        principalTable: "Plants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -124,7 +142,7 @@ namespace AgroSup.Infrastructure.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     StartYear = table.Column<int>(nullable: false),
                     EndYear = table.Column<int>(nullable: false),
-                    UserId = table.Column<Guid>(nullable: true)
+                    UserId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -169,10 +187,10 @@ namespace AgroSup.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     Number = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
                     PlantVariety = table.Column<string>(nullable: true),
                     PlantId = table.Column<Guid>(nullable: true),
-                    YearPlanId = table.Column<Guid>(nullable: true)
+                    YearPlanId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -188,7 +206,7 @@ namespace AgroSup.Infrastructure.Migrations
                         column: x => x.YearPlanId,
                         principalTable: "YearPlans",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -196,10 +214,10 @@ namespace AgroSup.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    FirstName = table.Column<string>(nullable: true),
+                    FirstName = table.Column<string>(nullable: false),
                     LastName = table.Column<string>(nullable: true),
                     ArimrNumber = table.Column<string>(nullable: true),
-                    YearPlanId = table.Column<Guid>(nullable: true)
+                    YearPlanId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -209,7 +227,7 @@ namespace AgroSup.Infrastructure.Migrations
                         column: x => x.YearPlanId,
                         principalTable: "YearPlans",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -217,11 +235,11 @@ namespace AgroSup.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Number = table.Column<string>(nullable: true),
+                    Number = table.Column<string>(nullable: false),
                     CultivatedArea = table.Column<int>(nullable: false),
                     FuelApplication = table.Column<bool>(nullable: false),
                     OperatorId = table.Column<Guid>(nullable: true),
-                    FieldId = table.Column<Guid>(nullable: true)
+                    FieldId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -231,7 +249,7 @@ namespace AgroSup.Infrastructure.Migrations
                         column: x => x.FieldId,
                         principalTable: "Fields",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Parcels_Operators_OperatorId",
                         column: x => x.OperatorId,
@@ -310,8 +328,13 @@ namespace AgroSup.Infrastructure.Migrations
                 column: "OperatorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Plants_UserId",
-                table: "Plants",
+                name: "IX_UserPlants_PlantId",
+                table: "UserPlants",
+                column: "PlantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserPlants_UserId",
+                table: "UserPlants",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -352,12 +375,12 @@ namespace AgroSup.Infrastructure.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Plants_AspNetUsers_UserId",
-                table: "Plants",
+                name: "FK_UserPlants_AspNetUsers_UserId",
+                table: "UserPlants",
                 column: "UserId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_YearPlans_AspNetUsers_UserId",
@@ -365,7 +388,7 @@ namespace AgroSup.Infrastructure.Migrations
                 column: "UserId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -391,6 +414,9 @@ namespace AgroSup.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Parcels");
+
+            migrationBuilder.DropTable(
+                name: "UserPlants");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

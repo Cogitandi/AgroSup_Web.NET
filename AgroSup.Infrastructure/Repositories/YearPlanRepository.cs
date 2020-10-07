@@ -39,6 +39,7 @@ namespace AgroSup.Infrastructure.Repositories
         {
             return await DbInclude(_context.YearPlans)
                 .Where(x => x.User == user)
+                .OrderBy(x=>x.StartYear)
                 .ToListAsync();
         }
         public async Task<YearPlan> GetByYearBack(YearPlan yearPlan, int backYear)
