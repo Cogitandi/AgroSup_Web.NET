@@ -4,384 +4,387 @@
     ViewData["Title"] = "Działki";
     int counter = 0;
 }
-<partial name="_ManageMenuPartial"/>
+
 <!--- Content -->
-<div class="col-md-10">
-    <div class="container-md mx-4">
-        <button class="float-right btn btn-primary" onClick="createPDF();">Drukuj</button>
-        <h2 class="text-center">Działki w sezonie 1/2</h2>
-        <div class="table-responsive">
-            <table id="parcels" class="text-center table w-75 mx-auto">
-                <thead style="background-color: #32CD32">
-                    <tr>
-                        <th scope="col">Pole</th>
-                        <th scope="col">#</th>
-                        <th scope="col">Numer działki</th>
-                        <th scope="col">Powierzchnia[ha]</th>
-                        <th scope="col">Paliwo</th>
-                        <th scope="col">Dopłaty</th>
-                        <th scope="col">Uprawa</th>
-                    </tr>
-                    <tr>
-                        <td class="align-middle"></td>
-                        <td class="align-middle"></td>
-                        <td class="align-middle"></td>
-                        <td class="align-middle"></td>
-                        <td class="align-middle">
-                            <select class="form-control" id="fuelSelect">
-                                <option selected="selected" value="all">Wszystkie</option>
-                                <option value="Tak">Tak</option>
-                                <option value="Nie">Nie</option>
-                            </select>
-                        </td>
-                        <td class="align-middle">
-                            <select class="form-control" asp-items="Model.OperatorSelectList" id="arimrOperatorSelect">
-                                <option selected="selected" value="all">Wszyscy</option>
-                                <option value="Brak">Brak</option>
-                            </select>
-                        </td>
-                        <td class="align-middle">
-                            <select class="form-control" asp-items="Model.PlantSelectList" id="plantNameSelect">
-                                <option selected="selected" value="all">Wszystkie</option>
-                                <option value="Brak">Brak</option>
-                            </select>
-                        </td>
-                    </tr>
-                </thead>
-                <tbody id="rawTable" style="display: none;">
-                    @foreach (var item in Model.Parcels)
-                    {
-                    <tr>
-                        <td name="fieldName" class="no-hover align-middle">@item.FieldName</td>
-                        <td hover name="no" class="align-middle">@(++counter)</td>
-                        <td hover class="align-middle">@item.Number</td>
-                        <td hover name="area" class="align-middle">@item.CultivatedArea</td>
-                        <td hover name="fuel" class="align-middle">@item.FuelApplication</td>
-                        <td hover name="arimrOperator" class="align-middle">@item.OperatorName</td>
-                        <td name="plantName" class="no-hover align-middle">@item.PlantName</td>
-                    </tr>
-                    }
-                </tbody>
-            </table>
+<div class="row">
+    <partial name="_ManageMenuPartial" />
+    <div class="col-md-10">
+        <div class="container-md mx-4">
+            <button class="float-right btn btn-primary" onClick="createPDF();">Drukuj</button>
+            <h2 class="text-center">Działki w sezonie 1/2</h2>
+            <div class="table-responsive">
+                <table id="parcels" class="text-center table w-75 mx-auto">
+                    <thead style="background-color: #32CD32">
+                        <tr>
+                            <th scope="col">Pole</th>
+                            <th scope="col">#</th>
+                            <th scope="col">Numer działki</th>
+                            <th scope="col">Powierzchnia[ha]</th>
+                            <th scope="col">Paliwo</th>
+                            <th scope="col">Dopłaty</th>
+                            <th scope="col">Uprawa</th>
+                        </tr>
+                        <tr>
+                            <td class="align-middle"></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle">
+                                <select class="form-control" id="fuelSelect">
+                                    <option selected="selected" value="all">Wszystkie</option>
+                                    <option value="Tak">Tak</option>
+                                    <option value="Nie">Nie</option>
+                                </select>
+                            </td>
+                            <td class="align-middle">
+                                <select class="form-control" asp-items="Model.OperatorSelectList" id="arimrOperatorSelect">
+                                    <option selected="selected" value="all">Wszyscy</option>
+                                    <option value="Brak">Brak</option>
+                                </select>
+                            </td>
+                            <td class="align-middle">
+                                <select class="form-control" asp-items="Model.PlantSelectList" id="plantNameSelect">
+                                    <option selected="selected" value="all">Wszystkie</option>
+                                    <option value="Brak">Brak</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody id="rawTable" style="display: none;">
+                        @foreach (var item in Model.Parcels)
+                        {
+                            <tr>
+                                <td name="fieldName" class="no-hover align-middle">@item.FieldName</td>
+                                <td hover name="no" class="align-middle">@(++counter)</td>
+                                <td hover class="align-middle">@item.Number</td>
+                                <td hover name="area" class="align-middle">@item.CultivatedArea</td>
+                                <td hover name="fuel" class="align-middle">@item.FuelApplication</td>
+                                <td hover name="arimrOperator" class="align-middle">@item.OperatorName</td>
+                                <td name="plantName" class="no-hover align-middle">@item.PlantName</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
-<!--- End content -->
+    <!--- End content -->
 
-@section Scripts {
-    <script>
-        function createPDF() {
-            var header = document.getElementsByTagName('h2')[0].textContent
-            var arimr = document.getElementById('arimrOperatorSelect').value;
-            if (arimr == 'all') arimr = 'Całość'
-            var data = document.getElementById('filteredTable');
-            var rowsLength = data.rows.length - 1;
-            data.deleteRow(rowsLength);
+    @section Scripts {
+        <script>
+            function createPDF() {
+                var header = document.getElementsByTagName('h2')[0].textContent
+                var arimr = document.getElementById('arimrOperatorSelect').value;
+                if (arimr == 'all') arimr = 'Całość'
+                var data = document.getElementById('filteredTable');
+                var rowsLength = data.rows.length - 1;
+                data.deleteRow(rowsLength);
 
-            var before = '<h2>' + header + '- ' + arimr + '</h2>';
-            data = data.innerHTML;
-            var style = "<style>";
-            style = style + "th {background-color: 	#32CD32}";
-            style = style + "table {border-spacing: 0px;width: 100%;font: 17px Calibri;}";
-            style = style + "table, th, td {border: solid 0.1px rgba(0, 0, 0, 0.5);";
-            style = style + "padding: 2px 3px;text-align: center;}";
-            style = style + "</style>";
+                var before = '<h2>' + header + '- ' + arimr + '</h2>';
+                data = data.innerHTML;
+                var style = "<style>";
+                style = style + "th {background-color: 	#32CD32}";
+                style = style + "table {border-spacing: 0px;width: 100%;font: 17px Calibri;}";
+                style = style + "table, th, td {border: solid 0.1px rgba(0, 0, 0, 0.5);";
+                style = style + "padding: 2px 3px;text-align: center;}";
+                style = style + "</style>";
 
-            // CREATE A WINDOW OBJECT.
-            var win = window.open('', '', 'height=700,width=700');
+                // CREATE A WINDOW OBJECT.
+                var win = window.open('', '', 'height=700,width=700');
 
-            win.document.write('<html><head>');
-            win.document.write('<title>Profile</title>');   // <title> FOR PDF HEADER.
-            win.document.write(style);          // ADD STYLE INSIDE THE HEAD TAG.
-            win.document.write('</head>');
-            win.document.write('<body>');
-            win.document.write('<table><tr><th scope = col colspan=7>' + before + '</th><tr><th scope ="col">Pole</th><th scope ="col">#</th><th scope ="col">Numer działki</th><th scope ="col">Powierzchnia[ha]</th><th scope ="col">Paliwo</th><th scope ="col">Dopłaty</th><th scope ="col">Uprawa</th></tr>');
-            win.document.write('<tbody>');
-            win.document.write(data);         // THE TABLE CONTENTS INSIDE THE BODY TAG.
-            win.document.write('</tbody>');
-            win.document.write('</table');
-            win.document.write('</body></html>');
+                win.document.write('<html><head>');
+                win.document.write('<title>Profile</title>');   // <title> FOR PDF HEADER.
+                win.document.write(style);          // ADD STYLE INSIDE THE HEAD TAG.
+                win.document.write('</head>');
+                win.document.write('<body>');
+                win.document.write('<table><tr><th scope = col colspan=7>' + before + '</th><tr><th scope ="col">Pole</th><th scope ="col">#</th><th scope ="col">Numer działki</th><th scope ="col">Powierzchnia[ha]</th><th scope ="col">Paliwo</th><th scope ="col">Dopłaty</th><th scope ="col">Uprawa</th></tr>');
+                win.document.write('<tbody>');
+                win.document.write(data);         // THE TABLE CONTENTS INSIDE THE BODY TAG.
+                win.document.write('</tbody>');
+                win.document.write('</table');
+                win.document.write('</body></html>');
 
-            win.document.close(); 	// CLOSE THE CURRENT WINDOW.
+                win.document.close(); 	// CLOSE THE CURRENT WINDOW.
 
-            win.print();    // PRINT THE CONTENTS.
-        }
-    </script>
-
-<script>
-    $(document).ready(function () {
-        var $fuelSelect = $('#fuelSelect');
-        var $arimrSelect = $('#arimrOperatorSelect');
-        var $cropSelect = $('#plantNameSelect');
-
-        $fuelSelect.change(function () {
-            tableActions();
-        });
-        $arimrSelect.change(function () {
-            tableActions();
-        });
-        $cropSelect.change(function () {
-            tableActions();
-        });
-        tableActions();
-
-    })
-
-    function tableActions() {
-        removeOldTableIfExist()
-        addFilteredTBody();
-
-        $filteredTBody = $('#filteredTable');
-        $filteredTR = $('#filteredTable').find('tr');
-        $filteredFieldsNameTD = $filteredTR.find('td[name=fieldName]');
-        $filteredPlantNameTD = $filteredTR.find('td[name=plantName]');
-        $fieldsWithArea = fieldsWithArea();
-
-        colorFields();
-        colorPlants();
-
-        scaleFieldNames();
-        scalePlantNames();
-
-        renumerate();
-        addSummaryRow();
-        addAreaToFields();
-    }
-
-    function removeOldTableIfExist() {
-        $filteredTBody = $('#filteredTable');
-        if ($filteredTBody.length) {
-            $filteredTBody.remove() // remove old table
-        }
-    }
-
-    function isValueMatched($required, $value) {
-        if ($required == 'all') return true;
-        if ($required == $value)
-            return true;
-        return false
-    }
-    function getFilteredTBody($isFuel, $arimrOperator, $plantName) {
-        $data = $('#rawTable');
-        $outputTable = '<tbody id=filteredTable>';
-
-        $data.find('tr').each(function () {
-            $rowFuel = $(this).find('td[name=fuel]').text();
-            $rowArimrOperator = $(this).find('td[name=arimrOperator]').text();
-            $rowPlantName = $(this).find('td[name=plantName]').text();
-            if (isValueMatched($isFuel, $rowFuel) &&
-                isValueMatched($arimrOperator, $rowArimrOperator) &&
-                isValueMatched($plantName, $rowPlantName)) {
-                $outputTable += '<tr>' + $(this).html() + '</tr>';
+                win.print();    // PRINT THE CONTENTS.
             }
-        })
-        $outputTable += '</tbody>';
-        return $outputTable;
+        </script>
 
-    }
-    function addFilteredTBody() {
-        $choosedFuel = $('#fuelSelect').val();
-        $choosedArimr = $('#arimrOperatorSelect').val();
-        $choosedCrop = $('#plantNameSelect').val();
-        $newTBody = getFilteredTBody($choosedFuel, $choosedArimr, $choosedCrop);
-        $('#rawTable').after($newTBody);
-    }
-    function scaleFieldNames() {
-        $firstFieldNameTD = $filteredFieldsNameTD.first();
-        $counter = 0;
-        $filteredFieldsNameTD.each(function () {
-            if ($firstFieldNameTD.text() == $(this).text()) {
-                $counter = $counter + 1;
+        <script>
+            $(document).ready(function () {
+                var $fuelSelect = $('#fuelSelect');
+                var $arimrSelect = $('#arimrOperatorSelect');
+                var $cropSelect = $('#plantNameSelect');
 
-                if ($counter != 1) {
-                    $(this).remove();
-                }
+                $fuelSelect.change(function () {
+                    tableActions();
+                });
+                $arimrSelect.change(function () {
+                    tableActions();
+                });
+                $cropSelect.change(function () {
+                    tableActions();
+                });
+                tableActions();
 
-                if ($(this).is($filteredFieldsNameTD.last())) {
-                    $firstFieldNameTD.attr('rowspan', $counter);
-                    return;
-                }
-
-
-            } else {
-                $firstFieldNameTD.attr('rowspan', $counter);
-                $firstFieldNameTD = $(this);
-                $counter = 1;
-            }
-
-        })
-    }
-    function scalePlantNames() {
-        $firstPlantNameTD = $filteredPlantNameTD.first();
-        $counter = 0;
-        $filteredPlantNameTD.each(function () {
-            if ($firstPlantNameTD.text() == $(this).text()) {
-                $counter = $counter + 1;
-
-                if ($counter != 1) {
-                    $(this).hide();
-                }
-
-                if ($(this).is($filteredPlantNameTD.last())) {
-                    $firstPlantNameTD.attr('rowspan', $counter);
-                    return;
-                }
-
-
-            } else {
-                $firstPlantNameTD.attr('rowspan', $counter);
-                $firstPlantNameTD = $(this);
-                $counter = 1;
-            }
-
-        })
-    }
-    function getArrayWithFieldNames() {
-        $fields = [];
-        $filteredFieldsNameTD.each(function () {
-            $fieldName = $(this).text();
-            if ($.inArray($fieldName, $fields) == -1) {
-                $fields.push($fieldName);
-            }
-        }
-        )
-        return $fields;
-    }
-    function getArrayWithPlantNames() {
-        $plantNames = [];
-        $filteredPlantNameTD.each(function () {
-            $plantName = $(this).text();
-            if ($.inArray($plantName, $plantNames) == -1) {
-                $plantNames.push($plantName);
-            }
-        }
-        )
-        return $plantNames;
-    }
-    function colorFields() {
-        $even = false;
-        $fields = getArrayWithFieldNames();
-
-        for (i = 0; i < $fields.length; i++) {
-            $found = false;
-            if ($even) {
-                // Even row
-                $filteredTR.each(function () {
-                    if ($(this).find('td[name=fieldName]').text() == $fields[i]) {
-                        $(this).children().each(function () {
-                            if ($(this).attr('name=plantName')) return true;
-
-                            $(this).css('background-color', '#F4A460');
-                        })
-                        $found = true;
-                    } else {
-                        if ($found) return false;
-                    }
-                })
-                $even = false;
-            } else {
-                // Odd row
-                $filteredTR.each(function () {
-                    if ($(this).find('td[name=fieldName]').text() == $fields[i]) {
-                        $(this).children().each(function () {
-                            if ($(this).attr('name=plantName')) return true;
-
-                            $(this).css('background-color', '#D2691E');
-                        })
-                        $found = true;
-                    } else {
-                        if ($found) return false;
-                    }
-                })
-                $even = true;
-            }
-
-        }
-    }
-    function colorPlants() {
-        $plantNames = getArrayWithPlantNames();
-
-        for (i = 0; i < $plantNames.length; i++) {
-            $color = generateColor();
-            $filteredPlantNameTD.each(function () {
-                if ($(this).text() == $plantNames[i]) {
-                    $(this).css('background-color', $color);
-                }
             })
-        }
 
-    }
-    function getFieldArea($fieldName) {
-        $area = 0;
-        $found = false;
-        $filteredTR.find(':contains(' + $fieldName + ')').each(function () {
-            if ($(this).text() == $fieldName) {
-                $found = true;
-                $area += $(this).closest('tr').find('td[name=area]').text() * 100;
+            function tableActions() {
+                removeOldTableIfExist()
+                addFilteredTBody();
 
-            } else {
-                if ($found) return false;
+                $filteredTBody = $('#filteredTable');
+                $filteredTR = $('#filteredTable').find('tr');
+                $filteredFieldsNameTD = $filteredTR.find('td[name=fieldName]');
+                $filteredPlantNameTD = $filteredTR.find('td[name=plantName]');
+                $fieldsWithArea = fieldsWithArea();
+
+                colorFields();
+                colorPlants();
+
+                scaleFieldNames();
+                scalePlantNames();
+
+                renumerate();
+                addSummaryRow();
+                addAreaToFields();
             }
-        })
-        return ($area / 100).toFixed(2);
-    }
-    function fieldsWithArea() {
-        $fieldNames = getArrayWithFieldNames();
-        $fieldsWithArea = {};
-        for (i = 0; i < $fieldNames.length; i++) {
-            $fieldsWithArea[$fieldNames[i]] = 0;
-        }
-        $filteredTR.each(function () {
-            $fieldName = $(this).find('td[name=fieldName]').text();
-            $area = $(this).find('td[name=area]').text().replace(',', '.') * 100;
-            $fieldsWithArea[$fieldName] += $area;
 
-        })
-        return $fieldsWithArea;
-    }
-    function getTotalArea() {
-        $area = 0;
-        $filteredTR.find('td[name=area]').each(function () {
-            $area += $(this).text().replace(',', '.') * 100;
-        })
-        return ($area / 100).toFixed(2);
-    }
-    function addSummaryRow() {
-        $html = '<tr>';
-        $html += '<td></td>';
-        $html += '<td></td>';
-        $html += '<td class="font-weight-bold">Razem</td>';
-        $html += '<td class="font-weight-bold">' + getTotalArea() + ' ha</td>';
-        $html += '<td></td>';
-        $html += '<td></td>';
-        $html += '<td></td>';
-        $html += '</tr>';
-        $filteredTBody.append($html);
-    }
-    function addAreaToFields() {
-        $filteredFieldsNameTD.each(function () {
-            $thisFieldName = $(this).text();
+            function removeOldTableIfExist() {
+                $filteredTBody = $('#filteredTable');
+                if ($filteredTBody.length) {
+                    $filteredTBody.remove() // remove old table
+                }
+            }
 
-            if (Object.keys($fieldsWithArea).length == 0) return false;
+            function isValueMatched($required, $value) {
+                if ($required == 'all') return true;
+                if ($required == $value)
+                    return true;
+                return false
+            }
+            function getFilteredTBody($isFuel, $arimrOperator, $plantName) {
+                $data = $('#rawTable');
+                $outputTable = '<tbody id=filteredTable>';
 
-            if ($fieldsWithArea[$thisFieldName] === undefined) return true;
+                $data.find('tr').each(function () {
+                    $rowFuel = $(this).find('td[name=fuel]').text();
+                    $rowArimrOperator = $(this).find('td[name=arimrOperator]').text();
+                    $rowPlantName = $(this).find('td[name=plantName]').text();
+                    if (isValueMatched($isFuel, $rowFuel) &&
+                        isValueMatched($arimrOperator, $rowArimrOperator) &&
+                        isValueMatched($plantName, $rowPlantName)) {
+                        $outputTable += '<tr>' + $(this).html() + '</tr>';
+                    }
+                })
+                $outputTable += '</tbody>';
+                return $outputTable;
 
-            $(this).append('<br />[' + ($fieldsWithArea[$thisFieldName] / 100).toFixed(2) + ' ha]');
-            delete $fieldsWithArea[$thisFieldName];
-        })
+            }
+            function addFilteredTBody() {
+                $choosedFuel = $('#fuelSelect').val();
+                $choosedArimr = $('#arimrOperatorSelect').val();
+                $choosedCrop = $('#plantNameSelect').val();
+                $newTBody = getFilteredTBody($choosedFuel, $choosedArimr, $choosedCrop);
+                $('#rawTable').after($newTBody);
+            }
+            function scaleFieldNames() {
+                $firstFieldNameTD = $filteredFieldsNameTD.first();
+                $counter = 0;
+                $filteredFieldsNameTD.each(function () {
+                    if ($firstFieldNameTD.text() == $(this).text()) {
+                        $counter = $counter + 1;
+
+                        if ($counter != 1) {
+                            $(this).remove();
+                        }
+
+                        if ($(this).is($filteredFieldsNameTD.last())) {
+                            $firstFieldNameTD.attr('rowspan', $counter);
+                            return;
+                        }
+
+
+                    } else {
+                        $firstFieldNameTD.attr('rowspan', $counter);
+                        $firstFieldNameTD = $(this);
+                        $counter = 1;
+                    }
+
+                })
+            }
+            function scalePlantNames() {
+                $firstPlantNameTD = $filteredPlantNameTD.first();
+                $counter = 0;
+                $filteredPlantNameTD.each(function () {
+                    if ($firstPlantNameTD.text() == $(this).text()) {
+                        $counter = $counter + 1;
+
+                        if ($counter != 1) {
+                            $(this).hide();
+                        }
+
+                        if ($(this).is($filteredPlantNameTD.last())) {
+                            $firstPlantNameTD.attr('rowspan', $counter);
+                            return;
+                        }
+
+
+                    } else {
+                        $firstPlantNameTD.attr('rowspan', $counter);
+                        $firstPlantNameTD = $(this);
+                        $counter = 1;
+                    }
+
+                })
+            }
+            function getArrayWithFieldNames() {
+                $fields = [];
+                $filteredFieldsNameTD.each(function () {
+                    $fieldName = $(this).text();
+                    if ($.inArray($fieldName, $fields) == -1) {
+                        $fields.push($fieldName);
+                    }
+                }
+                )
+                return $fields;
+            }
+            function getArrayWithPlantNames() {
+                $plantNames = [];
+                $filteredPlantNameTD.each(function () {
+                    $plantName = $(this).text();
+                    if ($.inArray($plantName, $plantNames) == -1) {
+                        $plantNames.push($plantName);
+                    }
+                }
+                )
+                return $plantNames;
+            }
+            function colorFields() {
+                $even = false;
+                $fields = getArrayWithFieldNames();
+
+                for (i = 0; i < $fields.length; i++) {
+                    $found = false;
+                    if ($even) {
+                        // Even row
+                        $filteredTR.each(function () {
+                            if ($(this).find('td[name=fieldName]').text() == $fields[i]) {
+                                $(this).children().each(function () {
+                                    if ($(this).attr('name=plantName')) return true;
+
+                                    $(this).css('background-color', '#F4A460');
+                                })
+                                $found = true;
+                            } else {
+                                if ($found) return false;
+                            }
+                        })
+                        $even = false;
+                    } else {
+                        // Odd row
+                        $filteredTR.each(function () {
+                            if ($(this).find('td[name=fieldName]').text() == $fields[i]) {
+                                $(this).children().each(function () {
+                                    if ($(this).attr('name=plantName')) return true;
+
+                                    $(this).css('background-color', '#D2691E');
+                                })
+                                $found = true;
+                            } else {
+                                if ($found) return false;
+                            }
+                        })
+                        $even = true;
+                    }
+
+                }
+            }
+            function colorPlants() {
+                $plantNames = getArrayWithPlantNames();
+
+                for (i = 0; i < $plantNames.length; i++) {
+                    $color = generateColor();
+                    $filteredPlantNameTD.each(function () {
+                        if ($(this).text() == $plantNames[i]) {
+                            $(this).css('background-color', $color);
+                        }
+                    })
+                }
+
+            }
+            function getFieldArea($fieldName) {
+                $area = 0;
+                $found = false;
+                $filteredTR.find(':contains(' + $fieldName + ')').each(function () {
+                    if ($(this).text() == $fieldName) {
+                        $found = true;
+                        $area += $(this).closest('tr').find('td[name=area]').text() * 100;
+
+                    } else {
+                        if ($found) return false;
+                    }
+                })
+                return ($area / 100).toFixed(2);
+            }
+            function fieldsWithArea() {
+                $fieldNames = getArrayWithFieldNames();
+                $fieldsWithArea = {};
+                for (i = 0; i < $fieldNames.length; i++) {
+                    $fieldsWithArea[$fieldNames[i]] = 0;
+                }
+                $filteredTR.each(function () {
+                    $fieldName = $(this).find('td[name=fieldName]').text();
+                    $area = $(this).find('td[name=area]').text().replace(',', '.') * 100;
+                    $fieldsWithArea[$fieldName] += $area;
+
+                })
+                return $fieldsWithArea;
+            }
+            function getTotalArea() {
+                $area = 0;
+                $filteredTR.find('td[name=area]').each(function () {
+                    $area += $(this).text().replace(',', '.') * 100;
+                })
+                return ($area / 100).toFixed(2);
+            }
+            function addSummaryRow() {
+                $html = '<tr>';
+                $html += '<td></td>';
+                $html += '<td></td>';
+                $html += '<td class="font-weight-bold">Razem</td>';
+                $html += '<td class="font-weight-bold">' + getTotalArea() + ' ha</td>';
+                $html += '<td></td>';
+                $html += '<td></td>';
+                $html += '<td></td>';
+                $html += '</tr>';
+                $filteredTBody.append($html);
+            }
+            function addAreaToFields() {
+                $filteredFieldsNameTD.each(function () {
+                    $thisFieldName = $(this).text();
+
+                    if (Object.keys($fieldsWithArea).length == 0) return false;
+
+                    if ($fieldsWithArea[$thisFieldName] === undefined) return true;
+
+                    $(this).append('<br />[' + ($fieldsWithArea[$thisFieldName] / 100).toFixed(2) + ' ha]');
+                    delete $fieldsWithArea[$thisFieldName];
+                })
+            }
+            function renumerate() {
+                $counter = 1;
+                $filteredTR.find('td[name=no]').each(function () {
+                    $(this).text($counter);
+                    $counter = $counter + 1;
+                })
+            }
+            function generateColor() {
+                var colorR = Math.floor((Math.random() * 256));
+                var colorG = Math.floor((Math.random() * 256));
+                var colorB = Math.floor((Math.random() * 256));
+                return "rgb(" + colorR + "," + colorG + "," + colorB + ",0.5)";
+            }
+        </script>
     }
-    function renumerate() {
-        $counter = 1;
-        $filteredTR.find('td[name=no]').each(function () {
-            $(this).text($counter);
-            $counter = $counter + 1;
-        })
-    }
-    function generateColor() {
-        var colorR = Math.floor((Math.random() * 256));
-        var colorG = Math.floor((Math.random() * 256));
-        var colorB = Math.floor((Math.random() * 256));
-        return "rgb(" + colorR + "," + colorG + "," + colorB + ",0.5)";
-    }
-</script>
-}

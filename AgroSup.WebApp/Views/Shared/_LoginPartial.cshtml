@@ -32,7 +32,10 @@
                 <a class="nav-link" asp-controller="manages" asp-action="cropplan">Zarządzaj</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" asp-controller="yearplans" asp-action="Index">Dane</a>
+                <a class="nav-link" asp-controller="yearplans" asp-action="index">Dane</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index">Moje konto</a>
             </li>
             <li class="nav-item">
                 <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">

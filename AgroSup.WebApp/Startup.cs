@@ -15,6 +15,7 @@ using AgroSup.Infrastructure.Data;
 using AgroSup.Core.Domain;
 using AgroSup.Core.Repositories;
 using AgroSup.Infrastructure.Repositories;
+using AgroSup.WebApp.ViewModels;
 
 namespace AgroSup.WebApp
 {
@@ -30,7 +31,7 @@ namespace AgroSup.WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var connectionString = Environment.GetEnvironmentVariable("SQLCONNSTR_ConnectionString");
+            var connectionString = Environment.GetEnvironmentVariable("SQLCONNSTR_db");
             if(connectionString == null)
             {
                 connectionString = Configuration.GetConnectionString("DefaultConnection");
@@ -40,11 +41,46 @@ namespace AgroSup.WebApp
                 options.UseSqlServer(connectionString));
             services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddRoles<IdentityRole<Guid>>()
-                .AddEntityFrameworkStores<DatabaseContext>();
+                .AddEntityFrameworkStores<DatabaseContext>()
+                .AddErrorDescriber<CustomIdentityErrorDescriber>();
             services.AddControllersWithViews();
             services.AddRazorPages();
 
-            services.AddScoped<IUserRepository, UserRepository>();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings.
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequiredUniqueChars = 0;
+
+                // Lockout settings.
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+
+                // User settings.
+                options.User.AllowedUserNameCharacters =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.RequireUniqueEmail = false;
+            });
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                // Cookie settings
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+
+                options.LoginPath = "/Identity/Account/Login";
+                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                options.SlidingExpiration = true;
+            });
+        
+
+        services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IFieldRepository, FieldRepository>();
             services.AddScoped<IOperatorRepository, OperatorRepository>();
             services.AddScoped<IPlantRepository, PlantRepository>();

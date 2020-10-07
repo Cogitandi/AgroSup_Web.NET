@@ -3,36 +3,35 @@
 @{
     ViewData["Title"] = "Nowy plan";
 }
-<partial name="_DataMenuPartial" />
 <!--- Content -->
-<div class="col-md-10">
-    <div class="container-md mx-4">
+<div class="row">
+    <partial name="_DataMenuPartial" />
+    <div class="col-md-10">
+        <div class="container-md mx-4">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-            <div class="form-group">
-                <label asp-for="StartYear" class="control-label"></label>
-                <input asp-for="StartYear" class="form-control" />
-                <span asp-validation-for="StartYear" class="text-danger"></span>
-                <small id="startYear" class="form-text text-muted">Podaj rok rozpoczęcia sezonu.</small>
-            </div>
-            <div class="form-group">
-                <label class="control-label">Wybierz sezon z którego chcesz zaimportować dane</label>
-                <select class="form-control" asp-items="ViewBag.YearPlans" name="yearPlanImportId">
-                    <option selected value="00000000-0000-0000-0000-000000000000">Wybierz</option>
-                </select>
-                <small id="import" class="form-text text-muted">Wybierz sezon z którego chcesz zaimportować wszystkie dane</small>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Utwórz" class="btn btn-primary mt-2" />
-            </div>
-        </form>
-
-
+                <div class="form-group">
+                    <label asp-for="StartYear" class="control-label"></label>
+                    <input asp-for="StartYear" class="form-control" />
+                    <span asp-validation-for="StartYear" class="text-danger"></span>
+                    <small id="startYear" class="form-text text-muted">Podaj rok rozpoczęcia sezonu.</small>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Wybierz sezon z którego chcesz zaimportować dane</label>
+                    <select class="form-control" asp-items="ViewBag.YearPlans" name="yearPlanImportId">
+                        <option selected value="00000000-0000-0000-0000-000000000000">Wybierz</option>
+                    </select>
+                    <small id="import" class="form-text text-muted">Wybierz sezon z którego chcesz zaimportować wszystkie dane</small>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Utwórz" class="btn btn-primary mt-2" />
+                </div>
+            </form>
+        </div>
+        </div>
     </div>
-</div>
-<!--- End content -->
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    <!--- End content -->
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
