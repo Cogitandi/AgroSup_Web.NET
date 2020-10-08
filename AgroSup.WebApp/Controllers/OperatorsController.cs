@@ -34,7 +34,7 @@ namespace AgroSup.WebApp.Controllers
             var managedYearPlan = await getManagedYearPlan();
             if (managedYearPlan == null)
             {
-                return RedirectToAction("Index", "YearPlan");
+                return RedirectToAction("index", "yearplan");
             }
 
             var operators = await _operatorRepository.GetByYearPlan(managedYearPlan);
@@ -63,7 +63,7 @@ namespace AgroSup.WebApp.Controllers
             var managedYearPlan = await getManagedYearPlan();
             if (managedYearPlan == null)
             {
-                return RedirectToAction("Index", "YearPlan");
+                return RedirectToAction("index", "yearplan");
             }
 
 

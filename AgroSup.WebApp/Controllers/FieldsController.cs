@@ -41,7 +41,7 @@ namespace AgroSup.WebApp.Controllers
 
             if (managedYearPlan == null)
             {
-                return RedirectToAction("Index", "YearPlan");
+                return RedirectToAction("index", "yearplan");
             }
 
             var fields = await _fieldRepository.GetByYearPlan(managedYearPlan);
@@ -61,7 +61,7 @@ namespace AgroSup.WebApp.Controllers
             var managedYearPlan = await getManagedYearPlan();
             if (managedYearPlan == null)
             {
-                return RedirectToAction("Index", "YearPlan");
+                return RedirectToAction("index", "yearplan");
             }
             var model = new FieldViewModel()
             {
@@ -87,7 +87,7 @@ namespace AgroSup.WebApp.Controllers
             var managedYearPlan = await getManagedYearPlan();
             if (managedYearPlan == null)
             {
-                return RedirectToAction("Index", "YearPlan");
+                return RedirectToAction("index", "yearplan");
             }
 
             Field field = new Field()
@@ -121,7 +121,7 @@ namespace AgroSup.WebApp.Controllers
             var managedYearPlan = await getManagedYearPlan();
             if (managedYearPlan == null)
             {
-                return RedirectToAction("Index", "YearPlan");
+                return RedirectToAction("index", "yearplan");
             }
 
             var operators = managedYearPlan.Operators;
@@ -188,7 +188,7 @@ namespace AgroSup.WebApp.Controllers
             var managedYearPlan = await getManagedYearPlan();
             if (managedYearPlan == null)
             {
-                return RedirectToAction("Index", "YearPlan");
+                return RedirectToAction("index", "yearplan");
             }
             var operatorSelectList = managedYearPlan.Operators.Select(x => new SelectListItem()
             {
@@ -206,7 +206,7 @@ namespace AgroSup.WebApp.Controllers
             var managedYearPlan = await getManagedYearPlan();
             if (managedYearPlan == null)
             {
-                return RedirectToAction("Index", "YearPlan");
+                return RedirectToAction("index", "yearplan");
             }
             ModelState.Clear();
             model.Parcels.RemoveAt(index);
