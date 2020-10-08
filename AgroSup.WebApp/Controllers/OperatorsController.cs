@@ -48,8 +48,14 @@ namespace AgroSup.WebApp.Controllers
             return View(model);
         }
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var managedYearPlan = await getManagedYearPlan();
+            if (managedYearPlan == null)
+            {
+                return RedirectToAction("index", "yearplan");
+            }
+
             return View();
         }
         [HttpPost]

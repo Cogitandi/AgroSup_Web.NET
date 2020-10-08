@@ -45,7 +45,7 @@ namespace AgroSup.WebApp.Controllers
 
             if (managedYearPlan == null)
             {
-                return RedirectToAction("index", "yearplan");
+                return RedirectToAction("index", "yearplans");
             }
             
             var plants = GetUser().Result.ChoosedPlants;
@@ -92,7 +92,7 @@ namespace AgroSup.WebApp.Controllers
 
             if (managedYearPlan == null)
             {
-                return RedirectToAction("index", "yearplan");
+                return RedirectToAction("index", "yearplans");
             }
             foreach(var item in model.Fields)
             {
@@ -111,7 +111,7 @@ namespace AgroSup.WebApp.Controllers
 
             if (managedYearPlan == null)
             {
-                return RedirectToAction("index", "yearplan");
+                return RedirectToAction("index", "yearplans");
             }
 
             var fields = await _fieldRepository.GetByYearPlan(managedYearPlan);
@@ -171,7 +171,7 @@ namespace AgroSup.WebApp.Controllers
 
             if (managedYearPlan == null)
             {
-                return RedirectToAction("index", "yearplan");
+                return RedirectToAction("index", "yearplans");
             }
 
             var operators = await _operatorRepository.GetByYearPlan(managedYearPlan);
@@ -219,7 +219,7 @@ namespace AgroSup.WebApp.Controllers
 
             if (managedYearPlan == null)
             {
-                return RedirectToAction("index", "yearplan");
+                return RedirectToAction("index", "yearplans");
             }
 
             var operators = await _operatorRepository.GetByYearPlan(managedYearPlan);
