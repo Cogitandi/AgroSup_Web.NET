@@ -44,7 +44,7 @@ namespace AgroSup.WebApp.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
-            [Required]
+            [Required(ErrorMessage = "Musisz wypełnić te pole")]
             [EmailAddress]
             [Display(Name = "Nowy email")]
             public string NewEmail { get; set; }

@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Lista pól";
-    int counter = 0;
 }
 
 <!--- Content -->
@@ -10,12 +9,12 @@
     <partial name="_DataMenuPartial" />
     <div class="col-md-10">
         <div class="container-md mx-4">
-            <h2 class="text-center">Twoje pola w sezonie</h2>
+            <h2 class="text-center">Twoje pola</h2>
+            <hr />
             <div class="table-responsive">
                 <table id="axs" class="text-center table w-75 mx-auto table-striped table-hover">
                     <thead>
                         <tr>
-                            <th scope="col"></th>
                             <th scope="col">#</th>
                             <th scope="col">@Html.DisplayNameFor(modelItem => modelItem.Number)</th>
                             <th scope="col">@Html.DisplayNameFor(modelItem => modelItem.Name)</th>
@@ -24,35 +23,42 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model)
+                        @if (Model.Count() == 0)
                         {
                             <tr>
-                                @if (Model.First().Id == item.Id)
-                                {
-                                    <th class="align-middle">
-                                        <i class="fas fa-sort-down fa-2x down" data-id="@item.Id"></i>
-                                    </th>
-                                }
-                                else if (Model.Last().Id == item.Id)
-                                {
-                                    <th class="align-middle">
-                                        <i class="fas fa-sort-up fa-2x up" data-id="@item.Id"></i>
-                                    </th>
-                                }
-                                else
-                                {
-                                    <th class="align-middle">
-                                        <p><i class="fas fa-sort-up fa-2x up" data-id="@item.Id"></i></p>
-                                        <p><i class="fas fa-sort-down fa-2x down" data-id="@item.Id"></i></p>
-                                    </th>
-                                }
-
-                                <th class="align-middle">@(++counter)</th>
-                                <td class="align-middle">@item.Number</td>
-                                <td class="align-middle">@item.Name</td>
-                                <td class="align-middle">@item.Area</td>
-                                <td class="align-middle">@Html.ActionLink("Modyfikuj", "Edit", new { id = item.Id }, new { @class = "btn btn-block btn btn-secondary" }) </td>
+                                <td colspan="6">
+                                    @Html.ActionLink("Utwórz nowe pole", "create", "fields", new { }, new { @class = "btn btn-info" })
+                                </td>
                             </tr>
+                        }
+                        @foreach (var item in Model)
+                        {
+                    <tr>
+                        @if (Model.First().Id == item.Id)
+                        {
+                            <td class="align-middle">
+                                <i class="fas fa-sort-down fa-2x down" data-id="@item.Id"></i>
+                            </td>
+                        }
+                        else if (Model.Last().Id == item.Id)
+                        {
+                            <td class="align-middle">
+                                <i class="fas fa-sort-up fa-2x up" data-id="@item.Id"></i>
+                            </td>
+                        }
+                        else
+                        {
+                            <td class="align-middle">
+                                <p><i class="fas fa-sort-up fa-2x up" data-id="@item.Id"></i></p>
+                                <p><i class="fas fa-sort-down fa-2x down" data-id="@item.Id"></i></p>
+                            </td>
+                        }
+
+                        <td class="align-middle">@item.Number</td>
+                        <td class="align-middle">@item.Name</td>
+                        <td class="align-middle">@item.Area</td>
+                        <td class="align-middle">@Html.ActionLink("Modyfikuj", "Edit", new { id = item.Id }, new { @class = "btn btn-block btn btn-secondary" }) </td>
+                    </tr>
                         }
 
                     </tbody>

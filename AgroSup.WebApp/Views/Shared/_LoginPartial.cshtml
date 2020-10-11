@@ -35,13 +35,21 @@
                 <a class="nav-link" asp-controller="yearplans" asp-action="index">Dane</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index">Moje konto</a>
+                <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Email">Moje konto</a>
             </li>
             <li class="nav-item">
                 <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                     <button type="submit" class="nav-link btn btn-link">Wyloguj</button>
                 </form>
             </li>
+            @if (
+                this.User.IsInRole("Administrator"))
+            {
+                <li class="nav-item">
+                    <a class="nav-link font-weight-bold"  asp-controller="AdminPanel" asp-action="index">Panel adminstratora</a>
+                </li>
+            }
+
         }
         else
         {

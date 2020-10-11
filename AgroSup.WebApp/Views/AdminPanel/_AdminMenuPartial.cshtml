@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewData["Title"] = "_AdminMenuPartial";
+}
+
+<!--- Left menu -->
+<div class="col-md-2 mb-4">
+    <ul class="nav nav-pills flex-column">
+        <li><a class="nav-link font-weight-bold" asp-controller="adminpanel" asp-action="">Usuń nieaktywne konta</a></li>
+        <li><a class="nav-link font-weight-bold" asp-controller="adminpanel" asp-action="index">Podsumowanie</a></li>
+        <li><a class="nav-link font-weight-bold" data-toggle="collapse" data-target=".d3" href="#">Rośliny</a></li>
+        <li>
+            <ul style="padding-left: 20px; list-style: none">
+                <li><a class="d3 nav-link collapse" asp-controller="adminpanel" asp-action="">Lista roślin</a></li>
+                <li><a class="d3 nav-link collapse" asp-controller="adminpanel" asp-action="">Dodaj</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+

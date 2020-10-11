@@ -83,6 +83,10 @@ namespace AgroSup.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CropPlan(CropPlanViewModel model)
         {
+            if(model.Fields == null)
+            {
+                return RedirectToAction("cropplan");
+            }
             if(!ModelState.IsValid)
             {
                 return View(model);
@@ -102,7 +106,7 @@ namespace AgroSup.WebApp.Controllers
                 field.PlantVariety = item.PlantVariety;
                 await _fieldRepository.Update(field);
             }
-            return RedirectToAction("CropPlan");
+            return RedirectToAction("cropplan");
         }
 
         public async Task<IActionResult> Summary()

@@ -9,7 +9,8 @@
     <div class="col-md-10">
         <div class="container-md mx-4">
             <button class="float-right btn btn-primary" onClick="createPDF();">Drukuj</button>
-            <h2 class="text-center">Pola w sezonie 11/12 </h2>
+            <h2 class="text-center">Twoje pola </h2>
+            <hr />
             <div class="table-responsive">
                 <table id="parcels" class="text-center table w-75 mx-auto">
                     <thead style="background-color: #32CD32">
@@ -50,6 +51,7 @@
                                 <td hover name="area" class="align-middle">@item.CultivatedArea</td>
                                 <td hover name="arimrOperator" class="align-middle">@item.OperatorName</td>
                                 <td name="plantName" class="no-hover align-middle">@item.PlantName</td>
+
                             </tr>
                         }
                     </tbody>
@@ -373,7 +375,6 @@
                 $html += '<td></td>';
                 $html += '<td class="font-weight-bold">Razem</td>';
                 $html += '<td class="font-weight-bold">' + getTotalArea() + ' ha</td>';
-                $html += '<td></td>';
                 $html += '<td></td>';
                 $html += '<td></td>';
                 $html += '</tr>';
