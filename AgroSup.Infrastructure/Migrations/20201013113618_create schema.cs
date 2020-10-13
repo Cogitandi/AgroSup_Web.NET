@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AgroSup.Infrastructure.Migrations
 {
-    public partial class createSchema : Migration
+    public partial class createschema : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -19,6 +19,25 @@ namespace AgroSup.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Fertilizer",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    N = table.Column<string>(nullable: true),
+                    P = table.Column<string>(nullable: true),
+                    K = table.Column<string>(nullable: true),
+                    Ca = table.Column<string>(nullable: true),
+                    Mg = table.Column<string>(nullable: true),
+                    S = table.Column<string>(nullable: true),
+                    Na = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Fertilizer", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -231,6 +250,39 @@ namespace AgroSup.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Treatment",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Start = table.Column<DateTime>(nullable: false),
+                    End = table.Column<DateTime>(nullable: false),
+                    FieldId = table.Column<Guid>(nullable: true),
+                    Discriminator = table.Column<string>(nullable: false),
+                    DosePerHa = table.Column<int>(nullable: true),
+                    FertilizerId = table.Column<Guid>(nullable: true),
+                    SeedingTreatment_DosePerHa = table.Column<int>(nullable: true),
+                    Composition = table.Column<string>(nullable: true),
+                    ReasonForUse = table.Column<string>(nullable: true),
+                    Notes = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Treatment", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Treatment_Fertilizer_FertilizerId",
+                        column: x => x.FertilizerId,
+                        principalTable: "Fertilizer",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Treatment_Fields_FieldId",
+                        column: x => x.FieldId,
+                        principalTable: "Fields",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Parcels",
                 columns: table => new
                 {
@@ -328,6 +380,16 @@ namespace AgroSup.Infrastructure.Migrations
                 column: "OperatorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Treatment_FertilizerId",
+                table: "Treatment",
+                column: "FertilizerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Treatment_FieldId",
+                table: "Treatment",
+                column: "FieldId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserPlants_PlantId",
                 table: "UserPlants",
                 column: "PlantId");
@@ -416,16 +478,22 @@ namespace AgroSup.Infrastructure.Migrations
                 name: "Parcels");
 
             migrationBuilder.DropTable(
+                name: "Treatment");
+
+            migrationBuilder.DropTable(
                 name: "UserPlants");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Fields");
+                name: "Operators");
 
             migrationBuilder.DropTable(
-                name: "Operators");
+                name: "Fertilizer");
+
+            migrationBuilder.DropTable(
+                name: "Fields");
 
             migrationBuilder.DropTable(
                 name: "Plants");

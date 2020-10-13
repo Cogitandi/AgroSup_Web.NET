@@ -22,6 +22,14 @@ namespace AgroSup.WebApp.Controllers
 
         public IActionResult Index()
         {
+            var seding = new SeedingTreatment {
+                DosePerHa = 150,
+                Start = DateTime.Today,
+                End = DateTime.Today,
+            };
+            Treatment tras = seding;
+            SeedingTreatment sd = (SeedingTreatment)tras;
+
             return View();
         }
 

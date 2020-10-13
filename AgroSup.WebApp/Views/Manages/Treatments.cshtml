@@ -1,0 +1,86 @@
+﻿@model IEnumerable<AgroSup.WebApp.ViewModels.Manages.TreatmentViewModel>
+
+@{
+    ViewData["Title"] = "Zabiegi";
+}
+
+
+<div class="row">
+    <partial name="_ManageMenuPartial" />
+    <div class="col-md-10">
+        <div class="container-md mx-4">
+            <h2 class="text-center">Zabiegi </h2>
+            <hr />
+            <!--- Content -->
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.StartDate)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.EndDate)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FieldName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FertilizerName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.DosePerHa)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ReasonForUse)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Notes)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.StartDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.EndDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FieldName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FertilizerName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DosePerHa)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ReasonForUse)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Notes)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <!--- End content -->
+        </div>
+    </div>
+</div>
+   

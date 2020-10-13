@@ -21,6 +21,9 @@ namespace AgroSup.WebApp.Controllers
         private readonly IYearPlanRepository _yearPlanRepository;
         private readonly IOperatorRepository _operatorRepository;
         private readonly IPlantRepository _plantRepository;
+        private readonly ITreatmentRepository<SeedingTreatment> _seedingRepository;
+        private readonly ITreatmentRepository<SprayingTreatment> _sprayingRepository;
+        private readonly ITreatmentRepository<FertilizationTreatment> _fertilizationRepository;
         
         public ManagesController(
             UserManager<User> userManager,
@@ -28,7 +31,10 @@ namespace AgroSup.WebApp.Controllers
             IFieldRepository fieldRepository,
             IYearPlanRepository yearPlanRepository,
             IOperatorRepository operatorRepository,
-            IPlantRepository plantRepository
+            IPlantRepository plantRepository,
+            ITreatmentRepository<SeedingTreatment> seedingRepository,
+            ITreatmentRepository<SprayingTreatment> sprayingRepository,
+            ITreatmentRepository<FertilizationTreatment> fertilizationRepository
             )
         {
             _userManager = userManager;
@@ -37,6 +43,9 @@ namespace AgroSup.WebApp.Controllers
             _yearPlanRepository = yearPlanRepository;
             _operatorRepository = operatorRepository;
             _plantRepository = plantRepository;
+            _seedingRepository = seedingRepository;
+            _sprayingRepository = sprayingRepository;
+            _fertilizationRepository = fertilizationRepository;
         }
 
         public async Task<IActionResult> CropPlan()
@@ -264,6 +273,63 @@ namespace AgroSup.WebApp.Controllers
                     PlantName = x.GetPlantName(),
                 })
             };
+            return View(model);
+        }
+        public async Task<IActionResult> Treatments()
+        {
+            var managedYearPlan = await GetManagedYearPlan();
+
+            if (managedYearPlan == null)
+            {
+                return RedirectToAction("index", "yearplans");
+            }
+
+            var fertilizationTreatments = await _fertilizationRepository.GetAllByYearPlan(managedYearPlan);
+            var seedingTreatments = await _seedingRepository.GetAllByYearPlan(managedYearPlan);
+            var sprayingTreatments = await _sprayingRepository.GetAllByYearPlan(managedYearPlan);
+
+            var FertilizationTreatmentsToModel = fertilizationTreatments.Select(x => new TreatmentViewModel
+            {
+                Id = x.Id,
+                StartDate = x.Start,
+                EndDate = x.End,
+                FieldName = x.Field.Name,
+                FertilizerName = x.Fertilizer.Name,
+                DosePerHa = x.DosePerHa,
+                Name = "Nawóz",
+                Notes = "-",
+                ReasonForUse = "-"
+
+            });
+            var SeedingTreatmentsToModel = fertilizationTreatments.Select(x => new TreatmentViewModel
+            {
+                Id = x.Id,
+                StartDate = x.Start,
+                EndDate = x.End,
+                FieldName = x.Field.Name,
+                FertilizerName ="-",
+                DosePerHa = x.DosePerHa,
+                Name = "Siew",
+                Notes = "-",
+                ReasonForUse = "-"
+            });
+            var SprayingTreatmentsToModel = fertilizationTreatments.Select(x => new TreatmentViewModel
+            {
+                Id = x.Id,
+                StartDate = x.Start,
+                EndDate = x.End,
+                FieldName = x.Field.Name,
+                FertilizerName = "-",
+                DosePerHa = x.DosePerHa,
+                Name = "Oprysk",
+                Notes = "-",
+                ReasonForUse = "-"
+            });
+            var model = new List<TreatmentViewModel>();
+            model.AddRange(FertilizationTreatmentsToModel);
+            model.AddRange(SeedingTreatmentsToModel);
+            model.AddRange(SprayingTreatmentsToModel);
+            var outmod = model.AsEnumerable();
             return View(model);
         }
 

@@ -19,6 +19,41 @@ namespace AgroSup.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("AgroSup.Core.Domain.Fertilizer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Ca")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("K")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Mg")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("N")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Na")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("P")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("S")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Fertilizer");
+                });
+
             modelBuilder.Entity("AgroSup.Core.Domain.Field", b =>
                 {
                     b.Property<Guid>("Id")
@@ -123,6 +158,34 @@ namespace AgroSup.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Plants");
+                });
+
+            modelBuilder.Entity("AgroSup.Core.Domain.Treatment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("End")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("FieldId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Start")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FieldId");
+
+                    b.ToTable("Treatment");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Treatment");
                 });
 
             modelBuilder.Entity("AgroSup.Core.Domain.User", b =>
@@ -372,6 +435,48 @@ namespace AgroSup.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("AgroSup.Core.Domain.FertilizationTreatment", b =>
+                {
+                    b.HasBaseType("AgroSup.Core.Domain.Treatment");
+
+                    b.Property<int>("DosePerHa")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("FertilizerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasIndex("FertilizerId");
+
+                    b.HasDiscriminator().HasValue("FertilizationTreatment");
+                });
+
+            modelBuilder.Entity("AgroSup.Core.Domain.SeedingTreatment", b =>
+                {
+                    b.HasBaseType("AgroSup.Core.Domain.Treatment");
+
+                    b.Property<int>("DosePerHa")
+                        .HasColumnName("SeedingTreatment_DosePerHa")
+                        .HasColumnType("int");
+
+                    b.HasDiscriminator().HasValue("SeedingTreatment");
+                });
+
+            modelBuilder.Entity("AgroSup.Core.Domain.SprayingTreatment", b =>
+                {
+                    b.HasBaseType("AgroSup.Core.Domain.Treatment");
+
+                    b.Property<string>("Composition")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReasonForUse")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasDiscriminator().HasValue("SprayingTreatment");
+                });
+
             modelBuilder.Entity("AgroSup.Core.Domain.Field", b =>
                 {
                     b.HasOne("AgroSup.Core.Domain.Plant", "Plant")
@@ -405,6 +510,13 @@ namespace AgroSup.Infrastructure.Migrations
                     b.HasOne("AgroSup.Core.Domain.Operator", "Operator")
                         .WithMany("Parcels")
                         .HasForeignKey("OperatorId");
+                });
+
+            modelBuilder.Entity("AgroSup.Core.Domain.Treatment", b =>
+                {
+                    b.HasOne("AgroSup.Core.Domain.Field", "Field")
+                        .WithMany()
+                        .HasForeignKey("FieldId");
                 });
 
             modelBuilder.Entity("AgroSup.Core.Domain.User", b =>
@@ -487,6 +599,13 @@ namespace AgroSup.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("AgroSup.Core.Domain.FertilizationTreatment", b =>
+                {
+                    b.HasOne("AgroSup.Core.Domain.Fertilizer", "Fertilizer")
+                        .WithMany()
+                        .HasForeignKey("FertilizerId");
                 });
 #pragma warning restore 612, 618
         }

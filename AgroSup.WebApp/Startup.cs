@@ -85,6 +85,9 @@ namespace AgroSup.WebApp
             services.AddScoped<IOperatorRepository, OperatorRepository>();
             services.AddScoped<IPlantRepository, PlantRepository>();
             services.AddScoped<IYearPlanRepository, YearPlanRepository>();
+            services.AddScoped<ITreatmentRepository<SeedingTreatment>, SeedingTreatmentRepository>();
+            services.AddScoped<ITreatmentRepository<SprayingTreatment>, SprayingTreatmentRepository>();
+            services.AddScoped<ITreatmentRepository<FertilizationTreatment>, FertilizationTreatmentRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,0 +1,31 @@
+﻿@model AgroSup.WebApp.ViewModels.AdminPanel.PlantViewModel
+
+@{
+    ViewData["Title"] = "Nowa roślina";
+}
+
+<div class="row">
+    <partial name="_AdminMenuPartial" />
+    <div class="col-md-10">
+        <div class="container-md mx-4">
+            <!--- Content -->
+            <form asp-action="NewPlant">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="EfaNitrogenRate" class="control-label"></label>
+                    <input asp-for="EfaNitrogenRate" class="form-control" />
+                    <span asp-validation-for="EfaNitrogenRate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Dodaj" class="btn btn-primary" />
+                </div>
+            </form>
+            <!--- End content -->
+        </div>
+    </div>
+</div>
