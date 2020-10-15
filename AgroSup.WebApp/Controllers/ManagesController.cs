@@ -1,6 +1,7 @@
 ﻿using AgroSup.Core.Domain;
 using AgroSup.Core.Repositories;
 using AgroSup.WebApp.ViewModels.Manages;
+using AgroSup.WebApp.ViewModels.Treatments;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -329,9 +330,72 @@ namespace AgroSup.WebApp.Controllers
             model.AddRange(FertilizationTreatmentsToModel);
             model.AddRange(SeedingTreatmentsToModel);
             model.AddRange(SprayingTreatmentsToModel);
-            var outmod = model.AsEnumerable();
             return View(model);
         }
+        public async Task<IActionResult> AddTreatment()
+        {
+            var managedYearPlan = await GetManagedYearPlan();
+
+            if (managedYearPlan == null)
+            {
+                return RedirectToAction("index", "yearplans");
+            }
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> NewTreatment(IList<AddTreatmentViewModel> model)
+        {
+            var managedYearPlan = await GetManagedYearPlan();
+            if (managedYearPlan == null)
+            {
+                return RedirectToAction("index", "yearplans");
+            }
+
+            var fields = await _fieldRepository.GetByYearPlan(managedYearPlan);
+            var FieldList = new SelectList(fields, "Id", "Name");
+            var KindList = new List<SelectListItem>
+            {
+                new SelectListItem{Text="Nawóz",Value="fertilizer"},
+                new SelectListItem{Text="Oprysk",Value="spraying"},
+                new SelectListItem{Text="Siew",Value="seeding"},
+            };
+
+            ViewBag.Kinds = KindList;
+            ViewBag.Fields = FieldList;
+
+            model.Add(new AddTreatmentViewModel());
+
+            return PartialView("Treatments1", model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveTreatment(IList<AddTreatmentViewModel> model, int index)
+        {
+            var managedYearPlan = await GetManagedYearPlan();
+            if (managedYearPlan == null)
+            {
+                return RedirectToAction("index", "yearplans");
+            }
+            ModelState.Clear();
+            model.RemoveAt(index);
+
+            var fields = await _fieldRepository.GetByYearPlan(managedYearPlan);
+            var FieldList = new SelectList(fields, "Id", "Name");
+            var KindList = new List<SelectListItem>
+            {
+                new SelectListItem{Text="Nawóz",Value="fertilizer"},
+                new SelectListItem{Text="Oprysk",Value="spraying"},
+                new SelectListItem{Text="Siew",Value="seeding"},
+            };
+
+            ViewBag.Kinds = KindList;
+            ViewBag.Fields = FieldList;
+
+            return PartialView("Treatments1", model);
+        }
+
+
 
         // Methods
         private async Task<YearPlan> GetManagedYearPlan()

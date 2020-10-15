@@ -276,5 +276,25 @@ namespace AgroSup.WebApp.Controllers
             return 1;
         }
 
+        // Validation
+        [AcceptVerbs("GET", "POST")]
+        public async Task<IActionResult> UniqueFieldNumber(FieldViewModel model)
+        {
+            var managedYearPlan = await getManagedYearPlan();
+            // Get list of user's yearplans
+            var userYearPlans = await _fieldRepository.GetByYearPlan(managedYearPlan);
+            var list = userYearPlans.ToList();
+
+            foreach (var item in list)
+            {
+                if (item.Number == model.Number)
+                {
+                    // If user have yearplan with startYear passed by user error
+                    return Json($"Posiadasz już pole z tym numerem");
+                }
+            }
+            return Json(true);
+        }
+
     }
 }

@@ -1,0 +1,46 @@
+﻿@model AgroSup.WebApp.ViewModels.Treatments.AddTreatmentViewModel
+@{ 
+    var options = (IEnumerable<SelectListItem>)@ViewData["operators"];
+}
+    <div class="form-group ">
+        <select asp-items="@ViewBag.Kinds" asp-for="Name" class="form-control">
+            <option selected>Wybierz rodzaj</option>
+        </select>
+        <div class="form-group">
+            <label asp-for="Date" class="control-label"></label>
+            <input asp-for="Date" class="form-control" />
+            <span asp-validation-for="Date" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="FieldId" class="control-label"></label>
+            <select asp-items="@ViewBag.Fields" asp-for="FieldId" class="form-control">
+                <option selected>Wybierz pole</option>
+            </select>
+            <span asp-validation-for="FieldId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Notes" class="control-label"></label>
+            <input asp-for="Notes" class="form-control" />
+            <span asp-validation-for="Notes" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DosePerHa" class="control-label"></label>
+            <input asp-for="DosePerHa" class="form-control" />
+            <span asp-validation-for="DosePerHa" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="SprayingAgents" class="control-label"></label>
+            <input asp-for="SprayingAgents" class="form-control" />
+            <span asp-validation-for="SprayingAgents" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="FertilizerId" class="control-label"></label>
+            <select asp-items="@ViewBag.Fertilizers" asp-for="FertilizerId" class="form-control">
+                <option selected>Wybierz nawóz</option>
+            </select>
+            <span asp-validation-for="FertilizerId" class="text-danger"></span>
+        </div>
+        <div class="col-auto align-self-center">
+            <button onclick="removeParcel.call(this)" class="btn btn-danger">Usuń</button>
+        </div>
+    </div>

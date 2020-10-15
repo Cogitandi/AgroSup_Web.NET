@@ -1,0 +1,59 @@
+﻿@model IList<AgroSup.WebApp.ViewModels.Treatments.AddTreatmentViewModel>
+
+@{
+    ViewData["Title"] = "Dodaj zabieg";
+}
+
+<div class="row">
+    <partial name="_ManageMenuPartial" />
+    <div class="col-md-10">
+        <div class="container-md mx-4">
+            <h2 class="text-center">Zabiegi</h2>
+            <hr />
+            <!--- Content -->
+            <form asp-action="AddTreatment" id="form">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input class="btn btn-info mb-2" type="button" id="addTreatment" value="Nowy zabieg" />
+                <div id="treatments">
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Dodaj zabiegi" class="btn btn-primary" />
+                </div>
+            </form>
+            <!--- End content -->
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $("#addTreatment").on("click", function () {
+        $.ajax({
+            async: true,
+            data: $("#form").serialize(),
+            type: "POST",
+            url: '@Url.Action("NewTreatment", "Manages")',
+            success: function (partialView) {
+                $('#treatments').html(partialView);
+            }
+        });
+        });
+
+        function removeParcel() {
+            //data: $("#form").serialize() + "&index=" + indexToRemove,
+            //data: $("#form").serialize() + id:indexToRemove,
+            var indexToRemove = $(this).parent().parent().prevAll().length;
+            //var data 
+            $.ajax({
+                async: true,
+                data: $("#form").serialize() + "&index=" + indexToRemove,
+            type: "POST",
+            url: '@Url.Action("RemoveTreatment", "Manages")',
+                success: function (partialView) {
+                    $('#treatments').html(partialView);
+            }
+        });
+            event.preventDefault();
+        }
+    </script>
+}
