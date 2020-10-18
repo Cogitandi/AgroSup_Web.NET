@@ -1,7 +1,9 @@
-﻿@model IEnumerable<AgroSup.WebApp.ViewModels.Manages.TreatmentViewModel>
+﻿@model IEnumerable<AgroSup.WebApp.ViewModels.Manages.Treatments.TreatmentViewModel>
 
 @{
-    ViewData["Title"] = "Zabiegi";
+    ViewData["Title"] = "Lista zabiegów";
+    ViewData["ActivePage"] = ManageMenu.TreatmentList;
+    var message = @TempData["message"];
 }
 
 
@@ -11,6 +13,10 @@
         <div class="container-md mx-4">
             <h2 class="text-center">Zabiegi </h2>
             <hr />
+            @if (message != null)
+            {
+                <partial name="_StatusMessage" model="message.ToString()" />
+            }
             <!--- Content -->
             <table class="table">
                 <thead>
@@ -83,4 +89,3 @@
         </div>
     </div>
 </div>
-   

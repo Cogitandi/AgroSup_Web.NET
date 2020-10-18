@@ -1,17 +1,16 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "_DataMenuPartial";
 }
 
 <!--- Left menu -->
 <div class="col-md-2 mb-4">
     <ul class="nav nav-pills flex-column">
-        <li><a class="nav-link font-weight-bold" asp-controller="manages" asp-action="cropplan">Planuj uprawy</a></li>
-        <li><a class="nav-link font-weight-bold" asp-controller="manages" asp-action="parcelsummary">Działki</a></li>
-        <li><a class="nav-link font-weight-bold" asp-controller="manages" asp-action="fieldsummary">Pola</a></li>
-        <li><a class="nav-link font-weight-bold" asp-controller="manages" asp-action="treatments">Zabiegi</a></li>
-        <li><a class="nav-link font-weight-bold" asp-controller="manages" asp-action="addtreatment">Nowy zabieg</a></li>
-        <li><a class="nav-link font-weight-bold" asp-controller="manages" asp-action="summary">Podsumowanie</a></li>
+        <li><a class="nav-link font-weight-bold @ManageMenu.CropPlanNavClass(ViewContext)" asp-controller="cropplan" asp-action="index">Planuj uprawy</a></li>
+        <li><a class="nav-link font-weight-bold @ManageMenu.ParcelsNavClass(ViewContext)" asp-controller="manages" asp-action="parcelsummary">Działki</a></li>
+        <li><a class="nav-link font-weight-bold @ManageMenu.FieldsNavClass(ViewContext)" asp-controller="manages" asp-action="fieldsummary">Pola</a></li>
+        <li><a class="nav-link font-weight-bold @ManageMenu.TreatmentListNavClass(ViewContext)" asp-controller="treatments" asp-action="index">Zabiegi</a></li>
+        <li><a class="nav-link font-weight-bold @ManageMenu.TreatmentAddNavClass(ViewContext)" asp-controller="treatments" asp-action="create">Nowy zabieg</a></li>
+        <li><a class="nav-link font-weight-bold @ManageMenu.SummaryManageNavClass(ViewContext)" asp-controller="manages" asp-action="summary">Podsumowanie</a></li>
     </ul>
 </div>
 

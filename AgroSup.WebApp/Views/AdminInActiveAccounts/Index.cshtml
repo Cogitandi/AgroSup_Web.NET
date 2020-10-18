@@ -1,0 +1,65 @@
+﻿@model AgroSup.WebApp.ViewModels.AdminPanel.InActiveAccounts.InActiveAccountViewModel
+
+@{
+    ViewData["Title"] = "Nieaktywne konta";
+    ViewData["ActivePage"] = ManageMenu.InActiveAccounts;
+    var message = @TempData["message"];
+}
+
+<div class="row">
+    <partial name="_AdminMenuPartial" />
+    <div class="col-md-10">
+        <div class="container-md mx-4">
+            <!--- Content -->
+            <h2 class="text-center">Podsumowanie</h2>
+            <hr />
+            @if( message != null) {
+            <partial name="_StatusMessage" model="message.ToString()" />
+            }
+
+            <pre>
+            Konta przeznaczone do kasacji to te, które spełniają warunki:
+            * Po utworzeniu nikt się nie zalogował przez conajmniej 90 dni.
+            * Nie mają utworzonych żadnych planów oraz ostatni nikt się nie zalogował przez conajmniej 90 dni.
+            Do usunięcia możliwych jest <strong>@Model.PossibleAccountToDelete</strong> kont
+            <button id="deleteBtn" class="btn btn-danger">Skasuj</button>
+</pre>
+            <!--- End content -->
+        </div>
+        <form asp-action="DeleteAccounts" asp-controller="AdminInActiveAccounts" id="form">
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
+    <script>
+
+        var konta = @Model.PossibleAccountToDelete;
+
+        $('#deleteBtn').click(function () {
+            var messageText = '<p>Czy jesteś pewien, że chcesz usunąć <strong>'+konta+'</strong> kont.</p>';
+            messageText += '<p>Tej decyzji nie można cofnąć</p>';
+
+            bootbox.confirm({
+                buttons: {
+                    confirm: {
+                        label: 'Potwierdzam',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'Anuluj',
+                        className: 'btn-danger'
+                    }
+                },
+                centerVertical: true,
+                message: messageText,
+                callback: function (result) {
+                    if (result === true) {
+                        $('#form').submit();
+                    }
+                }})
+        })
+    </script>
+}

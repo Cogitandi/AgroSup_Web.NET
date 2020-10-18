@@ -29,7 +29,7 @@
             }
 
             <li class="nav-item">
-                <a class="nav-link" asp-controller="manages" asp-action="cropplan">Zarządzaj</a>
+                <a class="nav-link" asp-controller="cropplan" asp-action="index">Zarządzaj</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" asp-controller="yearplans" asp-action="index">Dane</a>
@@ -46,7 +46,7 @@
                 this.User.IsInRole("Administrator"))
             {
                 <li class="nav-item">
-                    <a class="nav-link font-weight-bold"  asp-controller="AdminPanel" asp-action="index">Panel adminstratora</a>
+                    <a class="nav-link font-weight-bold"  asp-controller="adminsummary" asp-action="index">Panel adminstratora</a>
                 </li>
             }
 

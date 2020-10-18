@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace AgroSup.WebApp.ViewModels.AdminPanel
+namespace AgroSup.WebApp.ViewModels.AdminPanel.Plants
 {
     public class PlantViewModel
     {
         public Guid Id { get; set; }
-        [Required(ErrorMessage = "To pole jest wymagane")]
+        [Required(ErrorMessage = "Nazwa jest wymagana")]
         [DisplayName("Nazwa")]
         public string Name { get; set; }
-        [Required(ErrorMessage = "To pole jest wymagane")]
+        [Required(ErrorMessage = "Musisz podać współczynnik")]
+        [Range(0,2,ErrorMessage ="Współczynnik musi być z przedziału [0,2]")]
         [DisplayName("Współczynnik EFA")]
         public int EfaNitrogenRate { get; set; }
         public bool Delete { get; set; }

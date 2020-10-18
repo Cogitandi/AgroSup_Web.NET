@@ -92,8 +92,8 @@ namespace AgroSup.WebApp.Areas.Identity.Pages.Account.Manage
             }
 
             await _signInManager.RefreshSignInAsync(user);
-            _logger.LogInformation("User changed their password successfully.");
-            StatusMessage = "Your password has been changed.";
+            _logger.LogInformation("Użytkownik zmienił swoje hasło.");
+            StatusMessage = "Twoje hasło zostało zmienione";
 
             return RedirectToPage();
         }

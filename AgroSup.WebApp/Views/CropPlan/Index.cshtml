@@ -1,18 +1,24 @@
-﻿@model AgroSup.WebApp.ViewModels.Manages.CropPlanViewModel
+﻿@model AgroSup.WebApp.ViewModels.Manages.CropPlan.CropPlanViewModel
 
 @{
     ViewData["Title"] = "Plan upraw";
+    ViewData["ActivePage"] = ManageMenu.CropPlan;
+    var message = @TempData["message"];
 }
 <!--- Content -->
 <div class="row">
     <partial name="_ManageMenuPartial" />
     <div class="col-md-10">
         <div class="container-md mx-auto">
-            <form asp-action="CropPlan">
+            <form asp-action="Index">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <button type="submit" class="float-right btn btn-primary">Zapisz</button>
                 <h2 class="text-center">Uprawy</h2>
                 <hr />
+                @if (message != null)
+                {
+                    <partial name="_StatusMessage" model="message.ToString()" />
+                }
                 <div class="table-responsive">
                     <table id="axs" class="text-center w-75 mx-auto table table-hover">
                         <thead>
@@ -51,5 +57,5 @@
             </form>
         </div>
     </div>
-    </div>
-    <!--- End content -->
+</div>
+<!--- End content -->

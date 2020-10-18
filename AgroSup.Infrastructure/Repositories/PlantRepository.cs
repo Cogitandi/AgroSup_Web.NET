@@ -4,6 +4,7 @@ using AgroSup.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AgroSup.Infrastructure.Repositories
@@ -20,6 +21,7 @@ namespace AgroSup.Infrastructure.Repositories
         public async Task<IEnumerable<Plant>> GetAll()
         {
             return await _context.Plants
+                .OrderBy(x=>x.Name)
                 .ToListAsync();
         }
 

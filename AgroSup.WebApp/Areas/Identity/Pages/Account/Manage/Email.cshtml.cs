@@ -101,14 +101,14 @@ namespace AgroSup.WebApp.Areas.Identity.Pages.Account.Manage
                     protocol: Request.Scheme);
                 await _emailSender.SendEmailAsync(
                     Input.NewEmail,
-                    "Confirm your email",
-                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    "Potwierdz swój email",
+                    $"Proszę kliknij <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>tutaj</a> aby potwierdzić swój email.");
 
-                StatusMessage = "Confirmation link to change email sent. Please check your email.";
+                StatusMessage = "Potwierdzenie zmiany zostało wysłane na emaila.";
                 return RedirectToPage();
             }
 
-            StatusMessage = "Your email is unchanged.";
+            StatusMessage = "Twój email pozostał niezmieniony";
             return RedirectToPage();
         }
 
@@ -137,10 +137,10 @@ namespace AgroSup.WebApp.Areas.Identity.Pages.Account.Manage
                 protocol: Request.Scheme);
             await _emailSender.SendEmailAsync(
                 email,
-                "Confirm your email",
-                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                "Potwierdź swój email",
+                $"Proszę kliknij <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> aby potwierdzić swój email.");
 
-            StatusMessage = "Verification email sent. Please check your email.";
+            StatusMessage = "Potwierdzenie zostało wysłane na email. Sprawdz swoją pocztę.";
             return RedirectToPage();
         }
     }

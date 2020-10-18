@@ -46,6 +46,7 @@ namespace AgroSup.Infrastructure.Repositories
         {
             var startYear = yearPlan.StartYear - backYear;
             var user = yearPlan.User;
+
             return await _context.YearPlans
                 .Where(x=>x.User==user)
                 .Where(x => x.StartYear == startYear)

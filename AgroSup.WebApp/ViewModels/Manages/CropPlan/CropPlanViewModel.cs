@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AgroSup.WebApp.ViewModels.Manages
+namespace AgroSup.WebApp.ViewModels.Manages.CropPlan
 {
     public class CropPlanViewModel
     {

@@ -9,25 +9,25 @@
         <li><a class="nav-link font-weight-bold" data-toggle="collapse" data-target=".d1" href="#">Plany roczne</a></li>
         <li>
             <ul style="padding-left: 20px; list-style: none">
-                <li><a class="d1 nav-link collapse" asp-controller="yearplans" asp-action="index">Lista</a></li>
-                <li><a class="d1 nav-link collapse" asp-controller="yearplans" asp-action="create">Stwórz nowy plan</a></li>
+                <li><a class="d1 nav-link collapse @ManageMenu.YearPlanListNavClass(ViewContext)" asp-controller="yearplans" asp-action="index">Lista</a></li>
+                <li><a class="d1 nav-link collapse @ManageMenu.YearPlanAddNavClass(ViewContext)" asp-controller="yearplans" asp-action="create">Stwórz nowy plan</a></li>
             </ul>
         </li>
-        <li><a class="nav-link font-weight-bold" data-toggle="collapse" data-target=".d3" href="#">Osoby</a></li>
+        <li><a class="nav-link font-weight-bold" data-toggle="collapse" data-target=".d3" href="#">ARiMR</a></li>
         <li>
             <ul style="padding-left: 20px; list-style: none">
-                <li><a class="d3 nav-link collapse" asp-controller="operators" asp-action="index">Lista</a></li>
-                <li><a class="d3 nav-link collapse" asp-controller="operators" asp-action="create">Dodaj</a></li>
+                <li><a class="d3 nav-link collapse @ManageMenu.OperatorListNavClass(ViewContext)" asp-controller="operators" asp-action="index">Dane</a></li>
+                <li><a class="d3 nav-link collapse @ManageMenu.OperatorAddNavClass(ViewContext)" asp-controller="operators" asp-action="create">Dodaj osobe</a></li>
             </ul>
         </li>
         <li><a class="nav-link font-weight-bold" data-toggle="collapse" data-target=".d2" href="#">Pola</a></li>
         <li>
             <ul style="padding-left: 20px; list-style: none">
-                <li><a class="d2 nav-link collapse" asp-controller="fields" asp-action="index">Lista</a></li>
-                <li><a class="d2 nav-link collapse" asp-controller="fields" asp-action="create">Stwórz nowe pole</a></li>
+                <li><a class="d2 nav-link collapse @ManageMenu.FieldListNavClass(ViewContext)" asp-controller="fields" asp-action="index">Lista</a></li>
+                <li><a class="d2 nav-link collapse @ManageMenu.FieldAddNavClass(ViewContext)" asp-controller="fields" asp-action="create">Stwórz nowe pole</a></li>
             </ul>
         </li>
-        <li><a class="nav-link font-weight-bold" asp-controller="plants" asp-action="chooseplants">Wybierz rośliny</a></li>
+        <li><a class="nav-link font-weight-bold @ManageMenu.ChoosePlantsNavClass(ViewContext)" asp-controller="plants" asp-action="chooseplants">Wybierz rośliny</a></li>
     </ul>
 </div>
 

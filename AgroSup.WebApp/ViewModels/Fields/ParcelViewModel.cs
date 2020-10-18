@@ -23,7 +23,7 @@ namespace AgroSup.WebApp.ViewModels.Fields
         public int CultivatedArea { get; set; }
         [DisplayName("Paliwo")]
         public bool FuelApplication { get; set; }
-        [DisplayName("Dopłaty")]
+        [DisplayName("ARiMR")]
         public Guid OperatorId { get; set; }
     }
 }

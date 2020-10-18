@@ -1,24 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AgroSup.Core.Domain;
+﻿using AgroSup.Core.Domain;
 using AgroSup.Core.Repositories;
-using AgroSup.Infrastructure.Repositories;
 using AgroSup.WebApp.ViewModels.Fields;
-using AgroSup.WebApp.ViewModels.Operators;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AgroSup.WebApp.Controllers
 {
-    [Authorize]
-    public class FieldsController : Controller
+    public class FieldsController : BaseController
     {
-        private readonly UserManager<User> _userManager;
-        private readonly IUserRepository _userRepository;
         private readonly IFieldRepository _fieldRepository;
         private readonly IOperatorRepository _operatorRepository;
 
@@ -27,47 +20,42 @@ namespace AgroSup.WebApp.Controllers
             IUserRepository userRepository,
             IFieldRepository fieldRepository,
             IOperatorRepository operatorRepository
-            )
+            ) : base(userManager, userRepository)
         {
-            _userManager = userManager;
-            _userRepository = userRepository;
             _fieldRepository = fieldRepository;
             _operatorRepository = operatorRepository;
         }
 
         public async Task<IActionResult> Index()
         {
-            var managedYearPlan = await getManagedYearPlan();
-
-            if (managedYearPlan == null)
+            if (ManagedYearPlan == null)
             {
-                return RedirectToAction("index", "yearplans");
+                return ActionIfNotChoosedManagedYearPlan();
             }
 
-            var fields = await _fieldRepository.GetByYearPlan(managedYearPlan);
+            var fields = await _fieldRepository.GetByYearPlan(ManagedYearPlan);
 
             var model = fields.Select(x => new FieldViewModel()
             {
                 Id = x.Id,
                 Name = x.Name,
                 Number = x.Number,
-                Area = x.GetFieldArea()/100f,
+                Area = x.GetFieldArea() / 100f,
             });
             return View(model);
         }
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var managedYearPlan = await getManagedYearPlan();
-            if (managedYearPlan == null)
+            if (ManagedYearPlan == null)
             {
-                return RedirectToAction("index", "yearplans");
+                return ActionIfNotChoosedManagedYearPlan();
             }
             var model = new FieldViewModel()
             {
-                Number = await GetNumberForNewField(managedYearPlan),
+                Number = await GetNumberForNewField(ManagedYearPlan),
             };
-            var operatorSelectList = managedYearPlan.Operators.Select(x => new SelectListItem()
+            var operatorSelectList = ManagedYearPlan.Operators.Select(x => new SelectListItem()
             {
                 Text = x.GetName,
                 Value = x.Id.ToString(),
@@ -79,22 +67,22 @@ namespace AgroSup.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(FieldViewModel model)
         {
+            if (ManagedYearPlan == null)
+            {
+                return ActionIfNotChoosedManagedYearPlan();
+            }
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            var managedYearPlan = await getManagedYearPlan();
-            if (managedYearPlan == null)
-            {
-                return RedirectToAction("index", "yearplans");
-            }
+            // check number is unique
 
             Field field = new Field()
             {
                 Name = model.Name,
                 Number = model.Number,
-                YearPlan = managedYearPlan,
+                YearPlan = ManagedYearPlan,
                 Parcels = model.Parcels.Select(x => new Parcel()
                 {
                     Number = x.Number,
@@ -104,10 +92,19 @@ namespace AgroSup.WebApp.Controllers
                 }).ToList()
             };
             await _fieldRepository.Add(field);
-            return RedirectToAction("Index");
+            TempData["message"] = "Dodano nowe pole!";
+            ModelState.Clear();
+            return View();
         }
         public async Task<IActionResult> Edit(Guid id)
         {
+            if (ManagedYearPlan == null)
+            {
+                return ActionIfNotChoosedManagedYearPlan();
+            }
+
+            // check id passed is that same
+            // check number is unique
             if (id == null)
             {
                 return NotFound();
@@ -118,13 +115,8 @@ namespace AgroSup.WebApp.Controllers
             {
                 return NotFound();
             }
-            var managedYearPlan = await getManagedYearPlan();
-            if (managedYearPlan == null)
-            {
-                return RedirectToAction("index", "yearplans");
-            }
 
-            var operators = managedYearPlan.Operators;
+            var operators = ManagedYearPlan.Operators;
 
             var model = new FieldViewModel()
             {
@@ -140,7 +132,7 @@ namespace AgroSup.WebApp.Controllers
                 }).ToList()
             };
 
-            var operatorSelectList = managedYearPlan.Operators.Select(x => new SelectListItem()
+            var operatorSelectList = ManagedYearPlan.Operators.Select(x => new SelectListItem()
             {
                 Text = x.GetName,
                 Value = x.Id.ToString(),
@@ -153,6 +145,10 @@ namespace AgroSup.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(FieldViewModel model)
         {
+            if (ManagedYearPlan == null)
+            {
+                return ActionIfNotChoosedManagedYearPlan();
+            }
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -170,12 +166,17 @@ namespace AgroSup.WebApp.Controllers
             }
             ).ToList();
             await _fieldRepository.Update(field);
-            return RedirectToAction("Index");
+            TempData["message"] = "Zmiany zapisano pomyślnie!";
+            return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(Guid id)
         {
+            if (ManagedYearPlan == null)
+            {
+                return ActionIfNotChoosedManagedYearPlan();
+            }
             var field = await _fieldRepository.GetById(id);
             await _fieldRepository.Delete(field);
             return RedirectToAction("Index");
@@ -183,14 +184,13 @@ namespace AgroSup.WebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddParcel(FieldViewModel model)
+        public IActionResult AddParcel(FieldViewModel model)
         {
-            var managedYearPlan = await getManagedYearPlan();
-            if (managedYearPlan == null)
+            if (ManagedYearPlan == null)
             {
-                return RedirectToAction("index", "yearplans");
+                return ActionIfNotChoosedManagedYearPlan();
             }
-            var operatorSelectList = managedYearPlan.Operators.Select(x => new SelectListItem()
+            var operatorSelectList = ManagedYearPlan.Operators.Select(x => new SelectListItem()
             {
                 Text = x.GetName,
                 Value = x.Id.ToString(),
@@ -201,16 +201,16 @@ namespace AgroSup.WebApp.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RemoveParcel(FieldViewModel model, int index)
+        public IActionResult RemoveParcel(FieldViewModel model, int index)
         {
-            var managedYearPlan = await getManagedYearPlan();
-            if (managedYearPlan == null)
+            if (ManagedYearPlan == null)
             {
-                return RedirectToAction("index", "yearplans");
+                return ActionIfNotChoosedManagedYearPlan();
             }
+
             ModelState.Clear();
             model.Parcels.RemoveAt(index);
-            var operatorSelectList = managedYearPlan.Operators.Select(x => new SelectListItem()
+            var operatorSelectList = ManagedYearPlan.Operators.Select(x => new SelectListItem()
             {
                 Text = x.GetName,
                 Value = x.Id.ToString(),
@@ -221,10 +221,14 @@ namespace AgroSup.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangeNumber(Guid fieldId, int position)
         {
+            if (ManagedYearPlan == null)
+            {
+                return ActionIfNotChoosedManagedYearPlan();
+            }
             // position = 1 - change fieldId number to up
             // position = 2 - change fieldId number to down
             var mainField = await _fieldRepository.GetById(fieldId);
-            var fieldToChangeNumberWith = position == 1 ? await _fieldRepository.GetPrevious(fieldId): await _fieldRepository.GetNext(fieldId);
+            var fieldToChangeNumberWith = position == 1 ? await _fieldRepository.GetPrevious(fieldId) : await _fieldRepository.GetNext(fieldId);
             await SwapFieldNumbers(mainField, fieldToChangeNumberWith);
             return RedirectToAction("Index");
         }
@@ -238,56 +242,33 @@ namespace AgroSup.WebApp.Controllers
             await _fieldRepository.Update(a);
             await _fieldRepository.Update(b);
         }
-        private async Task<YearPlan> getManagedYearPlan()
-        {
-            var loggedUserId = Guid.Parse(_userManager.GetUserId(User));
-            var loggedUser = await _userRepository.GetById(loggedUserId);
-            var managedYearPlan = loggedUser.ManagedYearPlan;
-            return managedYearPlan;
-        }
 
-        private IEnumerable<Parcel> getParcelsFromModel(FieldViewModel model)
-        {
-            return model.Parcels.Select(x => new Parcel()
-            {
-                Number = x.Number,
-                CultivatedArea = x.CultivatedArea,
-                FuelApplication = x.FuelApplication,
-                //Operator = x.OperatorI,
-            });
-        }
-        private IEnumerable<ParcelViewModel> getParcelsModelFromDomain(Field domain)
-        {
-            return domain.Parcels.Select(x => new ParcelViewModel()
-            {
-                Number = x.Number,
-                CultivatedArea = x.CultivatedArea,
-                FuelApplication = x.FuelApplication,
-                //Operator = x.Operator,
-            });
-        }
         private async Task<int> GetNumberForNewField(YearPlan yearPlan)
         {
             var yearPlanFields = await _fieldRepository.GetByYearPlan(yearPlan);
-            if(yearPlanFields.Count()>0)
+            if (yearPlanFields.Count() > 0)
             {
-                return yearPlanFields.Max(x => x.Number)+1;
+                return yearPlanFields.Max(x => x.Number) + 1;
             }
             return 1;
         }
 
         // Validation
         [AcceptVerbs("GET", "POST")]
-        public async Task<IActionResult> UniqueFieldNumber(FieldViewModel model)
+        public async Task<IActionResult> UniqueFieldNumber(int Number, Guid Id)
         {
-            var managedYearPlan = await getManagedYearPlan();
+            if (ManagedYearPlan == null)
+            {
+                return ActionIfNotChoosedManagedYearPlan();
+            }
+
             // Get list of user's yearplans
-            var userYearPlans = await _fieldRepository.GetByYearPlan(managedYearPlan);
+            var userYearPlans = await _fieldRepository.GetByYearPlan(ManagedYearPlan);
             var list = userYearPlans.ToList();
 
             foreach (var item in list)
             {
-                if (item.Number == model.Number)
+                if (item.Number == Number && item.Id != Id)
                 {
                     // If user have yearplan with startYear passed by user error
                     return Json($"Posiadasz już pole z tym numerem");

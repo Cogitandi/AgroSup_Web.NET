@@ -1,13 +1,7 @@
-﻿using AgroSup.Core.Domain;
-using AgroSup.Core.Repositories;
-using AgroSup.WebApp.ViewModels;
-using Microsoft.AspNetCore.Identity;
+﻿using AgroSup.WebApp.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace AgroSup.WebApp.Controllers
 {
@@ -22,14 +16,6 @@ namespace AgroSup.WebApp.Controllers
 
         public IActionResult Index()
         {
-            var seding = new SeedingTreatment {
-                DosePerHa = 150,
-                Start = DateTime.Today,
-                End = DateTime.Today,
-            };
-            Treatment tras = seding;
-            SeedingTreatment sd = (SeedingTreatment)tras;
-
             return View();
         }
 

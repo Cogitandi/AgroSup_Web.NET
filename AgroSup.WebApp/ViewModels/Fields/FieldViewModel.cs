@@ -15,7 +15,7 @@ namespace AgroSup.WebApp.ViewModels.Fields
         public Guid Id { get; set; }
         [Required(ErrorMessage ="Musisz wypełnić te pole")]
         [DisplayName("Numer")]
-        [Remote(action: "UniqueFieldNumber", controller: "Fields")]
+        [Remote(action: "UniqueFieldNumber", controller: "Fields", AdditionalFields =nameof(Id))]
         public int Number { get; set; }
         [RegularExpression(@"^([a-żA-Ż0-9_\-()\s]+)$", ErrorMessage = "Niepoprawna nazwa")]
         [Required(ErrorMessage = "Musisz wypełnić te pole")]
@@ -25,10 +25,5 @@ namespace AgroSup.WebApp.ViewModels.Fields
         public float Area { get; set; }
 
         public IList<ParcelViewModel> Parcels { get; set; } = new List<ParcelViewModel>();
-
-        public void SetParcels(IEnumerable<ParcelViewModel> domains)
-        {
-            Parcels = domains.ToList();
-        }
     }
 }

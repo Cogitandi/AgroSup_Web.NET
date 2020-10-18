@@ -1,41 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AgroSup.Core.Domain;
+﻿using AgroSup.Core.Domain;
 using AgroSup.Core.Repositories;
 using AgroSup.WebApp.ViewModels.YearPlans;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AgroSup.WebApp.Controllers
 {
-    [Authorize]
-    public class YearPlansController : Controller
+    public class YearPlansController : BaseController
     {
-        private readonly UserManager<User> _userManager;
-        private readonly IUserRepository _userRepository;
         private readonly IYearPlanRepository _yearPlanRepository;
 
         public YearPlansController(
             UserManager<User> userManager,
             IUserRepository userRepository,
-            IYearPlanRepository yearPlanRepository)
+            IYearPlanRepository yearPlanRepository) : base(userManager, userRepository)
         {
-            _userRepository = userRepository;
-            _userManager = userManager;
             _yearPlanRepository = yearPlanRepository;
         }
 
-        
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var loggedUser = await GetLoggedUser();
-            var userYearPlans = await _yearPlanRepository.GetByUser(loggedUser);
-            var model = userYearPlans.Select(x=> new YearPlanViewModel
+            var userYearPlans = await _yearPlanRepository.GetByUser(LoggedUser);
+            var model = userYearPlans.Select(x => new YearPlanViewModel
             {
                 Id = x.Id,
                 StartYear = x.StartYear,
@@ -46,45 +38,45 @@ namespace AgroSup.WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var loggedUser = await _userManager.GetUserAsync(User);
-            var userYearPlans = await _yearPlanRepository.GetByUser(loggedUser);
+            var userYearPlans = await _yearPlanRepository.GetByUser(LoggedUser);
 
             ViewBag.YearPlans = new SelectList(userYearPlans, "Id", "GetYearPlanName");
             return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(YearPlanViewModel model,Guid yearPlanImportId)
+        public async Task<IActionResult> Create(YearPlanViewModel model, Guid yearPlanImportId)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View();
             }
-            var loggedUser = await GetLoggedUser();
             YearPlan yearPlan = new YearPlan()
             {
                 StartYear = model.StartYear,
                 EndYear = model.StartYear + 1,
-                User = loggedUser,
+                User = LoggedUser,
             };
 
             var yearPlanImport = await _yearPlanRepository.GetByIdToImport(yearPlanImportId);
-            if(yearPlanImport != null)
+            if (yearPlanImport != null)
             {
                 yearPlan.GetDataToImport(yearPlanImport);
             }
-           await _yearPlanRepository.Add(yearPlan);
-            return RedirectToAction("Index");
-       
+            await _yearPlanRepository.Add(yearPlan);
+            TempData["message"] = "Utworzono nowy plan: " + yearPlan.GetYearPlanName;
+            ModelState.Clear();
+            return View();
+
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SetManagedYearPlan(Guid id)
         {
-            var loggedUser = await GetLoggedUser();
             var yearPlan = await _yearPlanRepository.GetById(id);
-            loggedUser.ManagedYearPlan = yearPlan;
-            await _userRepository.Update(loggedUser);
+            LoggedUser.ManagedYearPlan = yearPlan;
+            await UpdateLoggedUser();
+            TempData["message"] = "Zarządzasz teraz: " + yearPlan.GetYearPlanName;
             return RedirectToAction("Index");
         }
 
@@ -92,10 +84,8 @@ namespace AgroSup.WebApp.Controllers
         [AcceptVerbs("GET", "POST")]
         public async Task<IActionResult> UniqueYearPlan(YearPlanViewModel model)
         {
-            var loggedUserId = _userManager.GetUserId(User);
-            var loggedUser = await _userRepository.GetById(Guid.Parse(loggedUserId));
             // Get list of user's yearplans
-            var userYearPlans = await _yearPlanRepository.GetByUser(loggedUser);
+            var userYearPlans = await _yearPlanRepository.GetByUser(LoggedUser);
             var list = userYearPlans.ToList();
 
             foreach (var item in list)
@@ -110,12 +100,6 @@ namespace AgroSup.WebApp.Controllers
         }
 
 
-        // Methods
-        private async Task<User> GetLoggedUser()
-        {
-            var loggedUserId = Guid.Parse(_userManager.GetUserId(User));
-            var loggedUser = await _userRepository.GetById(loggedUserId);
-            return loggedUser;
-        }
+
     }
 }

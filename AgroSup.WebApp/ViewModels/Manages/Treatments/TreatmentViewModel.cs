@@ -1,10 +1,13 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace AgroSup.WebApp.ViewModels.Manages
+namespace AgroSup.WebApp.ViewModels.Manages.Treatments
 {
     public class TreatmentViewModel
     {
+        public const string NameFertilizer = "Fertilizer";
+        public const string NameSpraying = "Spraying";
+        public const string NameSeeding = "Seeding";
         public Guid Id { get; set; }
         [DisplayName("Nazwa")]
         public string Name { get; set; }

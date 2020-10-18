@@ -1,6 +1,8 @@
-﻿
+﻿@model AgroSup.WebApp.ViewModels.AdminPanel.Summary.SummaryViewModel
+
 @{
     ViewData["Title"] = "Panel administratora";
+    ViewData["ActivePage"] = ManageMenu.Summary;
 }
 
 
@@ -11,7 +13,7 @@
             <!--- Content -->
             <h2 class="text-center">Podsumowanie</h2>
             <hr />
-            tutaj będzie podsumowanie o użytkownikach
+            Ilość kont w bazie: @(Model.TotalUsers)
             <!--- End content -->
         </div>
     </div>
