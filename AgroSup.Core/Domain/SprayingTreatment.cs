@@ -8,6 +8,6 @@ namespace AgroSup.Core.Domain
     {
         public string Composition { get; set; }
         public string ReasonForUse { get; set; }
-        public string Notes { get; set; }
+        public string Comments { get; set; }
     }
 }

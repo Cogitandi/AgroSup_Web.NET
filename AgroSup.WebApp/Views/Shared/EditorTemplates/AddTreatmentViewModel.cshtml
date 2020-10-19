@@ -8,40 +8,53 @@
                 <select asp-items="@ViewBag.Kinds" asp-for="Name" class="form-control" onchange="showHideInputs.call(this)">
                     <option selected value="none">Wybierz</option>
                 </select>
+                <span asp-validation-for="Name" class="text-danger" style="display: none"></span>
             </div>
         </td>
         <td>
-            <div class="form-group date">
-                <input asp-for="Date" class="form-control" disabled/>
+            <div class="form-group">
+                <input asp-for="Date" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-ddThh:mm")" disabled />
+                <span asp-validation-for="Date" class="text-danger" style="display: none"></span>
             </div>
         </td>
         <td>
-            <div class="form-group field">
+            <div class="form-group">
                 <select asp-items="@ViewBag.Fields" asp-for="FieldId" class="form-control" disabled>
-                    <option selected value="none">Wybierz</option>
+                    <option selected value=@Guid.Empty>Wybierz</option>
                 </select>
+                <span asp-validation-for="FieldId" class="text-danger" style="display: none"></span>
             </div>
         </td>
         <td>
-            <div class="form-group notes">
-                <input asp-for="Notes" class="form-control" disabled/>
+            <div class="form-group">
+                <input asp-for="Notes" class="form-control" disabled />
+                <span asp-validation-for="Notes" class="text-danger" style="display: none"></span>
             </div>
         </td>
         <td>
-            <div class="form-group dose">
-                <input asp-for="DosePerHa" class="form-control" disabled/>
+            <div class="form-group">
+                <input asp-for="DosePerHa" class="form-control" disabled />
+                <span asp-validation-for="DosePerHa" class="text-danger" style="display: none"></span>
             </div>
         </td>
         <td>
-            <div class="form-group agents">
-                <input asp-for="SprayingAgents" class="form-control" disabled/>
+            <div class="form-group">
+                <input asp-for="SprayingAgents" class="form-control" disabled />
+                <span asp-validation-for="SprayingAgents" class="text-danger" style="display: none"></span>
             </div>
         </td>
         <td>
-            <div class="form-group fertilizer">
+            <div class="form-group">
                 <select asp-items="@ViewBag.Fertilizers" asp-for="FertilizerId" class="form-control" disabled>
-                    <option selected value="none">Wybierz</option>
+                    <option selected value=@Guid.Empty>Wybierz</option>
                 </select>
+                <span asp-validation-for="FertilizerId" class="text-danger" style="display: none"></span>
+            </div>
+        </td>
+        <td>
+            <div class="form-group ">
+                <input asp-for="ReasonForUse" class="form-control" disabled />
+                <span asp-validation-for="ReasonForUse" class="text-danger" style="display: none"></span>
             </div>
         </td>
         <td>

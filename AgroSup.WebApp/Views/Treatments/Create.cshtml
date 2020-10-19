@@ -14,7 +14,7 @@
             <hr />
             <!--- Content -->
             <form asp-action="Create" id="form">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div asp-validation-summary="All" class="text-danger"></div>
                 <input class="btn btn-info mb-2" type="button" id="addTreatment" value="Nowy zabieg" />
                 <table class="table">
                     <thead>
@@ -40,10 +40,21 @@
                             <th>
                                 @Html.DisplayNameFor(model => treatmentModel.FertilizerId)
                             </th>
+                            <th>
+                                @Html.DisplayNameFor(model => treatmentModel.ReasonForUse)
+                            </th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody id="treatments">
+                        @if (Model != null)
+                        {
+                            @for (int i = 0; i < Model.Count; i++)
+                            {
+                                @Html.EditorFor(model => model[i])
+                            }
+                        }
+
                     </tbody>
                 </table>
                 <div class="form-group">
@@ -51,23 +62,29 @@
                 </div>
             </form>
             <!--- End content -->
-            <!--- Content -->
-            <!--<form asp-action="AddTreatment" id="form">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input class="btn btn-info mb-2" type="button" id="addTreatment" value="Nowy zabieg" />
-                <div id="treatments">
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Dodaj zabiegi" class="btn btn-primary" />
-                </div>
-            </form>-->
-            <!--- End content -->
         </div>
     </div>
 </div>
 
 @section Scripts {
+    @*await Html.RenderPartialAsync("_ValidationScriptsPartial");}*@
     <script>
+        $(function () {
+            var nameInputs = $("#treatments").find('select[name$=Name]');
+            nameInputs.each(function () {
+                showHideInputs.call(this);
+            })
+            markValidationError()
+        });
+        function markValidationError() {
+            var fields = $(".field-validation-error");
+            fields.each(function () {
+                if (this.val != "") {
+                    var inputField = $(this).prev();
+                    inputField.addClass('is-invalid');
+                }
+            });
+        }
         function showHideInputs() {
             var value = $(this).val();
             var inputs = $(this).parent().parent().siblings();
@@ -75,34 +92,38 @@
                 case 'Fertilizer':
                     inputs.find('input[name$=Date]').prop("disabled", false);
                     inputs.find('select[name$=FieldId]').prop("disabled", false);
-                    inputs.find('input[name$=Dose]').prop("disabled", false);
+                    inputs.find('input[name$=DosePerHa]').prop("disabled", false);
                     inputs.find('input[name$=Notes]').prop("disabled", false);
                     inputs.find('input[name$=Agents]').prop("disabled", true);
                     inputs.find('select[name$=FertilizerId]').prop("disabled", false);
+                    inputs.find('input[name$=ReasonForUse]').prop("disabled", true);
                     break;
                 case 'Seeding':
                    inputs.find('input[name$=Date]').prop("disabled", false);
                     inputs.find('select[name$=FieldId]').prop("disabled", false);
-                    inputs.find('input[name$=Dose]').prop("disabled", false);
+                    inputs.find('input[name$=DosePerHa]').prop("disabled", false);
                     inputs.find('input[name$=Notes]').prop("disabled", false);
                    inputs.find('input[name$=Agents]').prop("disabled", true);
-                   inputs.find('select[name$=FertilizerId]').prop("disabled", true);
+                    inputs.find('select[name$=FertilizerId]').prop("disabled", true);
+                    inputs.find('input[name$=ReasonForUse]').prop("disabled", true);
                     break;
                 case 'Spraying':
                    inputs.find('input[name$=Date]').prop("disabled", false);
                     inputs.find('select[name$=FieldId]').prop("disabled", false);
-                    inputs.find('input[name$=Dose]').prop("disabled", true);
+                    inputs.find('input[name$=DosePerHa]').prop("disabled", true);
                     inputs.find('input[name$=Notes]').prop("disabled", false);
                    inputs.find('input[name$=Agents]').prop("disabled", false);
-                   inputs.find('select[name$=FertilizerId]').prop("disabled", true);
+                    inputs.find('select[name$=FertilizerId]').prop("disabled", true);
+                    inputs.find('input[name$=ReasonForUse]').prop("disabled", false);
                     break;
                 case 'none':
                    inputs.find('input[name$=Date]').prop("disabled", true);
                     inputs.find('select[name$=FieldId]').prop("disabled", true);
-                    inputs.find('input[name$=Dose]').prop("disabled", true);
+                    inputs.find('input[name$=DosePerHa]').prop("disabled", true);
                     inputs.find('input[name$=Notes]').prop("disabled", true);
                    inputs.find('input[name$=Agents]').prop("disabled", true);
-                   inputs.find('select[name$=FertilizerId]').prop("disabled", true);
+                    inputs.find('select[name$=FertilizerId]').prop("disabled", true);
+                    inputs.find('input[name$=ReasonForUse]').prop("disabled", true);
                     break;
             }
         }

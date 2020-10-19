@@ -15,6 +15,13 @@
                 <li><a class="d3 nav-link collapse @ManageMenu.PlantAddNavClass(ViewContext)" asp-controller="adminplants" asp-action="create">Dodaj</a></li>
             </ul>
         </li>
+        <li><a class="nav-link font-weight-bold" data-toggle="collapse" data-target=".d3" href="#">Nawozy</a></li>
+        <li>
+            <ul style="padding-left: 20px; list-style: none">
+                <li><a class="d3 nav-link collapse @ManageMenu.FertilizerListNavClass(ViewContext)" asp-controller="adminfertilizers" asp-action="index">Lista nawozów</a></li>
+                <li><a class="d3 nav-link collapse @ManageMenu.FertilizerAddNavClass(ViewContext)" asp-controller="adminfertilizers" asp-action="create">Dodaj</a></li>
+            </ul>
+        </li>
     </ul>
 </div>
 

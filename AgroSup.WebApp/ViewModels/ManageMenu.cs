@@ -13,11 +13,15 @@ namespace AgroSup.WebApp.ViewModels
         public static string Summary => "Summary";
         public static string PlantList => "PlantLst";
         public static string PlantAdd=> "PlantAdd";
+        public static string FertilizerList => "FertilizerList";
+        public static string FertilizerAdd => "FertilizerAdd";
 
         public static string InActiveAccountsNavClass(ViewContext viewContext) => PageNavClass(viewContext, InActiveAccounts);
         public static string SummaryNavClass(ViewContext viewContext) => PageNavClass(viewContext, Summary);
         public static string PlantListNavClass(ViewContext viewContext) => PageNavClass(viewContext, PlantList);
         public static string PlantAddNavClass(ViewContext viewContext) => PageNavClass(viewContext, PlantAdd);
+        public static string FertilizerListNavClass(ViewContext viewContext) => PageNavClass(viewContext, FertilizerList);
+        public static string FertilizerAddNavClass(ViewContext viewContext) => PageNavClass(viewContext, FertilizerAdd);
         // Manage
         public static string CropPlan => "CropPlan";
         public static string Parcels => "Parcels";

@@ -25,25 +25,25 @@
                             @Html.DisplayNameFor(model => model.Name)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.StartDate)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.EndDate)
+                            @Html.DisplayNameFor(model => model.Date)
                         </th>
                         <th>
                             @Html.DisplayNameFor(model => model.FieldName)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.FertilizerName)
+                            @Html.DisplayNameFor(model => model.Notes)
                         </th>
                         <th>
                             @Html.DisplayNameFor(model => model.DosePerHa)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.ReasonForUse)
+                            @Html.DisplayNameFor(model => model.FertilizerName)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.Notes)
+                            @Html.DisplayNameFor(model => model.SprayingAgents)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ReasonForUse)
                         </th>
                         <th></th>
                     </tr>
@@ -51,37 +51,37 @@
                 <tbody>
                     @foreach (var item in Model)
                     {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Name)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.StartDate)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.EndDate)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FieldName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FertilizerName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.DosePerHa)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ReasonForUse)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Notes)
-                            </td>
-                            <td>
-                                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                            </td>
-                        </tr>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(model => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.FieldName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.Notes)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.DosePerHa)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.FertilizerName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.SprayingAgents)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.ReasonForUse)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                        </td>
+                    </tr>
                     }
                 </tbody>
             </table>

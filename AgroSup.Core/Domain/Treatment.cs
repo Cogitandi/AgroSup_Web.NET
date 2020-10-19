@@ -7,8 +7,8 @@ namespace AgroSup.Core.Domain
     public class Treatment
     {
         public Guid Id { get; set; }
-        public DateTime Start { get; set; }
-        public DateTime End { get; set; }
+        public DateTime Date { get; set; }
         public Field Field { get; set; }
+        public string Notes { get; set; }
     }
 }

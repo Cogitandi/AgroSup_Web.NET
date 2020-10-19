@@ -1,0 +1,67 @@
+﻿@model AgroSup.WebApp.ViewModels.AdminPanel.Fertilizers.FertilizerViewModel
+
+@{
+    ViewData["Title"] = "Nowy nawóz";
+    ViewData["ActivePage"] = ManageMenu.FertilizerAdd;
+    var message = @TempData["message"];
+}
+
+<div class="row">
+    <partial name="_AdminMenuPartial" />
+    <div class="col-md-10">
+        <div class="container-md mx-4">
+            <!--- Content -->
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                @if (message != null)
+                {
+                    <partial name="_StatusMessage" model="message.ToString()" />
+                }
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="N" class="control-label"></label>
+                    <input asp-for="N" class="form-control" />
+                    <span asp-validation-for="N" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="P" class="control-label"></label>
+                    <input asp-for="P" class="form-control" />
+                    <span asp-validation-for="P" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="K" class="control-label"></label>
+                    <input asp-for="K" class="form-control" />
+                    <span asp-validation-for="K" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Ca" class="control-label"></label>
+                    <input asp-for="Ca" class="form-control" />
+                    <span asp-validation-for="Ca" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Mg" class="control-label"></label>
+                    <input asp-for="Mg" class="form-control" />
+                    <span asp-validation-for="Mg" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="S" class="control-label"></label>
+                    <input asp-for="S" class="form-control" />
+                    <span asp-validation-for="S" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Na" class="control-label"></label>
+                    <input asp-for="Na" class="form-control" />
+                    <span asp-validation-for="Na" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Dodaj" class="btn btn-primary" />
+                </div>
+            </form>
+            <!--- End content -->
+        </div>
+    </div>
+</div>

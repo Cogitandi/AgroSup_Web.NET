@@ -4,6 +4,7 @@ using AgroSup.WebApp.ViewModels.Manages.Treatments;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ namespace AgroSup.WebApp.Controllers
     public class TreatmentsController : BaseController
     {
         private readonly IFieldRepository _fieldRepository;
+        private readonly IFertilizerRepository _fertilizerRepository;
         private readonly ITreatmentRepository<SeedingTreatment> _seedingRepository;
         private readonly ITreatmentRepository<SprayingTreatment> _sprayingRepository;
         private readonly ITreatmentRepository<FertilizationTreatment> _fertilizationRepository;
@@ -21,11 +23,13 @@ namespace AgroSup.WebApp.Controllers
             UserManager<User> userManager,
             IUserRepository userRepository,
             IFieldRepository fieldRepository,
+            IFertilizerRepository fertilizerRepository,
             ITreatmentRepository<SeedingTreatment> seedingRepository,
             ITreatmentRepository<SprayingTreatment> sprayingRepository,
             ITreatmentRepository<FertilizationTreatment> fertilizationRepository
             ) : base(userManager, userRepository)
         {
+            _fertilizerRepository = fertilizerRepository;
             _fieldRepository = fieldRepository;
             _seedingRepository = seedingRepository;
             _sprayingRepository = sprayingRepository;
@@ -46,43 +50,44 @@ namespace AgroSup.WebApp.Controllers
             var FertilizationTreatmentsToModel = fertilizationTreatments.Select(x => new TreatmentViewModel
             {
                 Id = x.Id,
-                StartDate = x.Start,
-                EndDate = x.End,
-                FieldName = x.Field.Name,
-                //FertilizerName = x.Fertilizer.Name,
-                DosePerHa = x.DosePerHa,
                 Name = "Nawóz",
-                Notes = "-",
-                ReasonForUse = "-"
-
+                Date = x.Date,
+                FieldName = x.Field.Name,
+                Notes = x.Notes,
+                DosePerHa = x.DosePerHa.ToString(),
+                FertilizerName = x.Fertilizer.Name,
+                SprayingAgents = "-",
+                ReasonForUse = "-",
             });
             var SeedingTreatmentsToModel = seedingTreatments.Select(x => new TreatmentViewModel
             {
                 Id = x.Id,
-                StartDate = x.Start,
-                EndDate = x.End,
-                FieldName = x.Field.Name,
-                FertilizerName = "-",
-                DosePerHa = x.DosePerHa,
                 Name = "Siew",
-                Notes = "-",
-                ReasonForUse = "-"
+                Date = x.Date,
+                FieldName = x.Field.Name,
+                Notes = x.Notes,
+                DosePerHa = x.DosePerHa.ToString(),
+                FertilizerName ="-",
+                SprayingAgents = "-",
+                ReasonForUse = "-",
             });
             var SprayingTreatmentsToModel = sprayingTreatments.Select(x => new TreatmentViewModel
             {
                 Id = x.Id,
-                StartDate = x.Start,
-                EndDate = x.End,
-                FieldName = x.Field.Name,
-                FertilizerName = "-",
                 Name = "Oprysk",
-                Notes = "-",
-                ReasonForUse = "-"
+                Date = x.Date,
+                FieldName = x.Field.Name,
+                Notes = x.Notes,
+                DosePerHa = "-",
+                FertilizerName = "-",
+                SprayingAgents = x.Composition,
+                ReasonForUse = x.ReasonForUse,
             });
             var model = new List<TreatmentViewModel>();
             model.AddRange(FertilizationTreatmentsToModel);
             model.AddRange(SeedingTreatmentsToModel);
             model.AddRange(SprayingTreatmentsToModel);
+            model = model.OrderByDescending(x => x.Date).ToList();
             return View(model);
         }
         public IActionResult Create()
@@ -94,11 +99,29 @@ namespace AgroSup.WebApp.Controllers
             return View();
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(IList<AddTreatmentViewModel> model)
         {
             if (ManagedYearPlan == null)
             {
                 return ActionIfNotChoosedManagedYearPlan();
+            }
+            if (!ModelState.IsValid)
+            {
+                var KindList = new List<SelectListItem>
+            {
+                new SelectListItem{Text="Nawóz",Value=TreatmentViewModel.NameFertilizer},
+                new SelectListItem{Text="Oprysk",Value=TreatmentViewModel.NameSpraying},
+                new SelectListItem{Text="Siew",Value=TreatmentViewModel.NameSeeding },
+            };
+                var fields = await _fieldRepository.GetByYearPlan(ManagedYearPlan);
+                var FieldList = new SelectList(fields, "Id", "Name");
+                var fertilizers = await _fertilizerRepository.GetAll();
+                var FertilizerList = new SelectList(fertilizers, "Id", "Name");
+                ViewBag.Kinds = KindList;
+                ViewBag.Fields = FieldList;
+                ViewBag.Fertilizers = FertilizerList;
+                return View(model);
             }
             foreach (var item in model)
             {
@@ -109,27 +132,37 @@ namespace AgroSup.WebApp.Controllers
                     case TreatmentViewModel.NameFertilizer:
                         var treatment = new FertilizationTreatment
                         {
-                            DosePerHa = item.DosePerHa,
+                            Date = item.Date,
                             Field = await _fieldRepository.GetById(item.FieldId),
+                            Notes = item.Notes,
+                            DosePerHa = item.DosePerHa,
+                            Fertilizer = await _fertilizerRepository.GetById(item.FertilizerId),
+                            
                         };
                         await _fertilizationRepository.Add(treatment);
-                        break;
-                    case TreatmentViewModel.NameSpraying:
-                        var treatment2 = new SprayingTreatment
-                        {
-                            Field = await _fieldRepository.GetById(item.FieldId),
-                        };
-                        await _sprayingRepository.Add(treatment2);
                         break;
                     case TreatmentViewModel.NameSeeding:
                         {
                             var treatment3 = new SeedingTreatment
                             {
-                                DosePerHa = item.DosePerHa,
+                                Date = item.Date,
                                 Field = await _fieldRepository.GetById(item.FieldId),
+                                Notes = item.Notes,
+                                DosePerHa = item.DosePerHa,
                             };
                             await _seedingRepository.Add(treatment3);
                         }
+                        break;
+                    case TreatmentViewModel.NameSpraying:
+                        var treatment2 = new SprayingTreatment
+                        {
+                            Date = item.Date,
+                            Field = await _fieldRepository.GetById(item.FieldId),
+                            Notes = item.Notes,
+                            Composition = item.SprayingAgents,
+                            ReasonForUse = item.ReasonForUse,
+                        };
+                        await _sprayingRepository.Add(treatment2);
                         break;
                 }
             }
@@ -145,8 +178,6 @@ namespace AgroSup.WebApp.Controllers
                 return ActionIfNotChoosedManagedYearPlan();
             }
 
-            var fields = await _fieldRepository.GetByYearPlan(ManagedYearPlan);
-            var FieldList = new SelectList(fields, "Id", "Name");
             var KindList = new List<SelectListItem>
             {
                 new SelectListItem{Text="Nawóz",Value=TreatmentViewModel.NameFertilizer},
@@ -154,8 +185,13 @@ namespace AgroSup.WebApp.Controllers
                 new SelectListItem{Text="Siew",Value=TreatmentViewModel.NameSeeding },
             };
 
+            var fields = await _fieldRepository.GetByYearPlan(ManagedYearPlan);
+            var FieldList = new SelectList(fields, "Id", "Name");
+            var fertilizers = await _fertilizerRepository.GetAll();
+            var FertilizerList = new SelectList(fertilizers, "Id", "Name");
             ViewBag.Kinds = KindList;
             ViewBag.Fields = FieldList;
+            ViewBag.Fertilizers = FertilizerList;
 
             model.Add(new AddTreatmentViewModel());
 
@@ -172,17 +208,20 @@ namespace AgroSup.WebApp.Controllers
             ModelState.Clear();
             model.RemoveAt(index);
 
-            var fields = await _fieldRepository.GetByYearPlan(ManagedYearPlan);
-            var FieldList = new SelectList(fields, "Id", "Name");
             var KindList = new List<SelectListItem>
             {
-                new SelectListItem{Text="Nawóz",Value="fertilizer"},
-                new SelectListItem{Text="Oprysk",Value="spraying"},
-                new SelectListItem{Text="Siew",Value="seeding"},
+                new SelectListItem{Text="Nawóz",Value=TreatmentViewModel.NameFertilizer},
+                new SelectListItem{Text="Oprysk",Value=TreatmentViewModel.NameSpraying},
+                new SelectListItem{Text="Siew",Value=TreatmentViewModel.NameSeeding },
             };
 
+            var fields = await _fieldRepository.GetByYearPlan(ManagedYearPlan);
+            var FieldList = new SelectList(fields, "Id", "Name");
+            var fertilizers = await _fertilizerRepository.GetAll();
+            var FertilizerList = new SelectList(fertilizers, "Id", "Name");
             ViewBag.Kinds = KindList;
             ViewBag.Fields = FieldList;
+            ViewBag.Fertilizers = FertilizerList;
 
             return PartialView("Treatments1", model);
         }

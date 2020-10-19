@@ -1,0 +1,119 @@
+﻿@model IList<AgroSup.WebApp.ViewModels.AdminPanel.Fertilizers.FertilizerViewModel>
+
+@{
+    ViewData["Title"] = "Nawozy";
+    ViewData["ActivePage"] = ManageMenu.FertilizerList;
+    var message = @TempData["message"];
+}
+
+<div class="row">
+    <partial name="_AdminMenuPartial" />
+    <div class="col-md-10">
+        <div class="container-md mx-4">
+            <!--- Content -->
+            <form asp-action="Index">
+                <button type="submit" class="float-right btn btn-primary">Zapisz</button>
+                <h2 class="text-center">Nawozy w systemie</h2>
+                <hr />
+                @if (message != null)
+                {
+                    <partial name="_StatusMessage" model="message.ToString()" />
+                }
+                <div class="row my-3">
+                    <input class="form-control col-md-3" id="listSearch" type="text" placeholder="Podaj nazwę nawozu">
+                </div>
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model[0].Name)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model[0].N)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model[0].P)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model[0].K)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model[0].Ca)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model[0].Mg)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model[0].S)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model[0].Na)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Count(); i++)
+                        {
+                        <tr>
+                            <td>
+                                <input asp-for="@Model[i].Id" type="hidden" />
+                                <input asp-for="@Model[i].Delete" type="hidden" />
+                                <input asp-for="@Model[i].Name" class="form-control" />
+                            </td>
+                            <td>
+                                <input asp-for="@Model[i].N" class="form-control" />
+                            </td>
+                            <td>
+                                <input asp-for="@Model[i].P" class="form-control" />
+                            </td>
+                            <td>
+                                <input asp-for="@Model[i].K" class="form-control" />
+                            </td>
+                            <td>
+                                <input asp-for="@Model[i].Ca" class="form-control" />
+                            </td>
+                            <td>
+                                <input asp-for="@Model[i].Mg" class="form-control" />
+                            </td>
+                            <td>
+                                <input asp-for="@Model[i].S" class="form-control" />
+                            </td>
+                            <td>
+                                <input asp-for="@Model[i].Na" class="form-control" />
+                            </td>
+                            <td>
+                                <input class="btn btn-danger removePlant" type="button" value="Usuń" />
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </form>
+            <!--- End content -->
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $('.removePlant').click(function () {
+            $(this).closest('tr').hide();
+            $(this).parent().siblings().find('input[name$=Delete]').val(true);
+        })
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#listSearch").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("tbody tr").filter(function () {
+                    $(this).toggle($(this).find('input[name$=Name]').val().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+}
+

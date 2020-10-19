@@ -7,16 +7,17 @@ using System.Text;
 
 namespace AgroSup.Infrastructure.Data.Configuration
 {
-    public class FertilizationTreatmentConfiguration : IEntityTypeConfiguration<FertilizationTreatment>
+    public class SprayingTreatmentConfiguration : IEntityTypeConfiguration<SprayingTreatment>
     {
-        public void Configure(EntityTypeBuilder<FertilizationTreatment> builder)
+        public void Configure(EntityTypeBuilder<SprayingTreatment> builder)
         {
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Date);
             builder.HasOne(x => x.Field);
             builder.Property(x => x.Notes);
-            builder.HasOne(x => x.Fertilizer);
-            builder.Property(x => x.DosePerHa);
+            builder.Property(x => x.Composition);
+            builder.Property(x => x.ReasonForUse);
+            builder.Property(x => x.Comments);
         }
     }
 }

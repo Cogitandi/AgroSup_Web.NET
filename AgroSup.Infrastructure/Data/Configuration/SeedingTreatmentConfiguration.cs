@@ -7,7 +7,7 @@ using System.Text;
 
 namespace AgroSup.Infrastructure.Data.Configuration
 {
-    public class FertilizationTreatmentConfiguration : IEntityTypeConfiguration<FertilizationTreatment>
+    public class SeedingTreatmentConfiguration : IEntityTypeConfiguration<FertilizationTreatment>
     {
         public void Configure(EntityTypeBuilder<FertilizationTreatment> builder)
         {
@@ -15,7 +15,6 @@ namespace AgroSup.Infrastructure.Data.Configuration
             builder.Property(x => x.Date);
             builder.HasOne(x => x.Field);
             builder.Property(x => x.Notes);
-            builder.HasOne(x => x.Fertilizer);
             builder.Property(x => x.DosePerHa);
         }
     }
