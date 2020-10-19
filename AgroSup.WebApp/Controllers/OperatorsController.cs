@@ -73,7 +73,7 @@ namespace AgroSup.WebApp.Controllers
             await _operatorRepository.Add(@operator);
             TempData["message"] = "Nowa osoba została dodana";
             ModelState.Clear();
-            return View();
+            return RedirectToAction("Index");
         }
         public async Task<IActionResult> Edit(Guid id)
         {

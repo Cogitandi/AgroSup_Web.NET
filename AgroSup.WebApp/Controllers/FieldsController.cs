@@ -94,7 +94,7 @@ namespace AgroSup.WebApp.Controllers
             await _fieldRepository.Add(field);
             TempData["message"] = "Dodano nowe pole!";
             ModelState.Clear();
-            return RedirectToAction("Index");
+            return RedirectToAction("Create");
         }
         public async Task<IActionResult> Edit(Guid id)
         {
