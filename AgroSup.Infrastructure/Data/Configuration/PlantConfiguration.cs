@@ -12,8 +12,8 @@ namespace AgroSup.Infrastructure.Data.Configuration
         public void Configure(EntityTypeBuilder<Plant> builder)
         {
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.Name);
-            builder.Property(x => x.EfaNitrogenRate);
+            builder.Property(x => x.Name).IsRequired();
+            builder.Property(x => x.EfaNitrogenRate).IsRequired();
         }
     }
 }

@@ -3,6 +3,8 @@ using AgroSup.Core.Repositories;
 using AgroSup.WebApp.ViewModels.AdminPanel.Plants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -85,6 +87,35 @@ namespace AgroSup.WebApp.Controllers
             TempData["message"] = "Dodano nową rośline!";
             ModelState.Clear();
             return View();
+        }
+        [HttpPost]
+        public async Task Update(PlantViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return;
+            }
+            var plant = await _plantRepository.GetById(model.Id);
+            plant.Name = model.Name;
+            plant.EfaNitrogenRate = model.EfaNitrogenRate;
+            await _plantRepository.Update(plant);
+        }
+
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var field = await _plantRepository.GetById(id);
+            try
+            {
+                await _plantRepository.Delete(field);
+
+            }
+            catch (DbUpdateException)
+            {
+                TempData["message"] = "Błąd: Roślina jest używana przez użytkowników!";
+            }
+
+            
+            return RedirectToAction("Index");
         }
 
     }

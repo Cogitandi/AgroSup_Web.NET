@@ -8,14 +8,10 @@ namespace AgroSup.Core.Domain
     public class Parcel
     {
         public Guid Id { get; set; }
-        [Required]
         public string Number { get; set; }
-        [Required]
         public int CultivatedArea { get; set; }
-        [Required]
         public bool FuelApplication { get; set; }
         public Operator Operator { get; set; }
-        [Required]
         public Field Field { get; set; }
 
         public Parcel(Parcel parcel)

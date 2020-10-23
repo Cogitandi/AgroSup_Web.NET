@@ -51,7 +51,7 @@ namespace AgroSup.WebApp.Controllers
             {
                 return View();
             }
-            YearPlan yearPlan = new YearPlan()
+            var yearPlan = new YearPlan()
             {
                 StartYear = model.StartYear,
                 EndYear = model.StartYear + 1,
@@ -69,8 +69,6 @@ namespace AgroSup.WebApp.Controllers
             return View();
 
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> SetManagedYearPlan(Guid id)
         {
             var yearPlan = await _yearPlanRepository.GetById(id);

@@ -8,7 +8,17 @@ namespace AgroSup.Core.Domain
     {
         public Guid Id { get; set; }
         public DateTime Date { get; set; }
-        public Field Field { get; set; }
         public string Notes { get; set; }
+
+        // Fertilization,Seed
+        public int DosePerHa { get; set; }
+
+        //Spraying
+        public string Composition { get; set; }
+        public string ReasonForUse { get; set; }
+
+        public Field Field { get; set; }
+        public Fertilizer Fertilizer { get; set; }
+        public TreatmentKind TreatmentKind { get; set; }
     }
 }

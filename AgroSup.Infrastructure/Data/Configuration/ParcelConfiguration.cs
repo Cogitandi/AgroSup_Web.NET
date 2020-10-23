@@ -12,11 +12,11 @@ namespace AgroSup.Infrastructure.Data.Configuration
         public void Configure(EntityTypeBuilder<Parcel> builder)
         {
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.Number);
-            builder.Property(x => x.CultivatedArea);
-            builder.Property(x => x.FuelApplication);
+            builder.Property(x => x.Number).IsRequired();
+            builder.Property(x => x.CultivatedArea).IsRequired();
+            builder.Property(x => x.FuelApplication).IsRequired();
             builder.HasOne(x => x.Operator).WithMany(x=>x.Parcels);
-            builder.HasOne(x => x.Field).WithMany(x=>x.Parcels).OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(x => x.Field).WithMany(x=>x.Parcels).OnDelete(DeleteBehavior.Cascade).IsRequired();
         }
     }
 }

@@ -3,6 +3,8 @@ using AgroSup.Core.Repositories;
 using AgroSup.WebApp.ViewModels.AdminPanel.Fertilizers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -104,6 +106,41 @@ namespace AgroSup.WebApp.Controllers
             TempData["message"] = "Dodano nowy nawóz!";
             ModelState.Clear();
             return View();
+        }
+
+        [HttpPost]
+        public async Task Update(FertilizerViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return;
+            }
+            var fertilizer = await _fertilizerRepository.GetById(model.Id);
+            fertilizer.Id = model.Id;
+                fertilizer.Name = model.Name;
+                fertilizer.N = model.N;
+                fertilizer.P = model.P;
+                fertilizer.K = model.K;
+                fertilizer.Ca = model.Ca;
+                fertilizer.Mg = model.Mg;
+            fertilizer.S = model.S;
+                fertilizer.Na = model.Na;
+            await _fertilizerRepository.Update(fertilizer);
+        }
+
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var fertilizer = await _fertilizerRepository.GetById(id);
+            try
+            {
+                await _fertilizerRepository.Delete(fertilizer);
+                
+            } catch (DbUpdateException)
+            {
+                TempData["message"] = "Błąd: Nawóz jest wpisany do ewidencji przez użytkowników!";
+            }
+            
+            return RedirectToAction("Index");
         }
 
     }

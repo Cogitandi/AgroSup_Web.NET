@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Plany sezonowe";
+    ViewData["Header"] = "Lista posiadanych planów dla sezonów";
     ViewData["ActivePage"] = ManageMenu.YearPlanList;
     var message = @TempData["message"];
     int counter = 0;
@@ -13,7 +14,7 @@
         <partial name="_DataMenuPartial" />
         <div class="col-md-10">
             <div class="container-md mx-4">
-                <h2 class="text-center">Plany roczne</h2>
+                <p class="text-center" id="headerTitle">@ViewData["Header"]</p>
                 <hr />
                 @if (message != null)
                 {
@@ -26,7 +27,6 @@
                                 <th scope="col">#</th>
                                 <th scope="col">@Html.DisplayNameFor(yearPlan => yearPlan.StartYear)</th>
                                 <th scope="col">@Html.DisplayNameFor(yearPlan => yearPlan.EndYear)</th>
-                                <th scope="col"></th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
@@ -41,17 +41,14 @@
                             }
                             @foreach (var item in Model)
                             {
-                                <tr>
-                                    <td class="align-middle">@(++counter)</td>
-                                    <td class="align-middle">@Html.DisplayFor(modelItem => item.StartYear)</td>
-                                    <td class="align-middle">@Html.DisplayFor(modelItem => item.EndYear)</td>
-                                    <td class="align-middle">
-                                        <form asp-action="SetManagedYearPlan" asp-controller="yearplans">
-                                            <input type="hidden" name="id" value="@item.Id" />
-                                            <input type="submit" value="Zarządzaj" class="btn btn-block btn btn-secondary" />
-                                        </form>
-                                    <td>
-                                </tr>
+                        <tr>
+                            <td class="align-middle">@(++counter)</td>
+                            <td class="align-middle">@Html.DisplayFor(modelItem => item.StartYear)</td>
+                            <td class="align-middle">@Html.DisplayFor(modelItem => item.EndYear)</td>
+                            <td class="align-middle">
+                            <td class="align-middle">@Html.ActionLink("Zarządzaj", "SetManagedYearPlan", new { id = item.Id }, new { @class = "btn btn-block btn btn-blue-grey" }) </td>
+                            <td>
+                        </tr>
                             }
                         </tbody>
                     </table>

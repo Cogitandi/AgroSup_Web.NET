@@ -126,8 +126,6 @@ namespace AgroSup.WebApp.Controllers
             TempData["message"] = "Zmiany zostały zapisane pomyślnie";
             return View(model);
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(Guid id)
         {
             if (ManagedYearPlan == null)

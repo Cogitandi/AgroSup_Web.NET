@@ -10,11 +10,8 @@ namespace AgroSup.Core.Domain
     public class YearPlan
     {
         public Guid Id { get; set; }
-        [Required]
         public int StartYear { get; set; }
-        [Required]
         public int EndYear { get; set; }
-        [Required]
         public User User { get; set; }
         public IEnumerable<Field> Fields { get; set; }
         public IEnumerable<Operator> Operators { get; set; }

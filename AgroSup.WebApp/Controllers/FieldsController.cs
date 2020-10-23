@@ -167,10 +167,8 @@ namespace AgroSup.WebApp.Controllers
             ).ToList();
             await _fieldRepository.Update(field);
             TempData["message"] = "Zmiany zapisano pomyślnie!";
-            return View();
+            return View(model);
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(Guid id)
         {
             if (ManagedYearPlan == null)
@@ -263,14 +261,13 @@ namespace AgroSup.WebApp.Controllers
             }
 
             // Get list of user's yearplans
-            var userYearPlans = await _fieldRepository.GetByYearPlan(ManagedYearPlan);
-            var list = userYearPlans.ToList();
+            var fields = await _fieldRepository.GetByYearPlan(ManagedYearPlan);
+            var list = fields.ToList();
 
             foreach (var item in list)
             {
                 if (item.Number == Number && item.Id != Id)
                 {
-                    // If user have yearplan with startYear passed by user error
                     return Json($"Posiadasz już pole z tym numerem");
                 }
             }

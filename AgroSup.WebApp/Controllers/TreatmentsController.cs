@@ -15,25 +15,22 @@ namespace AgroSup.WebApp.Controllers
     {
         private readonly IFieldRepository _fieldRepository;
         private readonly IFertilizerRepository _fertilizerRepository;
-        private readonly ITreatmentRepository<SeedingTreatment> _seedingRepository;
-        private readonly ITreatmentRepository<SprayingTreatment> _sprayingRepository;
-        private readonly ITreatmentRepository<FertilizationTreatment> _fertilizationRepository;
+        private readonly ITreatmentKindRepository _treatmentKindRepository;
+        private readonly ITreatmentRepository _treatmentRepository;
 
         public TreatmentsController(
             UserManager<User> userManager,
             IUserRepository userRepository,
             IFieldRepository fieldRepository,
             IFertilizerRepository fertilizerRepository,
-            ITreatmentRepository<SeedingTreatment> seedingRepository,
-            ITreatmentRepository<SprayingTreatment> sprayingRepository,
-            ITreatmentRepository<FertilizationTreatment> fertilizationRepository
+            ITreatmentKindRepository treatmentKindRepository,
+            ITreatmentRepository treatmentRepository
             ) : base(userManager, userRepository)
         {
             _fertilizerRepository = fertilizerRepository;
             _fieldRepository = fieldRepository;
-            _seedingRepository = seedingRepository;
-            _sprayingRepository = sprayingRepository;
-            _fertilizationRepository = fertilizationRepository;
+            _treatmentKindRepository = treatmentKindRepository;
+            _treatmentRepository = treatmentRepository;
 
         }
         public async Task<IActionResult> Index()
@@ -42,53 +39,21 @@ namespace AgroSup.WebApp.Controllers
             {
                 return ActionIfNotChoosedManagedYearPlan();
             }
-
-            var fertilizationTreatments = await _fertilizationRepository.GetAllByYearPlan(ManagedYearPlan);
-            var seedingTreatments = await _seedingRepository.GetAllByYearPlan(ManagedYearPlan);
-            var sprayingTreatments = await _sprayingRepository.GetAllByYearPlan(ManagedYearPlan);
-
-            var FertilizationTreatmentsToModel = fertilizationTreatments.Select(x => new TreatmentViewModel
+            var treatments = await _treatmentRepository.GetAllByYearPlan(ManagedYearPlan);
+            var model = treatments.Select(x => new TreatmentViewModel
             {
                 Id = x.Id,
-                Name = "Nawóz",
+                Name = x.TreatmentKind.Name,
                 Date = x.Date,
-                FieldName = x.Field.Name,
                 Notes = x.Notes,
                 DosePerHa = x.DosePerHa.ToString(),
-                FertilizerName = x.Fertilizer.Name,
-                SprayingAgents = "-",
-                ReasonForUse = "-",
-            });
-            var SeedingTreatmentsToModel = seedingTreatments.Select(x => new TreatmentViewModel
-            {
-                Id = x.Id,
-                Name = "Siew",
-                Date = x.Date,
-                FieldName = x.Field.Name,
-                Notes = x.Notes,
-                DosePerHa = x.DosePerHa.ToString(),
-                FertilizerName ="-",
-                SprayingAgents = "-",
-                ReasonForUse = "-",
-            });
-            var SprayingTreatmentsToModel = sprayingTreatments.Select(x => new TreatmentViewModel
-            {
-                Id = x.Id,
-                Name = "Oprysk",
-                Date = x.Date,
-                FieldName = x.Field.Name,
-                Notes = x.Notes,
-                DosePerHa = "-",
-                FertilizerName = "-",
                 SprayingAgents = x.Composition,
                 ReasonForUse = x.ReasonForUse,
+                FieldName = x.Field.Name,
+                FertilizerName = x.Fertilizer?.Name,
             });
-            var model = new List<TreatmentViewModel>();
-            model.AddRange(FertilizationTreatmentsToModel);
-            model.AddRange(SeedingTreatmentsToModel);
-            model.AddRange(SprayingTreatmentsToModel);
-            model = model.OrderByDescending(x => x.Date).ToList();
-            return View(model);
+            return View(model.OrderByDescending(x => x.Date));
+
         }
         public IActionResult Create()
         {
@@ -108,64 +73,31 @@ namespace AgroSup.WebApp.Controllers
             }
             if (!ModelState.IsValid)
             {
-                var KindList = new List<SelectListItem>
-            {
-                new SelectListItem{Text="Nawóz",Value=TreatmentViewModel.NameFertilizer},
-                new SelectListItem{Text="Oprysk",Value=TreatmentViewModel.NameSpraying},
-                new SelectListItem{Text="Siew",Value=TreatmentViewModel.NameSeeding },
-            };
+                var kinds = await _treatmentKindRepository.GetAll();
                 var fields = await _fieldRepository.GetByYearPlan(ManagedYearPlan);
-                var FieldList = new SelectList(fields, "Id", "Name");
                 var fertilizers = await _fertilizerRepository.GetAll();
+                var KindList = new SelectList(kinds, "Id", "Name");
+                var FieldList = new SelectList(fields, "Id", "Name");
                 var FertilizerList = new SelectList(fertilizers, "Id", "Name");
+
                 ViewBag.Kinds = KindList;
                 ViewBag.Fields = FieldList;
                 ViewBag.Fertilizers = FertilizerList;
                 return View(model);
             }
-            foreach (var item in model)
+
+            var treatments = model.Select((x) => new Treatment
             {
-                switch (item.Name)
-                {
-                    case "none":
-                        break;
-                    case TreatmentViewModel.NameFertilizer:
-                        var treatment = new FertilizationTreatment
-                        {
-                            Date = item.Date,
-                            Field = await _fieldRepository.GetById(item.FieldId),
-                            Notes = item.Notes,
-                            DosePerHa = item.DosePerHa,
-                            Fertilizer = await _fertilizerRepository.GetById(item.FertilizerId),
-                            
-                        };
-                        await _fertilizationRepository.Add(treatment);
-                        break;
-                    case TreatmentViewModel.NameSeeding:
-                        {
-                            var treatment3 = new SeedingTreatment
-                            {
-                                Date = item.Date,
-                                Field = await _fieldRepository.GetById(item.FieldId),
-                                Notes = item.Notes,
-                                DosePerHa = item.DosePerHa,
-                            };
-                            await _seedingRepository.Add(treatment3);
-                        }
-                        break;
-                    case TreatmentViewModel.NameSpraying:
-                        var treatment2 = new SprayingTreatment
-                        {
-                            Date = item.Date,
-                            Field = await _fieldRepository.GetById(item.FieldId),
-                            Notes = item.Notes,
-                            Composition = item.SprayingAgents,
-                            ReasonForUse = item.ReasonForUse,
-                        };
-                        await _sprayingRepository.Add(treatment2);
-                        break;
-                }
-            }
+                Date = x.Date,
+                Notes = x.Notes,
+                DosePerHa = x.DosePerHa,
+                Composition = x.SprayingAgents,
+                ReasonForUse = x.ReasonForUse,
+                Field = _fieldRepository.GetById(x.FieldId).Result,
+                Fertilizer = _fertilizerRepository.GetById(x.FertilizerId).Result,
+                TreatmentKind = _treatmentKindRepository.GetById(x.TreatmentKindId).Result
+            });
+            await _treatmentRepository.AddRange(treatments);
             TempData["message"] = "Pomyślnie dodano nowe zabiegi";
             return RedirectToAction("Index");
         }
@@ -178,17 +110,13 @@ namespace AgroSup.WebApp.Controllers
                 return ActionIfNotChoosedManagedYearPlan();
             }
 
-            var KindList = new List<SelectListItem>
-            {
-                new SelectListItem{Text="Nawóz",Value=TreatmentViewModel.NameFertilizer},
-                new SelectListItem{Text="Oprysk",Value=TreatmentViewModel.NameSpraying},
-                new SelectListItem{Text="Siew",Value=TreatmentViewModel.NameSeeding },
-            };
-
+            var kinds = await _treatmentKindRepository.GetAll();
             var fields = await _fieldRepository.GetByYearPlan(ManagedYearPlan);
-            var FieldList = new SelectList(fields, "Id", "Name");
             var fertilizers = await _fertilizerRepository.GetAll();
+            var KindList = new SelectList(kinds, "Id", "Name");
+            var FieldList = new SelectList(fields, "Id", "Name");
             var FertilizerList = new SelectList(fertilizers, "Id", "Name");
+
             ViewBag.Kinds = KindList;
             ViewBag.Fields = FieldList;
             ViewBag.Fertilizers = FertilizerList;
@@ -199,31 +127,38 @@ namespace AgroSup.WebApp.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RemoveTreatment(IList<AddTreatmentViewModel> model, int index)
+        public async Task<IActionResult> RemoveTreatment(IList<AddTreatmentViewModel> model, int __index)
         {
             if (ManagedYearPlan == null)
             {
                 return ActionIfNotChoosedManagedYearPlan();
             }
             ModelState.Clear();
-            model.RemoveAt(index);
+            model.RemoveAt(__index);
 
-            var KindList = new List<SelectListItem>
-            {
-                new SelectListItem{Text="Nawóz",Value=TreatmentViewModel.NameFertilizer},
-                new SelectListItem{Text="Oprysk",Value=TreatmentViewModel.NameSpraying},
-                new SelectListItem{Text="Siew",Value=TreatmentViewModel.NameSeeding },
-            };
-
+            var kinds = await _treatmentKindRepository.GetAll();
             var fields = await _fieldRepository.GetByYearPlan(ManagedYearPlan);
-            var FieldList = new SelectList(fields, "Id", "Name");
             var fertilizers = await _fertilizerRepository.GetAll();
+            var KindList = new SelectList(kinds, "Id", "Name");
+            var FieldList = new SelectList(fields, "Id", "Name");
             var FertilizerList = new SelectList(fertilizers, "Id", "Name");
+
             ViewBag.Kinds = KindList;
             ViewBag.Fields = FieldList;
             ViewBag.Fertilizers = FertilizerList;
 
-            return PartialView("Treatments1", model);
+            return PartialView("Treatments", model);
+        }
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            if (ManagedYearPlan == null)
+            {
+                return ActionIfNotChoosedManagedYearPlan();
+            }
+
+            var @operator = await _treatmentRepository.GetById(id);
+            await _treatmentRepository.Delete(@operator);
+            return RedirectToAction("Index");
         }
     }
 }

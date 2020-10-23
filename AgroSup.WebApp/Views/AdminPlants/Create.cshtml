@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Nowa roślina";
+    ViewData["Header"] = "Dodaj nową roślinę";
     ViewData["ActivePage"] = ManageMenu.PlantAdd;
     var message = @TempData["message"];
 }
@@ -11,6 +12,8 @@
     <div class="col-md-10">
         <div class="container-md mx-4">
             <!--- Content -->
+            <p class="text-center" id="headerTitle">@ViewData["Header"]</p>
+            <hr />
             <form asp-action="Create">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 @if (message != null)
@@ -35,3 +38,8 @@
         </div>
     </div>
 </div>
+
+@section Scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

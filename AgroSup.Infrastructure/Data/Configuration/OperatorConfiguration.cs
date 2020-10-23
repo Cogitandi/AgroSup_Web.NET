@@ -12,10 +12,10 @@ namespace AgroSup.Infrastructure.Data.Configuration
         public void Configure(EntityTypeBuilder<Operator> builder)
         {
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.FirstName);
+            builder.Property(x => x.FirstName).IsRequired();
             builder.Property(x => x.LastName);
             builder.Property(x => x.ArimrNumber);
-            builder.HasOne(x => x.YearPlan).WithMany(x => x.Operators);
+            builder.HasOne(x => x.YearPlan).WithMany(x => x.Operators).IsRequired();
             builder.HasMany(x => x.Parcels).WithOne(x => x.Operator);
 
         }

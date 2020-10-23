@@ -9,11 +9,9 @@ namespace AgroSup.Core.Domain
     public class Operator
     {
         public Guid Id { get; set; }
-        [Required]
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string ArimrNumber { get; set; }
-        [Required]
         public YearPlan YearPlan { get; set; }
         public IList<Parcel> Parcels { get; set; } = new List<Parcel>();
 

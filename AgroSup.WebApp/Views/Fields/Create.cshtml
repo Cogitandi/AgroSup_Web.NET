@@ -1,7 +1,8 @@
 ﻿@model AgroSup.WebApp.ViewModels.Fields.FieldViewModel
 
 @{
-    ViewData["Title"] = "Nowe pole";
+    ViewData["Title"] = "Pole";
+    ViewData["Header"] = "Utwórz nowe pole";
     ViewData["ActivePage"] = ManageMenu.FieldAdd;
     var message = @TempData["message"];
 }
@@ -10,7 +11,8 @@
     <partial name="_DataMenuPartial" />
     <div class="col-md-10">
         <div class="container-md mx-4">
-            <h2 class="text-center">Stwórz nowe pole</h2>
+            <p class="text-center" id="headerTitle">@ViewData["Header"]</p>
+            <hr />
             @if (message != null)
             {
                 <partial name="_StatusMessage" model="message.ToString()" />
@@ -38,61 +40,60 @@
 
                 <div class="form-group mt-2">
                     <input type="submit" value="Utwórz pole" class="btn btn-primary" />
+                    @Html.ActionLink("Powrót", "Index", new { },new { @class="btn btn-info"})
                 </div>
             </form>
         </div>
-        </div>
     </div>
+</div>
 
-    @section Styles {
-        <style type="text/css">
-            @@media (max-width: 930px) {
-                .form-inline {
-                    flex-direction: column;
-                    align-items: stretch;
-                }
+@section Styles {
+    <style type="text/css">
+        @@media (max-width: 930px) {
+            .form-inline {
+                flex-direction: column;
+                align-items: stretch;
             }
-        </style>
-    }
-
-    @section Scripts
-{
-        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-
-        <script type="text/javascript">
-            $(function () {
-                // delete extra hidden fields created by checkboxes as the grid links mess this up by doubling the querystring parameters
-                $("input[type='hidden'][name$='FuelApplication']").remove();
-            });
-        </script>
-
-        <script>
-    $("#addParcel").on("click", function () {
-        $.ajax({
-            async: true,
-            data: $("#form").serialize(),
-            type: "POST",
-            url: '@Url.Action("AddParcel", "Fields")',
-            success: function (partialView) {
-                $('#parcels').html(partialView);
-            }
-        });
-    });
-
-        function removeParcel() {
-
-            var indexToRemove = $(this).parent().parent().prevAll().length;
-            $.ajax({
-                async: true,
-                data: $("#form").serialize()+"&index="+indexToRemove,
-            type: "POST",
-            url: '@Url.Action("RemoveParcel", "Fields")',
-                success: function (partialView) {
-                $('#parcels').html(partialView);
-            }
-        });
-            event.preventDefault();
         }
-        </script>
+    </style>
+}
+
+@section Scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js//markValidationErrors.js"></script>
+
+    <script>
+  $(function() {
+    // delete extra hidden fields created by checkboxes as the grid links mess this up by doubling the querystring parameters
+    $("input[type='hidden'][name$='FuelApplication']").remove();
+  });
+
+$("#addParcel").on("click", function() {
+  $.ajax({
+    async: true,
+    data: $("#form").serialize(),
+    type: "POST",
+    url: '@Url.Action("AddParcel", "Fields")',
+    success: function(partialView) {
+      $('#parcels').html(partialView);
+      markValidationErrors();
     }
+  });
+});
+
+function removeParcel() {
+  var indexToRemove = $(this).parent().parent().prevAll().length;
+  $.ajax({
+    async: true,
+    data: $("#form").serialize() + "&index=" + indexToRemove,
+    type: "POST",
+    url: '@Url.Action("RemoveParcel", "Fields")',
+    success: function(partialView) {
+      $('#parcels').html(partialView);
+    }
+  });
+  event.preventDefault();
+}
+    </script>
+}

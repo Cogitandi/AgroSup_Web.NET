@@ -12,14 +12,14 @@ namespace AgroSup.Infrastructure.Data.Configuration
         public void Configure(EntityTypeBuilder<Fertilizer> builder)
         {
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.Name);
-            builder.Property(x => x.N);
-            builder.Property(x => x.P);
-            builder.Property(x => x.K);
-            builder.Property(x => x.Ca);
-            builder.Property(x => x.Mg);
-            builder.Property(x => x.S);
-            builder.Property(x => x.Na);
+            builder.Property(x => x.Name).IsRequired();
+            builder.Property(x => x.N).IsRequired();
+            builder.Property(x => x.P).IsRequired();
+            builder.Property(x => x.K).IsRequired();
+            builder.Property(x => x.Ca).IsRequired();
+            builder.Property(x => x.Mg).IsRequired();
+            builder.Property(x => x.S).IsRequired();
+            builder.Property(x => x.Na).IsRequired();
         }
     }
 }

@@ -7,57 +7,57 @@
 
 
 
-    <ul class="navbar-nav">
-        @if (SignInManager.IsSignedIn(User))
+<ul class="navbar-nav">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        var userId = UserManager.GetUserId(User);
+        var user = await _IUserRepository.GetById(Guid.Parse(userId));
+        var userManagedYearPlan = user.ManagedYearPlan;
+
+        @if (userManagedYearPlan != null)
         {
-            var userId = UserManager.GetUserId(User);
-            var user = await _IUserRepository.GetById(Guid.Parse(userId));
-            var userManagedYearPlan = user.ManagedYearPlan;
-
-            @if (userManagedYearPlan != null)
-            {
-                <li class="nav-item">
-
-                    <a class="nav-link" asp-controller="yearplans" asp-action="index">@userManagedYearPlan.GetYearPlanName</a>
-                </li>
-            }
-            else
-            {
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="yearplans" asp-action="index">Wybierz plan</a>
-                </li>
-            }
-
             <li class="nav-item">
-                <a class="nav-link" asp-controller="cropplan" asp-action="index">Zarządzaj</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="yearplans" asp-action="index">Dane</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Email">Moje konto</a>
-            </li>
-            <li class="nav-item">
-                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                    <button type="submit" class="nav-link btn btn-link">Wyloguj</button>
-                </form>
-            </li>
-            @if (
-                this.User.IsInRole("Administrator"))
-            {
-                <li class="nav-item">
-                    <a class="nav-link font-weight-bold"  asp-controller="adminsummary" asp-action="index">Panel adminstratora</a>
-                </li>
-            }
 
+                <a class="nav-link" asp-controller="yearplans" asp-action="index">@userManagedYearPlan.GetYearPlanName</a>
+            </li>
         }
         else
         {
             <li class="nav-item">
-                <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">Rejestracja</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">Zaloguj się</a>
+                <a class="nav-link" asp-controller="yearplans" asp-action="index">Wybierz plan</a>
             </li>
         }
-    </ul>
+
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="cropplan" asp-action="index">Zarządzaj</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="yearplans" asp-action="index">Dane</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Email">Moje konto</a>
+        </li>
+        <li class="nav-item">
+            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <button type="submit" class="btn btn-link nav-link " style="margin: 0px;text-transform: none; font-size:1rem;padding:.5rem 1rem;">Wyloguj</button>
+            </form>
+        </li>
+        @if (
+          this.User.IsInRole("Administrator"))
+        {
+            <li class="nav-item">
+                <a class="nav-link font-weight-bold" asp-controller="adminsummary" asp-action="index">Panel adminstratora</a>
+            </li>
+        }
+
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">Rejestracja</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">Zaloguj się</a>
+        </li>
+    }
+</ul>

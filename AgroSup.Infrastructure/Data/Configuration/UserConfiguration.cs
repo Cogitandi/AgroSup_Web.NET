@@ -14,7 +14,7 @@ namespace AgroSup.Infrastructure.Data.Configuration
             builder.HasOne(x => x.ManagedYearPlan);
             builder.HasMany(x => x.ChoosedPlants).WithOne(y => y.User);
             builder.HasMany(x => x.YearPlans).WithOne(y => y.User);
-            builder.Property(x => x.CreateDate);
+            builder.Property(x => x.CreateDate).IsRequired();
             builder.Property(x => x.LastLoginDate);
         }
     }

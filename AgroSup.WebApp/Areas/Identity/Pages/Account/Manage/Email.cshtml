@@ -1,11 +1,13 @@
 ﻿@page
 @model EmailModel
 @{
-    ViewData["Title"] = "Email";
+    ViewData["Title"] = "E-mail";
+    ViewData["Header"] = "Zmień e-mail";
     ViewData["ActivePage"] = ManageNavPages.Email;
 }
 
-<h4>@ViewData["Title"]</h4>
+<p id="headerTitle">@ViewData["Header"]</p>
+<hr />
 <partial name="_StatusMessage" model="Model.StatusMessage" />
 <div class="row">
     <div class="col-md-6">
@@ -22,7 +24,7 @@
                         </div>
                     </div>
                 }
-                 else
+                else
                 {
                     <input asp-for="Email" class="form-control" disabled />
                     <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="btn btn-link">Wyślij potwierdzenie na emaila</button>

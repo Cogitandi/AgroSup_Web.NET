@@ -22,9 +22,9 @@ namespace AgroSup.Infrastructure.Data
         public DbSet<User> ApplicationUsers { get; set; }
         public DbSet<YearPlan> YearPlans { get; set; }
         public DbSet<Fertilizer> Fertilizers { get; set; }
-        public DbSet<FertilizationTreatment> FertilizationTreatments { get; set; }
-        public DbSet<SeedingTreatment> SeedingTreatments { get; set; }
-        public DbSet<SprayingTreatment> SprayingTreatments { get; set; }
+        public DbSet<TreatmentKind> TreatmentKinds { get; set; }
+        public DbSet<Treatment> Treatments { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -37,9 +37,8 @@ namespace AgroSup.Infrastructure.Data
             builder.ApplyConfiguration(new UserConfiguration());
             builder.ApplyConfiguration(new YearPlanConfiguration());
             builder.ApplyConfiguration(new FertilizerConfiguration());
-            builder.ApplyConfiguration(new FertilizationTreatmentConfiguration());
-            builder.ApplyConfiguration(new SprayingTreatmentConfiguration());
-            builder.ApplyConfiguration(new SeedingTreatmentConfiguration());
+            builder.ApplyConfiguration(new TreatmentKindConfiguration());
+            builder.ApplyConfiguration(new TreatmentConfiguration());
         }
     }
 }

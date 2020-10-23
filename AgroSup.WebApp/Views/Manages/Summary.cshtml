@@ -1,6 +1,7 @@
 ﻿@model AgroSup.WebApp.ViewModels.Manages.SummaryViewModel
 @{
     ViewData["Title"] = "Podsumowanie";
+    ViewData["Header"] = "Utwórz pole";
     ViewData["ActivePage"] = ManageMenu.SummaryManage;
 }
 
@@ -14,7 +15,7 @@
             <div class="d-flex flex-wrap">
                 @foreach (var item in Model.DisplayGroups)
                 {
-                    <div class="card mx-2">
+                    <div class="card mx-2 my-2">
                         <div class="card-body">
                             <table class="table w-auto table-hover">
                                 <thead>

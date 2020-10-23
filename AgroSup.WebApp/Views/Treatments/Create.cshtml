@@ -1,9 +1,11 @@
 ﻿@model IList<AgroSup.WebApp.ViewModels.Manages.Treatments.AddTreatmentViewModel>
-
+@using AgroSup.WebApp.ViewModels.Manages.Treatments;
 @{
     ViewData["Title"] = "Dodaj zabiegi";
+    ViewData["Header"] = "Utwórz pole";
     ViewData["ActivePage"] = ManageMenu.TreatmentAdd;
-    var treatmentModel = new AgroSup.WebApp.ViewModels.Manages.Treatments.AddTreatmentViewModel();
+    var treatmentModel = new AddTreatmentViewModel();
+    var fertilizerTreatmentId = AddTreatmentViewModel.FertilizingTreatmentID;
 }
 
 <div class="row">
@@ -20,7 +22,7 @@
                     <thead>
                         <tr>
                             <th>
-                                @Html.DisplayNameFor(model => treatmentModel.Name)
+                                @Html.DisplayNameFor(model => treatmentModel.TreatmentKindId)
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => treatmentModel.Date)
@@ -68,9 +70,9 @@
 
 @section Scripts {
     @*await Html.RenderPartialAsync("_ValidationScriptsPartial");}*@
-    <script>
+<script>
         $(function () {
-            var nameInputs = $("#treatments").find('select[name$=Name]');
+            var nameInputs = $("#treatments").find('select[name$=TreatmentKindId]');
             nameInputs.each(function () {
                 showHideInputs.call(this);
             })
@@ -89,7 +91,7 @@
             var value = $(this).val();
             var inputs = $(this).parent().parent().siblings();
             switch (value) {
-                case 'Fertilizer':
+                case '@AddTreatmentViewModel.FertilizingTreatmentID':
                     inputs.find('input[name$=Date]').prop("disabled", false);
                     inputs.find('select[name$=FieldId]').prop("disabled", false);
                     inputs.find('input[name$=DosePerHa]').prop("disabled", false);
@@ -98,7 +100,7 @@
                     inputs.find('select[name$=FertilizerId]').prop("disabled", false);
                     inputs.find('input[name$=ReasonForUse]').prop("disabled", true);
                     break;
-                case 'Seeding':
+                case '@AddTreatmentViewModel.SeedingTreatmentID':
                    inputs.find('input[name$=Date]').prop("disabled", false);
                     inputs.find('select[name$=FieldId]').prop("disabled", false);
                     inputs.find('input[name$=DosePerHa]').prop("disabled", false);
@@ -107,7 +109,7 @@
                     inputs.find('select[name$=FertilizerId]').prop("disabled", true);
                     inputs.find('input[name$=ReasonForUse]').prop("disabled", true);
                     break;
-                case 'Spraying':
+                case '@AddTreatmentViewModel.SprayingTreatmentID':
                    inputs.find('input[name$=Date]').prop("disabled", false);
                     inputs.find('select[name$=FieldId]').prop("disabled", false);
                     inputs.find('input[name$=DosePerHa]').prop("disabled", true);
@@ -116,7 +118,7 @@
                     inputs.find('select[name$=FertilizerId]').prop("disabled", true);
                     inputs.find('input[name$=ReasonForUse]').prop("disabled", false);
                     break;
-                case 'none':
+                default:
                    inputs.find('input[name$=Date]').prop("disabled", true);
                     inputs.find('select[name$=FieldId]').prop("disabled", true);
                     inputs.find('input[name$=DosePerHa]').prop("disabled", true);
@@ -136,7 +138,7 @@
             url: '@Url.Action("AddTreatment", "Treatments")',
             success: function (partialView) {
                 $('#treatments').html(partialView);
-                $('#treatments').find('select[name$=Name]').each(function () {
+                $('#treatments').find('select[name$=TreatmentKindId]').each(function () {
                     showHideInputs.call(this)
                 });
             }
@@ -144,23 +146,21 @@
         });
 
         function removeParcel() {
-            //data: $("#form").serialize() + "&index=" + indexToRemove,
-            //data: $("#form").serialize() + id:indexToRemove,
             var indexToRemove = $(this).parent().parent().parent().prevAll().length;
             //var data
             $.ajax({
                 async: true,
-                data: $("#form").serialize() + "&index=" + indexToRemove,
+                data: $("#form").serialize() + "&__index=" + indexToRemove,
             type: "POST",
             url: '@Url.Action("RemoveTreatment", "Treatments")',
                 success: function (partialView) {
                     $('#treatments').html(partialView);
-                    $('#treatments').find('select[name$=Name]').each(function () {
+                    $('#treatments').find('select[name$=TreatmentKindId]').each(function () {
                         showHideInputs.call(this)
                     });
             }
         });
             event.preventDefault();
         }
-    </script>
+</script>
 }

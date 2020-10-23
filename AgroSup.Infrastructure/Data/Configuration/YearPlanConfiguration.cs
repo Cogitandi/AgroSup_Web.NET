@@ -12,9 +12,9 @@ namespace AgroSup.Infrastructure.Data.Configuration
         public void Configure(EntityTypeBuilder<YearPlan> builder)
         {
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.StartYear);
-            builder.Property(x => x.EndYear);
-            builder.HasOne(x => x.User).WithMany(y => y.YearPlans);
+            builder.Property(x => x.StartYear).IsRequired();
+            builder.Property(x => x.EndYear).IsRequired();
+            builder.HasOne(x => x.User).WithMany(y=>y.YearPlans).IsRequired();
             builder.HasMany(x => x.Fields).WithOne(y => y.YearPlan);
             builder.HasMany(x => x.Operators).WithOne(y => y.YearPlan);
         }

@@ -7,8 +7,12 @@ namespace AgroSup.WebApp.ViewModels.Manages.Treatments
 {
     public class AddTreatmentViewModel : IValidatableObject
     {
+        public static Guid FertilizingTreatmentID = Guid.Parse("407d4311-9b2f-4ee1-a532-1a1317e574f0");
+        public static Guid SeedingTreatmentID = Guid.Parse("a56940ba-6de0-4803-8c90-09d17e143ac2");
+        public static Guid SprayingTreatmentID = Guid.Parse("98595141-8270-413a-b175-d02a35eb48bd");
+
         [DisplayName("Nazwa")]
-        public string Name { get; set; }
+        public Guid TreatmentKindId { get; set; }
         [DisplayName("Data")]
         public DateTime Date { get; set; }
         [DisplayName("Pole")]
@@ -26,18 +30,18 @@ namespace AgroSup.WebApp.ViewModels.Manages.Treatments
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (Name.Equals("none"))
+            if (TreatmentKindId == Guid.Empty)
             {
                 yield return new ValidationResult(
-                    $"Musisz wybrać zabieg", new string[] { nameof(Name) });
+                    $"Musisz wybrać zabieg", new string[] { nameof(TreatmentKindId) });
             }
 
-            if (!Name.Equals("none") && FieldId == Guid.Empty)
+            if (!(TreatmentKindId == Guid.Empty) && FieldId == Guid.Empty)
             {
                 yield return new ValidationResult(
                     $"Musisz wybrać pole", new string[] { nameof(FieldId) });
             }
-            if (Name.Equals(TreatmentViewModel.NameFertilizer) && FertilizerId == Guid.Empty)
+            if (TreatmentKindId==FertilizingTreatmentID && FertilizerId == Guid.Empty)
             {
                 yield return new ValidationResult(
                     $"Musisz wybrać nawóz", new string[] { nameof(FertilizerId) });

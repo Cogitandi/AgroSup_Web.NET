@@ -1,7 +1,8 @@
 ﻿@model AgroSup.WebApp.ViewModels.Operators.OperatorViewModel
 
 @{
-    ViewData["Title"] = "Nowa osoba";
+    ViewData["Title"] = "Osoba";
+    ViewData["Header"] = "Dodaj dane osoby zarejestrowanej w systemie ARiMR";
     ViewData["ActivePage"] = ManageMenu.OperatorAdd;
     var message = @TempData["message"];
 }
@@ -11,6 +12,8 @@
     <partial name="_DataMenuPartial" />
     <div class="col-md-10">
         <div class="container-md mx-4">
+            <p class="text-center" id="headerTitle">@ViewData["Header"]</p>
+            <hr />
             @if (message != null)
             {
                 <partial name="_StatusMessage" model="message.ToString()" />
@@ -37,6 +40,7 @@
                 </div>
                 <div class="form-group">
                     <input type="submit" value="Dodaj" class="btn btn-primary" />
+                    @Html.ActionLink("Powrót", "Index", new { }, new { @class = "btn btn-info" })
                 </div>
             </form>
         </div>

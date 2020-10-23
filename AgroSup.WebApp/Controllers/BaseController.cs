@@ -33,7 +33,6 @@ namespace AgroSup.WebApp.Controllers
         private User GetLoggedUser()
         {
             var loggedUserId = _userManager.GetUserId(User);
-            //var loggedUserName = User.Identity.Name;
             var loggedUser = _userRepository.GetById(Guid.Parse(loggedUserId)).GetAwaiter().GetResult();
             return loggedUser;
         }

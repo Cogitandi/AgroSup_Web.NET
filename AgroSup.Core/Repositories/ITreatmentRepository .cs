@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace AgroSup.Core.Repositories
 {
-    public interface ITreatmentRepository<T>
+    public interface ITreatmentRepository
     {
-        Task<T> GetById(Guid id);
-        Task<IEnumerable<T>> GetAllByYearPlan(YearPlan yearPlan);
-        Task Add(T treatment);
-        Task Update(T treatment);
-        Task Delete(T treatment);
+        Task<Treatment> GetById(Guid id);
+        Task<IEnumerable<Treatment>> GetAllByYearPlan(YearPlan yearPlan);
+        Task Add(Treatment treatment);
+        Task AddRange(IEnumerable<Treatment> treatments);
+        Task Update(Treatment treatment);
+        Task Delete(Treatment treatment);
     }
 }
