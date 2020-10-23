@@ -43,22 +43,17 @@ namespace AgroSup.WebApp.Controllers
             var plant = await _plantRepository.GetById(id);
             if(plant != null)
             {
-                var userPlant = new UserPlant
-                {
-                    Plant = plant,
-                };
-                LoggedUser.ChoosedPlants.Add(userPlant);
+                LoggedUser.AddPlantToChoosed(plant);
             await UpdateLoggedUser();
             }
         }
         [HttpPost]
         public async Task UnAssignPlant(Guid id)
         {
-            var userPlant = LoggedUser.ChoosedPlants.FirstOrDefault(x => x.Plant.Id == id);
-
-            if (userPlant != null)
+            var plant = await _plantRepository.GetById(id);
+            if (plant != null)
             {
-                LoggedUser.ChoosedPlants.Remove(userPlant);
+                LoggedUser.RemovePlantFromChoosed(plant);
                 await UpdateLoggedUser();
             }
         }

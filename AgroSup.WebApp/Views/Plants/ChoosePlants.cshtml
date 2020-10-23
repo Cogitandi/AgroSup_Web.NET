@@ -28,9 +28,10 @@
                     <tbody>
                         @foreach (var item in Model.AvailablePlants)
                         {
+                            var selected = @Model.SelectedPlants.Contains(item.Value) == true ? 1 : 0;
                             <tr>
                                 <td>@item.Text</td>
-                                <td @if (Model.SelectedPlants.Contains(item.Value)) { <text> data-order=1 </text> }>
+                                <td data-order=@selected>
                                     <div class="custom-control custom-switch">
                                         <input type="checkbox" class="custom-control-input" name="SelectedPlants" id="@item.Value" value="@item.Value" @if (Model.SelectedPlants.Contains(item.Value)) { <text> checked data-order=1 </text> } } />
                                         <label class="custom-control-label" for="@item.Value" onclick="choosePlant.call(this)">Kliknij tutaj</label>
@@ -55,6 +56,7 @@
             var id = input.val();
             var assign = input.prop('checked') == false ? true : false;
             if (assign) {
+                td.data('order', 1);
                 $.ajax({
                     async: true,
                     data: "Id=" + id,
@@ -62,6 +64,7 @@
                     url: '@Url.Action("AssignPlant", "Plants")',
                 });
             } else {
+                td.data('order', 0);
                 $.ajax({
                     async: true,
                     data: "Id=" + id,
