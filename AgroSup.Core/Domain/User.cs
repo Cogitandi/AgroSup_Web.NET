@@ -13,7 +13,7 @@ namespace AgroSup.Core.Domain
         public DateTime CreateDate { get; set; }
 
         public YearPlan ManagedYearPlan { get; set; }
-        public IEnumerable<UserPlant> ChoosedPlants { get; set; }
+        public IList<UserPlant> ChoosedPlants { get; set; } = new List<UserPlant>();
         public IEnumerable<YearPlan> YearPlans { get; set; }
     }
 }

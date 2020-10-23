@@ -38,23 +38,29 @@ namespace AgroSup.WebApp.Controllers
             return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> ChoosePlants(PlantViewModel model)
+        public async Task AssignPlant(Guid id)
         {
-            if (ModelState.IsValid)
+            var plant = await _plantRepository.GetById(id);
+            if(plant != null)
             {
-                var choosedPlants = model.SelectedPlants.Select(x => _plantRepository.GetById(Guid.Parse(x)).Result);
-                var PlantsToUser = choosedPlants.Select(x => new UserPlant()
+                var userPlant = new UserPlant
                 {
-                    Plant = x
-                }).ToList();
-
-                LoggedUser.ChoosedPlants = PlantsToUser;
-                await UpdateLoggedUser();
-                TempData["message"] = "Pomyślnie zapisano zmiany";
-                return RedirectToAction("ChoosePlants");
+                    Plant = plant,
+                };
+                LoggedUser.ChoosedPlants.Add(userPlant);
+            await UpdateLoggedUser();
             }
+        }
+        [HttpPost]
+        public async Task UnAssignPlant(Guid id)
+        {
+            var userPlant = LoggedUser.ChoosedPlants.FirstOrDefault(x => x.Plant.Id == id);
 
-            return View(model);
+            if (userPlant != null)
+            {
+                LoggedUser.ChoosedPlants.Remove(userPlant);
+                await UpdateLoggedUser();
+            }
         }
 
         // Methods

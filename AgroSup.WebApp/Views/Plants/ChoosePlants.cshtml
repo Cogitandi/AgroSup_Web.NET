@@ -18,10 +18,6 @@
             {
                 <partial name="_StatusMessage" model="message.ToString()" />
             }
-
-            <form asp-action="ChoosePlants">
-                <button type="submit" class="float-right btn btn-primary">Zapisz</button>
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <table id="dtDynamicVerticalScrollExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
                     <thead>
                         <tr>
@@ -37,7 +33,7 @@
                                 <td @if (Model.SelectedPlants.Contains(item.Value)) { <text> data-order=1 </text> }>
                                     <div class="custom-control custom-switch">
                                         <input type="checkbox" class="custom-control-input" name="SelectedPlants" id="@item.Value" value="@item.Value" @if (Model.SelectedPlants.Contains(item.Value)) { <text> checked data-order=1 </text> } } />
-                                        <label class="custom-control-label" for="@item.Value">Kliknij tutaj</label>
+                                        <label class="custom-control-label" for="@item.Value" onclick="choosePlant.call(this)">Kliknij tutaj</label>
                                     </div>
                                 </td>
                             </tr>
@@ -45,7 +41,6 @@
 
                     </tbody>
                 </table>
-            </form>
         </div>
     </div>
 </div>
@@ -55,6 +50,27 @@
     <script type="text/javascript" src="~/md/js/addons/datatables.min.js"></script>
 
     <script>
+        function choosePlant() {
+            var input = $(this).siblings('input[name=SelectedPlants]');
+            var id = input.val();
+            var assign = input.prop('checked') == false ? true : false;
+            if (assign) {
+                $.ajax({
+                    async: true,
+                    data: "Id=" + id,
+                    type: "POST",
+                    url: '@Url.Action("AssignPlant", "Plants")',
+                });
+            } else {
+                $.ajax({
+                    async: true,
+                    data: "Id=" + id,
+                    type: "POST",
+                    url: '@Url.Action("UnAssignPlant", "Plants")',
+                });
+            }
+
+        }
         $(document).ready(function () {
             $('#dtDynamicVerticalScrollExample').DataTable({
                 "scrollY": "50vh",
