@@ -42,16 +42,47 @@
                 <div class="form-group">
                     <input type="submit" value="Zapisz" class="btn btn-primary" />
                     @Html.ActionLink("Powrót", "Index", new { }, new { @class = "btn btn-info" })
-                    @Html.ActionLink("Usuń", "Delete", new { id = Model.Id }, new { @class = "btn btn-danger" })
+                    <button id="deleteBtn" class="btn btn-danger" onclick="deleteRow('@Model.Id')">Skasuj</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-    <!--- End content -->
+<!--- End content -->
 
 
-    @section Scripts {
-        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function deleteRow(ID) {
+        event.preventDefault();
+        var url = '@Url.Action("Delete", "Operators", new { id = "Identifier" })';
+        url = url.replace("Identifier", ID);
+
+        bootbox.confirm({
+            title: "Potwierdzenie",
+            centerVertical: true,
+            message: "Czy na pewno chcesz usunąć? Nie można cofnąć tej akcji.",
+            buttons: {
+                confirm: {
+                    label: 'Usuń',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'Anuluj',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function(result) {
+                if (result == true) {
+                    {
+                        window.location.replace(url);
+                    }
+                }
+            }
+        });
     }
+    </script>
+}
 

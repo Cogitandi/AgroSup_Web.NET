@@ -78,7 +78,7 @@
                                 @Html.DisplayFor(model => item.ReasonForUse)
                             </td>
                             <td class="text-center">
-                                @Html.ActionLink("", "Delete", new { id = item.Id }, new { @class="fas fa-trash-alt fa-1x"})
+                                <i class="fas fa-trash-alt fa-1x" onclick="deleteRow('@item.Id')"></i>
                             </td>
                         </tr>
                     }
@@ -91,7 +91,7 @@
 
 @section Scripts {
     <script type="text/javascript" src="~/md/js/addons/datatables.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
     <script>
         $(document).ready(function () {
             $('#dtDynamicVerticalScrollExample').DataTable({
@@ -118,6 +118,35 @@
             });
             $('.dataTables_length').addClass('bs-select');
         });
+
+        function deleteRow(ID) {
+            var url = '@Url.Action("Delete", "Treatments", new { id = "Identifier" })';
+            url = url.replace("Identifier", ID);
+
+            bootbox.confirm({
+                title: "Usunąć zabieg?",
+                centerVertical: true,
+                message: "Czy na pewno chcesz usunąć zabieg? Nie można cofnąć tej akcji.",
+                buttons: {
+                    confirm: {
+                        label: 'Usuń',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'Anuluj',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if (result == true) {
+                        {
+                            window.location.replace(url);
+                        }
+                    }
+                }
+            });
+        }
+
     </script>
 }
 

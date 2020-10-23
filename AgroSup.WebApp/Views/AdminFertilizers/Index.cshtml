@@ -54,68 +54,68 @@
                     <tbody>
                         @for (int i = 0; i < Model.Count(); i++)
                         {
-                        <tr>
-                            <td>
-                                <input asp-for="@Model[i].Id" type="hidden" />
-                                <div class="value">@Html.DisplayFor(model => @Model[i].Name)</div>
-                                <input asp-for="@Model[i].Name" style="display: none;" />
-                                <span asp-validation-for="@Model[i].Name" class="text-danger"></span>
-                            </td>
-                            <td>
-                                <div class="value">
-                                    @Html.DisplayFor(model => @Model[i].N)
-                                </div>
-                                <input asp-for="@Model[i].N" style="display: none;" />
-                                <span asp-validation-for="@Model[i].N" class="text-danger"></span>
-                            </td>
-                            <td>
-                                <div class="value">
-                                    @Html.DisplayFor(model => @Model[i].P)
-                                </div>
-                                <input asp-for="@Model[i].P" style="display: none;" />
-                                <span asp-validation-for="@Model[i].P" class="text-danger"></span>
-                            </td>
-                            <td>
-                                <div class="value">
-                                    @Html.DisplayFor(model => @Model[i].K)
-                                </div>
-                                <input asp-for="@Model[i].K" style="display: none;" />
-                                <span asp-validation-for="@Model[i].K" class="text-danger"></span>
-                            </td>
-                            <td>
-                                <div class="value">
-                                    @Html.DisplayFor(model => @Model[i].Ca)
-                                </div>
-                                <input asp-for="@Model[i].Ca" style="display: none;" />
-                                <span asp-validation-for="@Model[i].Ca" class="text-danger"></span>
-                            </td>
-                            <td>
-                                <div class="value">
-                                    @Html.DisplayFor(model => @Model[i].Mg)
-                                </div>
-                                <input asp-for="@Model[i].Mg" style="display: none;" />
-                                <span asp-validation-for="@Model[i].Mg" class="text-danger"></span>
-                            </td>
-                            <td>
-                                <div class="value">
-                                    @Html.DisplayFor(model => @Model[i].S)
-                                </div>
-                                <input asp-for="@Model[i].S" style="display: none;" />
-                                <span asp-validation-for="@Model[i].S" class="text-danger"></span>
-                            </td>
-                            <td>
-                                <div class="value">
-                                    @Html.DisplayFor(model => @Model[i].Na)
-                                </div>
-                                <input asp-for="@Model[i].Na" style="display: none;" />
-                                <span asp-validation-for="@Model[i].Na" class="text-danger"></span>
-                            </td>
-                            <td class="text-center">
-                                <a class="btn btn-primary waves-effect waves-light submit m-2" onclick="saveRow.call(this)" style="display:none">Zapisz</a>
-                                <a class="btn btn-blue-grey waves-effect waves-light modify m-2" onclick="editRow.call(this)">Modifikuj</a>
-                                @Html.ActionLink("Usuń", "Delete", new { id = @Model[i].Id }, new { @class = "btn btn-danger" })
-                            </td>
-                        </tr>
+                            <tr>
+                                <td>
+                                    <input asp-for="@Model[i].Id" type="hidden" />
+                                    <div class="value">@Html.DisplayFor(model => @Model[i].Name)</div>
+                                    <input asp-for="@Model[i].Name" style="display: none;" />
+                                    <span asp-validation-for="@Model[i].Name" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <div class="value">
+                                        @Html.DisplayFor(model => @Model[i].N)
+                                    </div>
+                                    <input asp-for="@Model[i].N" style="display: none;" />
+                                    <span asp-validation-for="@Model[i].N" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <div class="value">
+                                        @Html.DisplayFor(model => @Model[i].P)
+                                    </div>
+                                    <input asp-for="@Model[i].P" style="display: none;" />
+                                    <span asp-validation-for="@Model[i].P" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <div class="value">
+                                        @Html.DisplayFor(model => @Model[i].K)
+                                    </div>
+                                    <input asp-for="@Model[i].K" style="display: none;" />
+                                    <span asp-validation-for="@Model[i].K" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <div class="value">
+                                        @Html.DisplayFor(model => @Model[i].Ca)
+                                    </div>
+                                    <input asp-for="@Model[i].Ca" style="display: none;" />
+                                    <span asp-validation-for="@Model[i].Ca" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <div class="value">
+                                        @Html.DisplayFor(model => @Model[i].Mg)
+                                    </div>
+                                    <input asp-for="@Model[i].Mg" style="display: none;" />
+                                    <span asp-validation-for="@Model[i].Mg" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <div class="value">
+                                        @Html.DisplayFor(model => @Model[i].S)
+                                    </div>
+                                    <input asp-for="@Model[i].S" style="display: none;" />
+                                    <span asp-validation-for="@Model[i].S" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <div class="value">
+                                        @Html.DisplayFor(model => @Model[i].Na)
+                                    </div>
+                                    <input asp-for="@Model[i].Na" style="display: none;" />
+                                    <span asp-validation-for="@Model[i].Na" class="text-danger"></span>
+                                </td>
+                                <td class="text-center">
+                                    <a class="btn btn-primary waves-effect waves-light submit m-2" onclick="saveRow.call(this)" style="display:none">Zapisz</a>
+                                    <a class="btn btn-blue-grey waves-effect waves-light modify m-2" onclick="editRow.call(this)">Modifikuj</a>
+                                    <button id="deleteBtn" class="btn btn-danger" onclick="deleteRow('@Model[i].Id')">Usuń</button>
+                                </td>
+                            </tr>
                         }
                     </tbody>
                 </table>
@@ -126,7 +126,7 @@
 </div>
 
 @section Scripts {
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script type="text/javascript" src="~/md/js/addons/datatables.min.js"></script>
 
@@ -168,7 +168,6 @@ function editRow() {
         $(this).show();
     })
 }
-
         function saveRow() {
             var modifyButton = $(this).siblings('.modify');
             var submitButton = $(this);
@@ -202,7 +201,34 @@ function editRow() {
 
         }
 
+function deleteRow(ID) {
+        event.preventDefault();
+        var url = '@Url.Action("Delete", "AdminFertilizers", new { id = "Identifier" })';
+        url = url.replace("Identifier", ID);
 
+        bootbox.confirm({
+            title: "Potwierdzenie",
+            centerVertical: true,
+            message: "Czy na pewno chcesz usunąć nawóz? Nie można cofnąć tej akcji.",
+            buttons: {
+                confirm: {
+                    label: 'Usuń',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'Anuluj',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function(result) {
+                if (result == true) {
+                    {
+                        window.location.replace(url);
+                    }
+                }
+            }
+        });
+    }
     </script>
 }
 

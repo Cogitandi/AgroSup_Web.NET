@@ -43,7 +43,7 @@
             <div class="form-group mt-2">
                 <input type="submit" value="Zapisz" class="btn btn-primary" />
                 @Html.ActionLink("Powrót", "Index", new { }, new { @class = "btn btn-info" })
-                @Html.ActionLink("Usuń", "Delete", new { id = Model.Id }, new { @class = "btn btn-danger" })
+            <button id="deleteBtn" class="btn btn-danger" onclick="deleteRow('@Model.Id');">Skasuj</button>
             </div>
         </form>
         </div>
@@ -61,8 +61,9 @@
         </style>
     }
 
-    @section Scripts
+@section Scripts
 {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
         @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
@@ -74,31 +75,60 @@
         </script>
 
         <script>
-    $("#addParcel").on("click", function () {
-        $.ajax({
-            async: true,
-            data: $("#form").serialize(),
-            type: "POST",
-            url: '@Url.Action("AddParcel", "Fields")',
-            success: function (partialView) {
-                $('#parcels').html(partialView);
-            }
-        });
-    });
-
-        function removeParcel() {
-
-            var indexToRemove = $(this).parent().parent().prevAll().length;
-            $.ajax({
-                async: true,
-                data: $("#form").serialize()+"&index="+indexToRemove,
-            type: "POST",
-            url: '@Url.Action("RemoveParcel", "Fields")',
-                success: function (partialView) {
-                    $('#parcels').html(partialView);
-            }
-        });
-            event.preventDefault();
+$("#addParcel").on("click", function() {
+    $.ajax({
+        async: true,
+        data: $("#form").serialize(),
+        type: "POST",
+        url: '@Url.Action("AddParcel", "Fields")',
+        success: function(partialView) {
+            $('#parcels').html(partialView);
         }
+    });
+});
+
+function removeParcel() {
+
+    var indexToRemove = $(this).parent().parent().prevAll().length;
+    $.ajax({
+        async: true,
+        data: $("#form").serialize() + "&index=" + indexToRemove,
+        type: "POST",
+        url: '@Url.Action("RemoveParcel", "Fields")',
+        success: function(partialView) {
+            $('#parcels').html(partialView);
+        }
+    });
+    event.preventDefault();
+}
+
+function deleteRow(ID) {
+    event.preventDefault();
+    var url = '@Url.Action("Delete", "Fields", new { id = "Identifier" })';
+    url = url.replace("Identifier", ID);
+
+    bootbox.confirm({
+        title: "Potwierdzenie",
+        centerVertical: true,
+        message: "Czy na pewno chcesz usunąć pole? Nie można cofnąć tej akcji.",
+        buttons: {
+            confirm: {
+                label: 'Usuń',
+                className: 'btn-success'
+            },
+            cancel: {
+                label: 'Anuluj',
+                className: 'btn-danger'
+            }
+        },
+        callback: function(result) {
+            if (result == true) {
+                {
+                    window.location.replace(url);
+                }
+            }
+        }
+    });
+}
         </script>
-    }
+}

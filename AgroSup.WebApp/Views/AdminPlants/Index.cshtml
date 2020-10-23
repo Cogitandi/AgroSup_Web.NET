@@ -53,7 +53,7 @@
                                 <td class="text-center">
                                     <a class="btn btn-primary waves-effect waves-light submit m-0" onclick="saveRow.call(this)" style="display:none">Zapisz</a>
                                     <a class="btn btn-blue-grey waves-effect waves-light modify m-0" onclick="editRow.call(this)">Modifikuj</a>
-                                    @Html.ActionLink("Usuń", "Delete", new { id = @Model[i].Id }, new { @class = "btn btn-danger m-0" })
+                                    <button id="deleteBtn" class="btn btn-danger" onclick="deleteRow('@Model[i].Id')">Usuń</button>
                                 </td>
                             </tr>
                         }
@@ -65,7 +65,7 @@
     </div>
 </div>
 @section Scripts {
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script type="text/javascript" src="~/md/js/addons/datatables.min.js"></script>
 
@@ -125,7 +125,7 @@ function editRow() {
                 url: '@Url.Action("Update", "AdminPlants")',
                 success: function (partialView) {
                     modifyButton.show();
-                    
+
                     row.find('input').each(function () {
                         $(this).siblings('.value').text($(this).val());
                         $(this).hide();
@@ -134,7 +134,34 @@ function editRow() {
             });
 
         }
+function deleteRow(ID) {
+        event.preventDefault();
+        var url = '@Url.Action("Delete", "AdminPlants", new { id = "Identifier" })';
+        url = url.replace("Identifier", ID);
 
+        bootbox.confirm({
+            title: "Potwierdzenie",
+            centerVertical: true,
+            message: "Czy na pewno chcesz usunąć roślinę? Nie można cofnąć tej akcji.",
+            buttons: {
+                confirm: {
+                    label: 'Usuń',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'Anuluj',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function(result) {
+                if (result == true) {
+                    {
+                        window.location.replace(url);
+                    }
+                }
+            }
+        });
+    }
 
     </script>
 }
