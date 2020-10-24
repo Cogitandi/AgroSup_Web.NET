@@ -10,6 +10,7 @@ namespace AgroSup.Core.Repositories
     {
         Task<Treatment> GetById(Guid id);
         Task<IEnumerable<Treatment>> GetAllByYearPlan(YearPlan yearPlan);
+        Task<IEnumerable<Treatment>> GetAll();
         Task Add(Treatment treatment);
         Task AddRange(IEnumerable<Treatment> treatments);
         Task Update(Treatment treatment);

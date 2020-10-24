@@ -19,18 +19,8 @@ namespace AgroSup.WebApp.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            // stworzone i nigdy nie zalogowane przez 90 dni
-            // lub nie logowane od 90dni i nie utworzono nic
-            int DaysWithoutLogin = 90;
-
             var AllUsers = await _userRepository.GetAll();
-            var TodayDate = DateTime.Now;
-
-            var selectedUsersAmount = AllUsers
-                .Where(x => x.YearPlans.Count() == 0)
-                .Where(x => TodayDate.Subtract(x.CreateDate).Days >= DaysWithoutLogin)
-                .Where(x => x.LastLoginDate == null || TodayDate.Subtract(x.LastLoginDate).Days >= DaysWithoutLogin)
-                .Count();
+            var selectedUsersAmount = AgroSup.Core.Domain.User.GetInActiveUsers(AllUsers).Count();
 
             var model = new InActiveAccountViewModel()
             {
@@ -41,18 +31,8 @@ namespace AgroSup.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteAccounts()
         {
-            // stworzone i nigdy nie zalogowane przez 90 dni
-            // lub nie logowane od 90dni i nie utworzono nic
-            int DaysWithoutLogin = 90;
-
             var AllUsers = await _userRepository.GetAll();
-            var TodayDate = DateTime.Now;
-
-            var SelectedUsers = AllUsers
-                .Where(x => x.YearPlans.Count() == 0)
-                .Where(x => TodayDate.Subtract(x.CreateDate).Days >= DaysWithoutLogin)
-                .Where(x => x.LastLoginDate == null || TodayDate.Subtract(x.LastLoginDate).Days >= DaysWithoutLogin)
-                .ToList();
+            var SelectedUsers = AgroSup.Core.Domain.User.GetInActiveUsers(AllUsers);
             await _userRepository.Delete(SelectedUsers);
             TempData["message"] = "Konta zostały usunięte!";
             return RedirectToAction("Index");

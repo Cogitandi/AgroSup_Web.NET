@@ -96,6 +96,7 @@
         $(document).ready(function () {
             $('#dtDynamicVerticalScrollExample').DataTable({
                 "scrollY": "50vh",
+                "scrollX": true,
                 "scrollCollapse": true,
                 "info": false,
                 "iDisplayLength": 50,
@@ -109,7 +110,7 @@
                     "sLengthMenu": "Wyświetl _MENU_ zabiegów",
                     "sSearch": "Wyszukaj",
                     "sInfoEmpty": "Nie znaleziono żadnych zabiegów",
-                    "sZeroRecords": "Nie znaleziono zabiegów o podanych wymaganiach",
+                    "sZeroRecords": "Nie znaleziono żadnych zabiegów",
                     "oPaginate": {
                         "sNext": "Następna",
                         "sPrevious": "Poprzednia",

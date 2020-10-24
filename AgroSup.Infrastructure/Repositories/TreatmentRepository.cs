@@ -63,6 +63,10 @@ namespace AgroSup.Infrastructure.Repositories
             return await _context.Treatments.FindAsync(id);
         }
 
-
+        public async Task<IEnumerable<Treatment>> GetAll()
+        {
+            return await DbInclude(_context.Treatments)
+                .ToListAsync();
+        }
     }
 }

@@ -42,5 +42,26 @@ namespace AgroSup.Core.Domain
             this.Fields = yearPlan.Fields.ToList();
             this.Operators = yearPlan.Operators.ToList();
         }
+        public static int GetTotalFieldsArea(IEnumerable<YearPlan> yearPlans)
+        {
+            int totalArea = 0;
+            foreach(var item in yearPlans)
+            {
+                foreach(var field in item.Fields)
+                {
+                    totalArea += field.GetFieldArea();
+                }
+            }
+            return totalArea;
+        }
+        public static int GetTotalFieldsCount(IEnumerable<YearPlan> yearPlans)
+        {
+            int counter = 0;
+            foreach (var item in yearPlans)
+            {
+                counter += item.Fields.Count();
+            }
+            return counter;
+        }
     }
 }

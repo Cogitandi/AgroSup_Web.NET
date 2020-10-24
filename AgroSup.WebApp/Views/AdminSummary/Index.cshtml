@@ -14,9 +14,45 @@
             <!--- Content -->
             <p class="text-center" id="headerTitle">@ViewData["Header"]</p>
             <hr />
-            Ilość kont w bazie: @(Model.TotalUsers)
+
+            <div class="d-flex flex-wrap">
+                <div class="card text-center mx-3 my-2" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">@(Model.TotalUsers)</h5>
+                        <p class="card-text">Ilość zarejestrowanych użytkowników</p>
+                    </div>
+                </div>
+
+                <div class="card text-center mx-3 my-2" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">@(Model.AverageFieldArea) ha</h5>
+                        <p class="card-text">Średnia wielkość pola</p>
+                    </div>
+                </div>
+
+                <div class="card text-center mx-3 my-2" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">@(Model.AverageTreatmentCountPerField)</h5>
+                        <p class="card-text">Średnia ilość zabiegów w przeliczeniu na pole</p>
+                    </div>
+                </div>
+
+                <div class="card text-center mx-3 my-2" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">@(Model.AverageYearPlansCountPerUser)</h5>
+                        <p class="card-text">Średnia ilość planów sezonowych posiadanych przez użytkownika</p>
+                    </div>
+                </div>
+
+                <div class="card text-center mx-3 my-2" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">@(Model.InActiveAccounts)</h5>
+                        <p class="card-text">Ilość użytkowników możliwych do usunięcia</p>
+                    </div>
+                </div>
+            </div>
             <!--- End content -->
         </div>
-    </div>
+        </div>
 </div>
 

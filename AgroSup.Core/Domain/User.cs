@@ -38,6 +38,19 @@ namespace AgroSup.Core.Domain
                 this.ChoosedPlants.Remove(userPlant);
             }
         }
+        public static IEnumerable<User> GetInActiveUsers(IEnumerable<User> users)
+        {
+            // stworzone i nigdy nie zalogowane przez 90 dni
+            // lub nie logowane od 90dni i nie utworzono nic
+            int DaysWithoutLogin = 90;
+            var TodayDate = DateTime.Now;
+
+            return users
+                .Where(x => x.YearPlans.Count() == 0)
+                .Where(x => TodayDate.Subtract(x.CreateDate).Days >= DaysWithoutLogin)
+                .Where(x => x.LastLoginDate == null || TodayDate.Subtract(x.LastLoginDate).Days >= DaysWithoutLogin)
+                .ToList();
+        }
     }
 
 }

@@ -70,5 +70,12 @@ namespace AgroSup.Infrastructure.Repositories
             _context.Update(YearPlan);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<YearPlan>> GetAll()
+        {
+            return await DbInclude(_context.YearPlans)
+                .OrderBy(x => x.StartYear)
+                .ToListAsync();
+        }
     }
 }
