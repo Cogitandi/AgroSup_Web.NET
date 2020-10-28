@@ -19,7 +19,7 @@ namespace AgroSup.WebApp.ViewModels.Manages.Treatments
         public Guid FieldId { get; set; }
         [DisplayName("Notatki")]
         public string Notes { get; set; }
-        [DisplayName("Dawka na ha")]
+        [DisplayName("Dawka na ha[kg]")]
         public int DosePerHa { get; set; }
         [DisplayName("Nawóz")]
         public Guid FertilizerId { get; set; }

@@ -14,7 +14,7 @@ namespace AgroSup.WebApp.ViewModels.Manages.Treatments
         public string FieldName { get; set; }
         [DisplayName("Dodatkowe")]
         public string Notes { get; set; }
-        [DisplayName("Dawka na ha")]
+        [DisplayName("Dawka na ha[kg]")]
         public string DosePerHa { get; set; }
         [DisplayName("Nawóz")]
         public string FertilizerName { get; set; }

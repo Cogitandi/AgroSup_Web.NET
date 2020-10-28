@@ -18,7 +18,7 @@ namespace AgroSup.WebApp.ViewModels.Operators
         [DisplayName("Nazwisko")]
         public string LastName { get; set; }
         [RegularExpression(@"^[0-9]{11}$", ErrorMessage = "Niepoprawny numer")]
-        [DisplayName("Numer ARIMR")]
+        [DisplayName("Numer identyfikacyjny ARIMR")]
         public string ArimrNumber { get; set; }
     }
 }

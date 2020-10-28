@@ -97,6 +97,17 @@ namespace AgroSup.WebApp.Controllers
             return Json(true);
         }
 
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            if (ManagedYearPlan == null)
+            {
+                return ActionIfNotChoosedManagedYearPlan();
+            }
+            var field = await _yearPlanRepository.GetById(id);
+            await _yearPlanRepository.Delete(field);
+            return RedirectToAction("Index");
+        }
+
 
 
     }

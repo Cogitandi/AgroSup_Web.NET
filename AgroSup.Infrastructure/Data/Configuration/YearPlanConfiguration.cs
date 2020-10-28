@@ -15,7 +15,7 @@ namespace AgroSup.Infrastructure.Data.Configuration
             builder.Property(x => x.StartYear).IsRequired();
             builder.Property(x => x.EndYear).IsRequired();
             builder.HasOne(x => x.User).WithMany(y=>y.YearPlans).IsRequired();
-            builder.HasMany(x => x.Fields).WithOne(y => y.YearPlan);
+            builder.HasMany(x => x.Fields).WithOne(y => y.YearPlan).OnDelete(DeleteBehavior.Cascade);
             builder.HasMany(x => x.Operators).WithOne(y => y.YearPlan);
         }
     }
