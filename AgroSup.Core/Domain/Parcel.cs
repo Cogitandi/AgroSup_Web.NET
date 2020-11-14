@@ -19,6 +19,7 @@ namespace AgroSup.Core.Domain
             this.Number = parcel.Number;
             this.CultivatedArea = parcel.CultivatedArea;
             this.FuelApplication = parcel.FuelApplication;
+            this.Operator = parcel.Operator;
         }
         public Parcel()
         {

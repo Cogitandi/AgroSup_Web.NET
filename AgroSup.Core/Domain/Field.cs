@@ -18,7 +18,7 @@ namespace AgroSup.Core.Domain
         [Required]
         public YearPlan YearPlan { get; set; }
 
-        public IEnumerable<Parcel> Parcels { get; set; } = new List<Parcel>();
+        public IList<Parcel> Parcels { get; set; } = new List<Parcel>();
 
         public Field()
         {
@@ -28,6 +28,7 @@ namespace AgroSup.Core.Domain
         {
             this.Number = field.Number;
             this.Name = field.Name;
+            this.Parcels = field.Parcels.Select(x => new Parcel(x)).ToList();
         }
         public int GetFieldArea()
         {

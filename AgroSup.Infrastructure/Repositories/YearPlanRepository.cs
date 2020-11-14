@@ -24,6 +24,7 @@ namespace AgroSup.Infrastructure.Repositories
                 .Include(x => x.User)
                 .Include(x => x.Fields)
                 .ThenInclude(f => f.Parcels)
+                    .ThenInclude(x => x.Operator)
                 .Include(x => x.Operators);
         }
 

@@ -28,8 +28,8 @@ namespace AgroSup.Core.Domain
         }
         public Operator(Operator @operator)
         {
+            this.Id = @operator.Id;
             this.FirstName = @operator.FirstName;
-            this.LastName = @operator.LastName;
             this.LastName = @operator.LastName;
             this.ArimrNumber = @operator.ArimrNumber;
         }

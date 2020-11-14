@@ -65,8 +65,7 @@ namespace AgroSup.WebApp.Controllers
             }
             await _yearPlanRepository.Add(yearPlan);
             TempData["message"] = "Utworzono nowy plan: " + yearPlan.GetYearPlanName;
-            ModelState.Clear();
-            return View();
+            return RedirectToAction("Create");
 
         }
         public async Task<IActionResult> SetManagedYearPlan(Guid id)

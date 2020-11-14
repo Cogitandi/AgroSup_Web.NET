@@ -13,8 +13,8 @@ namespace AgroSup.Core.Domain
         public int StartYear { get; set; }
         public int EndYear { get; set; }
         public User User { get; set; }
-        public IEnumerable<Field> Fields { get; set; }
-        public IEnumerable<Operator> Operators { get; set; }
+        public IList<Field> Fields { get; set; }
+        public IList<Operator> Operators { get; set; }
 
         public string GetYearPlanName
         {
@@ -25,22 +25,24 @@ namespace AgroSup.Core.Domain
         }
         public void GetDataToImport(YearPlan yearPlan)
         {
-            foreach(var field in yearPlan.Fields)
+            this.Fields = yearPlan.Fields.Select(x => new Field(x)).ToList();
+            this.Operators = yearPlan.Operators.Select(x => new Operator(x)).ToList();
+            foreach(var @operator in this.Operators)
             {
-                field.Id = Guid.Empty;
-                foreach(var parcel in field.Parcels)
+                var oldId = @operator.Id;
+                @operator.Id = Guid.NewGuid();
+                foreach(var field in Fields)
                 {
-                    parcel.Id = Guid.Empty;
+                    foreach(var parcel in field.Parcels)
+                    {
+                        var op = parcel.Operator;
+                        if (op!=null && op.Id == oldId)
+                        {
+                            parcel.Operator = @operator;
+                        }
+                    }
                 }
             }
-            foreach (var @operator in yearPlan.Operators)
-            {
-                @operator.Id = Guid.Empty;
-                
-            }
-
-            this.Fields = yearPlan.Fields.ToList();
-            this.Operators = yearPlan.Operators.ToList();
         }
         public static int GetTotalFieldsArea(IEnumerable<YearPlan> yearPlans)
         {
