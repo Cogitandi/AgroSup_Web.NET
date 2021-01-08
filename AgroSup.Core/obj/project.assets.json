@@ -930,11 +930,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Root\\source\\repos\\AgroSup\\AgroSup.Core\\AgroSup.Core.csproj",
+      "projectUniqueName": "C:\\Users\\Root\\Desktop\\Nowy folder\\AgroSup_Web.NET\\AgroSup.Core\\AgroSup.Core.csproj",
       "projectName": "AgroSup.Core",
-      "projectPath": "C:\\Users\\Root\\source\\repos\\AgroSup\\AgroSup.Core\\AgroSup.Core.csproj",
+      "projectPath": "C:\\Users\\Root\\Desktop\\Nowy folder\\AgroSup_Web.NET\\AgroSup.Core\\AgroSup.Core.csproj",
       "packagesPath": "C:\\Users\\Root\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Root\\source\\repos\\AgroSup\\AgroSup.Core\\obj\\",
+      "outputPath": "C:\\Users\\Root\\Desktop\\Nowy folder\\AgroSup_Web.NET\\AgroSup.Core\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Root\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -949,6 +949,7 @@
       },
       "frameworks": {
         "netstandard2.0": {
+          "targetAlias": "netstandard2.0",
           "projectReferences": {}
         }
       },
@@ -960,6 +961,7 @@
     },
     "frameworks": {
       "netstandard2.0": {
+        "targetAlias": "netstandard2.0",
         "dependencies": {
           "Microsoft.Extensions.Identity.Stores": {
             "target": "Package",
@@ -982,7 +984,7 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.301\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   }

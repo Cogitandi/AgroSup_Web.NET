@@ -7045,11 +7045,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Root\\source\\repos\\AgroSup\\AgroSup.Infrastructure\\AgroSup.Infrastructure.csproj",
+      "projectUniqueName": "C:\\Users\\Root\\Desktop\\Nowy folder\\AgroSup_Web.NET\\AgroSup.Infrastructure\\AgroSup.Infrastructure.csproj",
       "projectName": "AgroSup.Infrastructure",
-      "projectPath": "C:\\Users\\Root\\source\\repos\\AgroSup\\AgroSup.Infrastructure\\AgroSup.Infrastructure.csproj",
+      "projectPath": "C:\\Users\\Root\\Desktop\\Nowy folder\\AgroSup_Web.NET\\AgroSup.Infrastructure\\AgroSup.Infrastructure.csproj",
       "packagesPath": "C:\\Users\\Root\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Root\\source\\repos\\AgroSup\\AgroSup.Infrastructure\\obj\\",
+      "outputPath": "C:\\Users\\Root\\Desktop\\Nowy folder\\AgroSup_Web.NET\\AgroSup.Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Root\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -7064,9 +7064,10 @@
       },
       "frameworks": {
         "netstandard2.1": {
+          "targetAlias": "netstandard2.1",
           "projectReferences": {
-            "C:\\Users\\Root\\source\\repos\\AgroSup\\AgroSup.Core\\AgroSup.Core.csproj": {
-              "projectPath": "C:\\Users\\Root\\source\\repos\\AgroSup\\AgroSup.Core\\AgroSup.Core.csproj"
+            "C:\\Users\\Root\\Desktop\\Nowy folder\\AgroSup_Web.NET\\AgroSup.Core\\AgroSup.Core.csproj": {
+              "projectPath": "C:\\Users\\Root\\Desktop\\Nowy folder\\AgroSup_Web.NET\\AgroSup.Core\\AgroSup.Core.csproj"
             }
           }
         }
@@ -7079,6 +7080,7 @@
     },
     "frameworks": {
       "netstandard2.1": {
+        "targetAlias": "netstandard2.1",
         "dependencies": {
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
             "target": "Package",
@@ -7108,7 +7110,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.301\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   }
