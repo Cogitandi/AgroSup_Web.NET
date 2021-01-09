@@ -42,13 +42,13 @@
                             <td class="align-middle">
                                 <select class="form-control" asp-items="Model.OperatorSelectList" id="arimrOperatorSelect">
                                     <option selected="selected" value="all">Wszyscy</option>
-                                    <option value="Brak dopłat">Brak dopłat</option>
+                                    <option value="Brak">Brak dopłat</option>
                                 </select>
                             </td>
                             <td class="align-middle">
                                 <select class="form-control" asp-items="Model.PlantSelectList" id="plantNameSelect">
                                     <option selected="selected" value="all">Wszystkie</option>
-                                    <option value="Nie ustalono">Nie ustalono</option>
+                                    <option value="Brak">Brak</option>
                                 </select>
                             </td>
                         </tr>
@@ -77,15 +77,14 @@
     @section Scripts {
         <script>
             function createPDF() {
-                var header = document.getElementsByTagName('h2')[0].textContent;
-                var season = document.querySelector('#navbarTogglerDemo01 > ul:nth-child(3) > li:nth-child(1) > a').innerHTML;
+                var header = document.getElementsByTagName('h2')[0].textContent
                 var arimr = document.getElementById('arimrOperatorSelect').value;
                 if (arimr == 'all') arimr = 'Całość'
                 var data = document.getElementById('filteredTable');
                 var rowsLength = data.rows.length - 1;
                 data.deleteRow(rowsLength);
 
-                var before = '<h2>' + season + '- ' + arimr + '</h2>';
+                var before = '<h2>' + header + '- ' + arimr + '</h2>';
                 data = data.innerHTML;
                 var style = "<style>";
                 style = style + "th {background-color: 	#32CD32}";
