@@ -161,6 +161,9 @@
           "netcoreapp3.1": {
             "targetAlias": "netcoreapp3.1",
             "projectReferences": {
+              "C:\\Users\\Root\\Desktop\\Nowy folder\\AgroSup_Web.NET\\AgroSup.Core\\AgroSup.Core.csproj": {
+                "projectPath": "C:\\Users\\Root\\Desktop\\Nowy folder\\AgroSup_Web.NET\\AgroSup.Core\\AgroSup.Core.csproj"
+              },
               "C:\\Users\\Root\\Desktop\\Nowy folder\\AgroSup_Web.NET\\AgroSup.Infrastructure\\AgroSup.Infrastructure.csproj": {
                 "projectPath": "C:\\Users\\Root\\Desktop\\Nowy folder\\AgroSup_Web.NET\\AgroSup.Infrastructure\\AgroSup.Infrastructure.csproj"
               }

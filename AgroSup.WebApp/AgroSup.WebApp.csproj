@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AgroSup.Core\AgroSup.Core.csproj" />
     <ProjectReference Include="..\AgroSup.Infrastructure\AgroSup.Infrastructure.csproj" />
   </ItemGroup>
 
